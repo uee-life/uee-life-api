@@ -17,7 +17,7 @@ function getID(handle) {
     rows = await executeSQL(sql, [handle])
     if(rows.length === 0) {
         // not found
-        return -1
+        return 0
     } else {
         return rows[0].id
     }
