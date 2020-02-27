@@ -102,7 +102,12 @@ async function addShip(usr, ship) {
     const id = await getID(user.app_metadata.handle)
     sql = "INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)"
     args = [id, ship.id, ship.name]
-    console.log(args)
+    const res = executeSQL(sql, args)
+    console.log(res)
+}
+
+async function removeShip(usr, ship) {
+    
 }
 
 async function getLocation(handle) {
