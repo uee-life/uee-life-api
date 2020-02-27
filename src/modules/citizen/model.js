@@ -106,11 +106,11 @@ async function addShip(usr, ship) {
     console.log(res)
 }
 
-async function removeShip(usr, data) {
+async function removeShip(usr, ship) {
     const user = await getUser(usr)
     const id = await getID(user.app_metadata.handle)
     sql = "DELETE FROM ship_map WHERE id=? AND citizen=?"
-    const res = await executeSQL(sql, [id, data.ship])
+    const res = await executeSQL(sql, [id, ship])
     console.log(res)
 }
 
