@@ -13,7 +13,7 @@ async function createCitizen(handle) {
 }
 
 function getID(handle) {
-    sql = "SELECT id FROM citizens WHERE handle=?"
+    sql = "SELECT id FROM citizen WHERE handle=?"
     return executeSQL(sql, [handle])
 }
 
