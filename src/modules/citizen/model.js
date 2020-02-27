@@ -12,9 +12,7 @@ async function getCitizen(handle) {
     console.log('in getCitizen')
     let citizen = {}
     citizen.info = await loadCitizen(handle)
-    console.log(citizen.info)
     if(citizen.info) {
-        console.log("Citizen Found")
         citizen.ships = []
         citizen.home = await loadCitizenLocation(handle)
     } else {
@@ -69,8 +67,8 @@ async function loadCitizenLocation(handle) {
         location: null,
         base: null
     }
-    sql_system = "SELECT b.id, b.name FROM systems b LEFT JOIN citizen a ON a.home_system = b.id WHERE a.handle=?"
-    sql_location = "SELECT b.id, b.name FROM locations b LEFT JOIN citizen a ON a.home_location = b.id WHERE a.handle=?"
+    sql_system = "SELECT b.id, b.name FROM locs b LEFT JOIN citizen a ON a.home_system = b.id WHERE a.handle=?"
+    sql_location = "SELECT b.id, b.name FROM locs b LEFT JOIN citizen a ON a.home_location = b.id WHERE a.handle=?"
     sql_base = "SELECT b.id, b.name FROM pois b LEFT JOIN citizen a ON a.home_base = b.id WHERE a.handle=?"
     const rows = await executeSQL(sql_system, [handle])
     if(rows.length > 0) {
