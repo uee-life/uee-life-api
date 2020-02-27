@@ -2,7 +2,7 @@ const {executeSQL} = require('../mariadb')
 
 
 async function getSystems() {
-    return await executeSQL("SELECT a.id, a.name, b.affiliation FROM locs a LEFT JOIN affiliation b ON a.affiliation = b.id where a.code='stanton'")
+    return await executeSQL("SELECT a.id, a.code, a.name, b.affiliation FROM locs a LEFT JOIN affiliation b ON a.affiliation = b.id where a.code='stanton'")
 }
 
 async function getSystem(sys) {

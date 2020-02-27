@@ -138,7 +138,8 @@ async function setLocation(token, handle, location) {
 
     if(handle == user.app_metadata.handle) {
         await saveLocation(handle, location)
-        user.home = location
+        user.citizen = await getCitizen(handle)
+        user.citizen.home = location
         return {
             success: true,
             error: "",
