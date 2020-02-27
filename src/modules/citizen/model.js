@@ -10,9 +10,11 @@ const { getID } = require('../../helpers/db')
 */
 async function getCitizen(handle) {
     console.log('in getCitizen')
-    citizen = {}
+    let citizen = {}
     citizen.info = await loadCitizen(handle)
+    console.log(citizen.info)
     if(citizen.info) {
+        console.log("Citizen Found")
         citizen.ships = []
         citizen.home = await loadCitizenLocation(handle)
     } else {
@@ -61,6 +63,7 @@ async function loadCitizen(handle) {
 }
 
 async function loadCitizenLocation(handle) {
+    console.log('loading citizen location')
     let home = {
         system: null,
         location: null,
