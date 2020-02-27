@@ -123,7 +123,6 @@ async function getLocation(handle) {
 
 async function saveLocation(handle, loc) {
     console.log("saving location...")
-    console.log(loc)
     const sql = "UPDATE citizen SET home_system = ?, home_location = ?, home_base = ? WHERE handle=?"
     const system = loc.system ? loc.system.id : null
     const location = loc.location ? loc.location.id : null
