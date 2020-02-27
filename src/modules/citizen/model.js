@@ -99,8 +99,9 @@ async function getShips(handle) {
 
 async function addShip(usr, ship) {
     const user = await getUser(usr)
+    const id = await getID(user.app_metadata.handle)
     sql = "INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)"
-    args = [getID(user.app_metadata.handle), ship.id, ship.name]
+    args = [id, ship.id, ship.name]
     console.log(args)
 }
 
