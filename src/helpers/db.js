@@ -14,7 +14,7 @@ async function createCitizen(handle) {
 
 function getID(handle) {
     sql = "SELECT id FROM citizen WHERE handle=?"
-    return executeSQL(sql, [handle])[0]
+    return executeSQL(sql, [handle])
 }
 
 module.exports = {
