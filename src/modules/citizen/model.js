@@ -3,6 +3,7 @@ const { executeSQL } = require('../mariadb')
 
 const { getUser } = require('../user/model')
 const { fetchCitizen } = require('../../helpers/rsi')
+const { getID } = require('../../helpers/db')
 
 /*
 *   GET /citizen/<handle>
@@ -96,6 +97,12 @@ async function getShips(handle) {
     return ships
 }
 
+async function addShip(user, ship) {
+    sql = "INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)"
+    args = [user.handle, ship.id, ship.name]
+    console.log(user)
+}
+
 async function getLocation(handle) {
     citizen = await getCitizen(handle)
     return citizen.home
@@ -151,6 +158,7 @@ module.exports = {
     fetchCitizen,
     getInfo,
     getShips,
+    addShip,
     getLocation,
     setLocation,
     createCitizen

@@ -6,6 +6,7 @@ const {
     getInfo, 
     getLocation,
     getShips,
+    addShip,
     setLocation,
     startSync
 } = require('./model');
@@ -26,6 +27,11 @@ router.get('/citizens/:handle/info', cache(600), async (req, res) => {
 
 router.get('/citizens/:handle/ships', async (req, res) => {
     res.send(await getShips(req.params.handle));
+});
+
+// Protected
+router.post('/citizens/:handle/ships', checkJwt, async (req, res) => {
+    res.send(await addShip(req.user, req.body));
 });
 
 router.get('/citizens/:handle/location', cache(600), async(req, res) => {
