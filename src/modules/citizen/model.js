@@ -106,10 +106,6 @@ async function addShip(usr, ship) {
     console.log(res)
 }
 
-async function removeShip(usr, ship) {
-    
-}
-
 async function getLocation(handle) {
     citizen = await getCitizen(handle)
     return citizen.home
