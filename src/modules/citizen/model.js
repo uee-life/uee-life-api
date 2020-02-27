@@ -128,14 +128,15 @@ async function saveLocation(handle, loc) {
     const system = loc.system ? loc.system.id : null
     const location = loc.location ? loc.location.id : null
     const base = loc.base ? loc.base.id : null
-    const res = executeSQL(sql, [system, location, base, handle])
+    const args = [system, location, base, handle]
+    console.log(args)
+    const res = await executeSQL(sql, args)
     console.log(res)
 }
 
 async function setLocation(token, handle, location) {
     console.log("setting Location!")
     const user = await getUser(token)
-    console.log(user)
 
     if(handle == user.app_metadata.handle) {
         await saveLocation(handle, location)
