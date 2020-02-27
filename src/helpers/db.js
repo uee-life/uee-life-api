@@ -14,7 +14,13 @@ async function createCitizen(handle) {
 
 function getID(handle) {
     sql = "SELECT id FROM citizen WHERE handle=?"
-    return executeSQL(sql, [handle])
+    rows = await executeSQL(sql, [handle])
+    if(rows.length === 0) {
+        // not found
+        return -1
+    } else {
+        return rows[0].id
+    }
 }
 
 module.exports = {
