@@ -102,7 +102,15 @@ async function addShip(usr, ship) {
     const id = await getID(user.app_metadata.handle)
     sql = "INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)"
     args = [id, ship.id, ship.name]
-    const res = executeSQL(sql, args)
+    const res = await executeSQL(sql, args)
+    console.log(res)
+}
+
+async function removeShip(usr, data) {
+    const user = await getUser(usr)
+    const id = await getID(user.app_metadata.handle)
+    sql = "DELETE FROM ship_map WHERE id=? AND citizen=?"
+    const res = await executeSQL(sql, [id, data.ship])
     console.log(res)
 }
 
@@ -162,6 +170,7 @@ module.exports = {
     getInfo,
     getShips,
     addShip,
+    removeShip,
     getLocation,
     setLocation,
     createCitizen
