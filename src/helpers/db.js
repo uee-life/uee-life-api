@@ -12,7 +12,7 @@ async function createCitizen(handle) {
     }
 }
 
-function getID(handle) {
+async function getID(handle) {
     sql = "SELECT id FROM citizen WHERE handle=?"
     rows = await executeSQL(sql, [handle])
     if(rows.length === 0) {
