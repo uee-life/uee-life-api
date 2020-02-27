@@ -107,6 +107,5 @@ module.exports = {
     cache,
     checkJwt,
     checkPermission,
-    convertToMarkdown,
-    getID
+    convertToMarkdown
 }
