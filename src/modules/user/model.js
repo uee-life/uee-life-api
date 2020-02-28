@@ -24,20 +24,34 @@ async function getUser(usr) {
     return user
 }
 
+function handleExists(handle) {
+    const rows = executeSQL('SELECT handle FROM citizen WHERE handle=?', [handle])
+    if(rows.length === 0) {
+        return false
+    } else {
+        return true
+    }
+}
+
 async function updateHandle(usr, handle) {
-    var params = {
-        id: usr.sub
+    // check if handle already exists and is verified
+    if(handleExists(handle)) {
+        return {error: 'Handle belongs to another citizen. Contact Flint if you think this is in error!'}
+    } else {
+        var params = {
+            id: usr.sub
+        }
+        var metadata = {
+            handle: handle,
+            handle_verified: false
+        }
+        manager.updateAppMetadata(params, metadata).then(function(user) {
+            removeCitizen(user.app_metadata.handle)
+            return user
+        }).catch(function(err) {
+            console.error(err)
+        });
     }
-    var metadata = {
-        handle: handle,
-        handle_verified: false
-    }
-    manager.updateAppMetadata(params, metadata).then(function(user) {
-        removeCitizen(user.app_metadata.handle)
-        return user
-    }).catch(function(err) {
-        console.error(err)
-    });
 }
 
 async function removeCitizen(handle) {
