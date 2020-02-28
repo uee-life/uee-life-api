@@ -1,5 +1,5 @@
 const { fetchCitizen } = require('../../helpers/rsi')
-const { createCitizen } = require('../../helpers/db')
+const { createCitizen, getID } = require('../../helpers/db')
 const { getVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
 
@@ -42,8 +42,18 @@ async function updateHandle(usr, handle) {
 }
 
 async function removeCitizen(handle) {
+    const citizen_id = getID(handle)
+    // remove sync data
     await executeSQL("DELETE FROM citizen_sync WHERE handle=?", [handle])
+    // remove citizen record
     await executeSQL("DELETE FROM citizen WHERE handle=?", [handle])
+    // remove recorded ships
+    await executeSQL('DELETE FROM ship_map WHERE citizen=?', [citizen_id])
+
+    // remove recorded locations
+
+    // remove linked orgs
+    
 }
 
 // Sync code

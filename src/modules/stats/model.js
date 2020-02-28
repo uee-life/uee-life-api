@@ -102,6 +102,11 @@ async function activeCount() {
     return count
 }
 
+async function shipCount() {
+    const res = await executeSQL('SELECT count(*) as count from ship_map')
+    return res[0].count
+}
+
 async function getStats() {
     stats = {}
     stats.latestCitizen = await latestCitizen()
@@ -109,6 +114,7 @@ async function getStats() {
     stats.users.total = await userCount()
     stats.users.active = await activeCount()
     stats.users.verified = await verifiedCount()
+    stats.ships = await shipCount()
     return stats
 }
 

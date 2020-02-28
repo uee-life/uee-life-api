@@ -9,9 +9,6 @@ const {
 
 // Protected
 router.get("/user", checkJwt, async (req, res) => {
-    console.log('/user called')
-    console.log(req.user)
-    console.log('************')
     res.send(await getUser(req.user).catch(err => {
         console.error(err)
         return err
