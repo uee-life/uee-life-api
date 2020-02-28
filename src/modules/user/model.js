@@ -24,7 +24,7 @@ async function getUser(usr) {
     return user
 }
 
-function handleExists(handle) {
+async function handleExists(handle) {
     const rows = await executeSQL('SELECT handle FROM citizen WHERE handle=?', [handle])
     console.log(rows)
     if(rows.length === 0) {
@@ -48,7 +48,7 @@ async function updateHandle(usr, handle) {
     if(old_handle === new_handle) {
         console.log('Handles match, not changing')
         return {error: 'No change necessary. Old and new handles match.'}
-    } else if(handleExists(new_handle)) {
+    } else if(await handleExists(new_handle)) {
         console.log('Handle exists, not changing')
         return {error: 'Handle belongs to another citizen. Contact Flint if you think this is in error!'}
     } else {
