@@ -26,6 +26,7 @@ async function getUser(usr) {
 
 async function updateHandle(usr, handle) {
     user = getUser(usr)
+    console.log(user)
     var params = {
         id: user.sub
     }
