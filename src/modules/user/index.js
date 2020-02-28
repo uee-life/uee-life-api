@@ -3,6 +3,7 @@ const router = require('express').Router()
 
 const {
     getUser,
+    updateHandle,
     verify,
     sync
 } = require('./model');
