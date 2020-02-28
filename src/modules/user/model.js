@@ -25,7 +25,7 @@ async function getUser(usr) {
 }
 
 function handleExists(handle) {
-    const rows = executeSQL('SELECT handle FROM citizen WHERE handle=?', [handle])
+    const rows = await executeSQL('SELECT handle FROM citizen WHERE handle=?', [handle])
     console.log(rows)
     if(rows.length === 0) {
         return false
