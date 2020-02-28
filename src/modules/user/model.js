@@ -35,7 +35,7 @@ function handleExists(handle) {
 
 async function updateHandle(usr, handle) {
     // get current users handle for removal
-    const old_user = getUser(usr)
+    const old_user = await getUser(usr)
     const old_handle = old_user.app_metadata.handle
     const new_handle = handle.trim()
     // if a record for the old handle exists, but the current user isn't verified. This isn't the owner, so don't delete old data.
@@ -53,7 +53,7 @@ async function updateHandle(usr, handle) {
             id: usr.sub
         }
         var metadata = {
-            handle: handle,
+            handle: new_handle,
             handle_verified: false
         }
         manager.updateAppMetadata(params, metadata).then(function(user) {
