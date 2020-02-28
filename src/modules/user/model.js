@@ -33,7 +33,7 @@ async function updateHandle(usr, handle) {
         handle: handle,
         handle_verified: false
     }
-    management.updateAppMetadata(params, metadata).then(function(user) {
+    manager.updateAppMetadata(params, metadata).then(function(user) {
         removeCitizen(user.app_metadata.handle)
         return user
     }).catch(function(err) {
@@ -53,7 +53,7 @@ async function removeCitizen(handle) {
     // remove recorded locations
 
     // remove linked orgs
-    
+
 }
 
 // Sync code
