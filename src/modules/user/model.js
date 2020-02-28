@@ -38,6 +38,7 @@ async function updateHandle(usr, handle) {
     const old_user = await getUser(usr)
     const old_handle = old_user.app_metadata.handle
     const new_handle = handle.trim()
+    console.log('handles:',old_handle,new_handle)
     // if a record for the old handle exists, but the current user isn't verified. This isn't the owner, so don't delete old data.
     let should_delete = false
     if(old_user.app_metadata.handle_verified) {
