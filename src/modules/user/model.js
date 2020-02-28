@@ -34,6 +34,8 @@ function handleExists(handle) {
 }
 
 async function updateHandle(usr, handle) {
+    // get current users handle for removal
+    const old_handle = getUser(usr).app_metadata.handle
     // check if handle already exists and is verified
     if(handleExists(handle)) {
         return {error: 'Handle belongs to another citizen. Contact Flint if you think this is in error!'}
@@ -46,7 +48,7 @@ async function updateHandle(usr, handle) {
             handle_verified: false
         }
         manager.updateAppMetadata(params, metadata).then(function(user) {
-            removeCitizen(user.app_metadata.handle)
+            removeCitizen(old_handle)
             return user
         }).catch(function(err) {
             console.error(err)
