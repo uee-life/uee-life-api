@@ -45,10 +45,13 @@ async function updateHandle(usr, handle) {
     }
     // check if handle already exists and is verified
     if(old_handle === new_handle) {
+        console.log('Handles match, not changing')
         return {error: 'No change necessary. Old and new handles match.'}
     } else if(handleExists(new_handle)) {
+        console.log('Handle exists, not changing')
         return {error: 'Handle belongs to another citizen. Contact Flint if you think this is in error!'}
     } else {
+        console.log('handle ok, changing!')
         var params = {
             id: usr.sub
         }
@@ -57,6 +60,7 @@ async function updateHandle(usr, handle) {
             handle_verified: false
         }
         manager.updateAppMetadata(params, metadata).then(function(user) {
+            console.log('Done. Should delete:', should_delete)
             if(should_delete) {
                 removeCitizen(old_handle)
             }
