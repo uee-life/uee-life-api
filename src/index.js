@@ -26,6 +26,7 @@ app.use(require('./modules/search'))
 app.use(require('./modules/ships'))
 app.use(require('./modules/stats'))
 app.use(require('./modules/user'))
+app.use(require('./modules/content'))
 
 // starting the server
 app.listen(3001, () => {
