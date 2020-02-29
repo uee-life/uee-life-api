@@ -1,20 +1,5 @@
-
-var ManagementClient = require('auth0').ManagementClient;
-const {executeSQL} = require('../mariadb')
-
-const { domain, clientId, clientSecret, scope, audience } = require("../../config/auth_config.js");
-
-var management = new ManagementClient({
-    domain: domain,
-    clientId: clientId,
-    clientSecret: clientSecret,
-    scope: scope,
-    audience: audience,
-    tokenProvider: {
-        enableCache: true,
-        cacheTTLInSeconds: 10
-    }
-});
+const { manager } = require('../manager')
+const { executeSQL } = require('../mariadb')
 
 async function loadStat(stat) {
     sql = "SELECT value FROM stats WHERE stat=?"
@@ -37,7 +22,7 @@ async function latestCitizen() {
         q: 'type:"sapi" AND description:"Update a user"'
     }
 
-    const result = await management.getLogs(params).then((res) => {
+    const result = await manager.getLogs(params).then((res) => {
         return res
     }).catch((err) => {
         console.error(err)
@@ -69,7 +54,7 @@ async function verifiedCount() {
         include_totals: true
       };
       
-    const result = await management.getUsers(params).then((res) => {
+    const result = await manager.getUsers(params).then((res) => {
         return res.total
     }).catch(err => {
         console.error(err)
@@ -86,7 +71,7 @@ async function userCount() {
         include_totals: true
       };
       
-    const result = await management.getUsers(params).then((res) => {
+    const result = await manager.getUsers(params).then((res) => {
         return res.total
     }).catch(err => {
         console.error(err)
@@ -96,7 +81,7 @@ async function userCount() {
 }
 
 async function activeCount() {
-    const count = await management.getActiveUsersCount().then((count) => {
+    const count = await manager.getActiveUsersCount().then((count) => {
         return count
     })
     return count
