@@ -10,7 +10,11 @@ router.get('/content/:tag', async (req, res) => {
 })
 
 router.put('/content/:tag', checkJwt, async (req, res) => {
-    console.log(req.user)
+    if(req.user.permissions.includes('write:site_content')) {
+        res.send(req.user)
+    } else {
+        res.sendStatus(401)
+    }
 })
 
 module.exports = router
