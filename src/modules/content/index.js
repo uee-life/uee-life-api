@@ -12,7 +12,7 @@ router.get('/content/:tag', async (req, res) => {
 
 router.put('/content/:tag', checkJwt, async (req, res) => {
     if(req.user.permissions.includes('write:site_content')) {
-        res.send(await updateContent(tag, req.body))
+        res.send(await updateContent(req.params.tag, req.body))
     } else {
         res.sendStatus(401)
     }
