@@ -2,7 +2,8 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const {
-    getContent
+    getContent,
+    updateContent
 } = require('./model');
 
 router.get('/content/:tag', async (req, res) => {
@@ -11,7 +12,7 @@ router.get('/content/:tag', async (req, res) => {
 
 router.put('/content/:tag', checkJwt, async (req, res) => {
     if(req.user.permissions.includes('write:site_content')) {
-        res.send(req.user)
+        res.send(await updateContent(tag, req.body))
     } else {
         res.sendStatus(401)
     }

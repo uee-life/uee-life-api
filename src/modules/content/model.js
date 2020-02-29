@@ -14,6 +14,7 @@ async function getContent(tag) {
 }
 
 async function updateContent(tag, data) {
+    console.log(data)
     sql = "UPDATE site_content SET title=?, content=? WHERE tag=?"
     await executeSQL(sql, [data.title, data.content, tag]).then(() => {
         return {success: true}
