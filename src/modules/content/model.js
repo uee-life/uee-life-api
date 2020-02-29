@@ -13,6 +13,16 @@ async function getContent(tag) {
     }
 }
 
+async function updateContent(tag, data) {
+    sql = "UPDATE site_content SET title=?, content=? WHERE tag=?"
+    await executeSQL(sql, [data.title, data.content, tag]).then(() => {
+        return {success: true}
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
 module.exports = {
-    getContent
+    getContent,
+    updateContent
 }
