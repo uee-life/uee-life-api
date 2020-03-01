@@ -1,6 +1,8 @@
 const uuid = require('uuid/v4')
 const { executeSQL } = require('../mariadb')
 
+const{ manager } = require('../manager')
+
 async function setVerificationCode(user, code) {
     // delete old code
     await executeSQL("DELETE FROM verification WHERE email = ?", [user.email]);
@@ -29,7 +31,7 @@ async function setVerified(user) {
     var metadata = {
         handle_verified: true
     }
-    const usr = await management.updateAppMetadata(params, metadata).then(function(res) {
+    const usr = await manager.updateAppMetadata(params, metadata).then(function(res) {
         console.log(res)
         return res
     }).catch(function(err) {
