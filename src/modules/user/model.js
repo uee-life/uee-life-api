@@ -1,6 +1,6 @@
 const { fetchCitizen } = require('../../helpers/rsi')
 const { createCitizen, getID } = require('../../helpers/db')
-const { getVerificationCode, setVerified } = require('../verification')
+const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
 
 const{ manager } = require('../manager')

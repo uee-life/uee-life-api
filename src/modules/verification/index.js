@@ -43,5 +43,6 @@ async function setVerified(user) {
 
 module.exports = {
     getVerificationCode,
+    setVerificationCode,
     setVerified
 }
