@@ -20,7 +20,11 @@ router.get('/ships', async (req, res) => {
 */
 
 router.post('/ships', checkJwt, async (req, res) => {
-    res.send(await saveShip(req.body))
+    if(req.user.permissions.includes('admin:all')) {
+        res.send(await saveShip(req.body))
+    } else {
+        res.sendStatus(401)
+    }
 })
 
 module.exports = router

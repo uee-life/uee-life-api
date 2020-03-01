@@ -171,5 +171,6 @@ module.exports = {
     getUser,
     updateHandle,
     sync,
+    syncCitizen,
     verify
 }
