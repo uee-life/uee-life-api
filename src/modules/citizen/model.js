@@ -4,7 +4,7 @@ const { executeSQL } = require('../mariadb')
 const { getUser } = require('../user/model')
 const { fetchCitizen } = require('../../helpers/rsi')
 const { getID } = require('../../helpers/db')
-const { syncCitizen } = require('../user')
+const { syncCitizen } = require('../user/model')
 
 /*
 *   GET /citizen/<handle>
