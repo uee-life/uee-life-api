@@ -13,7 +13,7 @@ async function createCitizen(handle) {
 }
 
 async function getCitizen(id) {
-    return await executeSQL("SELECT * FROM citizen WHERE id=?", [id])
+    return await executeSQL("SELECT a.*, b.name FROM citizen a left join citizen_sync b on a.handle = b.handle WHERE a.id=?", [id])
 }
 
 async function getID(handle) {
