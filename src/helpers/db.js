@@ -13,7 +13,12 @@ async function createCitizen(handle) {
 }
 
 async function getCitizen(id) {
-    return await executeSQL("SELECT a.*, b.name FROM citizen a left join citizen_sync b on a.handle = b.handle WHERE a.id=?", [id])
+    const rows = await executeSQL("SELECT a.*, b.name FROM citizen a left join citizen_sync b on a.handle = b.handle WHERE a.id=?", [id])
+    if(rows.length > 0) {
+        return rows[0]
+    } else {
+        return null
+    }
 }
 
 async function getID(handle) {
