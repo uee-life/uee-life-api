@@ -178,7 +178,7 @@ async function getOrgShips(org) {
     if (rows.length > 0) {
         for (i in rows) {
             ship = rows[i]
-            ship.owner = getCitizen(ship.citizen)
+            ship.owner = await getCitizen(ship.citizen)
             ships.push(ship)
         }
         return ships
