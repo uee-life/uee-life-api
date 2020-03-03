@@ -4,7 +4,8 @@ const router = require('express').Router()
 const {
     getOrganization, 
     getOrgFounders, 
-    getOrgMembers
+    getOrgMembers,
+    getOrgShips
 } = require('./model');
 
 router.get('/orgs/:id', cache(60), async (req, res) => {
@@ -23,6 +24,10 @@ router.get('/orgs/:id/members', async (req, res) => {
 router.get('/orgs/:id/affiliates', async (req, res) => {
     const page = req.query.page || 1
     res.send(await getOrgMembers(req.params.id, page, false));
+})
+
+router.get('/orgs/:id/ships', async (req, res) => {
+    req.send(await getOrgShips(req.params.id))
 })
 
 module.exports = router

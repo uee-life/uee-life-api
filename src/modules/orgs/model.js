@@ -1,6 +1,7 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 const { convertToMarkdown } = require('../helper')
+const { executeSQL } = require('../mariadb')
 
 async function fetchMembers(org, page, isMain) {
     let members = {
@@ -169,10 +170,21 @@ async function getOrgMembers(org, page=1, isMain=true) {
     return members
 }
 
+async function getOrgShips(org) {
+    const sql = 'select * from ship_map s left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on s.citizen = c.citizen where tag=?'
+    const rows = await executeSQL(sql, [org])
+    if (rows.length > 0) {
+        return rows
+    } else {
+        return []
+    }
+}
+
 
 module.exports = {
     getOrganization,
     getOrgFounders,
     getOrgMembers,
+    getOrgShips,
     test
 };
