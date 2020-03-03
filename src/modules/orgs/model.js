@@ -172,7 +172,7 @@ async function getOrgMembers(org, page=1, isMain=true) {
 }
 
 async function getOrgShips(org) {
-    const sql = 'select * from ship_map s left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on s.citizen = c.citizen where tag=?'
+    const sql = 'select * from ship_map m left join ship_view s on m.ship = s.id left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on m.citizen = c.citizen where tag=?'
     const rows = await executeSQL(sql, [org])
     let ships = []
     if (rows.length > 0) {
