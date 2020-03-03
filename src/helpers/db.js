@@ -12,6 +12,10 @@ async function createCitizen(handle) {
     }
 }
 
+async function getCitizen(id) {
+    return await executeSQL("SELECT * FROM citizen WHERE id=?", [id])
+}
+
 async function getID(handle) {
     sql = "SELECT id FROM citizen WHERE handle=?"
     rows = await executeSQL(sql, [handle])
@@ -25,5 +29,6 @@ async function getID(handle) {
 
 module.exports = {
     createCitizen,
+    getCitizen,
     getID
 }
