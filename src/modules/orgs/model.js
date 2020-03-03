@@ -176,7 +176,8 @@ async function getOrgShips(org) {
     const rows = await executeSQL(sql, [org])
     let ships = []
     if (rows.length > 0) {
-        for (ship in rows) {
+        for (i in rows) {
+            ship = rows[i]
             ship.owner = getCitizen(ship.citizen)
             ships.push(ship)
         }
