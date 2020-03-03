@@ -174,11 +174,13 @@ async function getOrgMembers(org, page=1, isMain=true) {
 async function getOrgShips(org) {
     const sql = 'select * from ship_map s left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on s.citizen = c.citizen where tag=?'
     const rows = await executeSQL(sql, [org])
+    let ships = []
     if (rows.length > 0) {
         for (ship in rows) {
             ship.owner = getCitizen(ship.citizen)
+            ships.push(ship)
         }
-        return rows
+        return ships
     } else {
         return []
     }
