@@ -1,5 +1,5 @@
 const { fetchCitizen } = require('../../helpers/rsi')
-const { createCitizen, getID, getOrgID } = require('../../helpers/db')
+const { createCitizen, getID, getOrgID, getOrgFounders } = require('../../helpers/db')
 const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
 const uuid = require('uuid/v4')
@@ -141,14 +141,19 @@ async function setOrg(citizen) {
         const orgID = await getOrgID(citizen.org)
         console.log(orgID)
         if(orgID) {
-            let rows = await executeSQL('SELECT id FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
+            let founder = 0
+            if (getOrgFounders().includes(citizen.handle)) {
+                founder = 1
+            }
+            let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
                 // clear up old org mapping
                 await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizen.id])
                 // map to new org
-                await executeSQL('INSERT INTO org_map (citizen, org) values (?,?)', [citizen.id, orgID])
+                await executeSQL('INSERT INTO org_map (citizen, org, founder, type) values (?, ?, ?, ?)', [citizen.id, orgID, founder, 1])
             } else {
                 // already exists
+                // need to add logic to update if founder flag changes, or type changes (member/affiliate)
                 console.log('citizen already registered to org...')
             }
         } else {
