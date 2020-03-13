@@ -142,9 +142,12 @@ async function setOrg(citizen) {
         console.log(orgID)
         if(orgID) {
             let founder = 0
-            if (fetchOrgFounders(citizen.org).includes(citizen.handle)) {
-                founder = 1
-            }
+            const founders = fetchOrgFounders(citizen.org)
+            founders.forEach((item) => {
+                if (item.handle === citizen.handle) {
+                    founder = 1
+                }
+            })
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
                 // clear up old org mapping
