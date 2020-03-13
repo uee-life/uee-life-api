@@ -142,7 +142,7 @@ async function setOrg(citizen) {
         console.log(orgID)
         if(orgID) {
             let founder = 0
-            if (fetchOrgFounders().includes(citizen.handle)) {
+            if (fetchOrgFounders(citizen.org).includes(citizen.handle)) {
                 founder = 1
             }
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
