@@ -1,6 +1,8 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 
+const { convertToMarkdown } = require('../modules/helper')
+
 async function fetchCitizen(handle) {
     console.log('fetching citizen...')
     try {
