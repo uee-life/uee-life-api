@@ -42,7 +42,7 @@ async function getOrgID(tag) {
     if(rows.length === 0) {
         console.log(`Adding: ${tag}`)
         // not found, add to org table
-        await executeSQL("INSERT INTO org (tag) valuies (?)", [tag])
+        await executeSQL("INSERT INTO org (tag) values (?)", [tag])
         rows = await executeSQL(sql, [tag])
         if (rows.length === 0) {
             return null
