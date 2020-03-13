@@ -32,8 +32,33 @@ async function getID(handle) {
     }
 }
 
+async function getOrg(id) {
+
+}
+
+async function getOrgID(tag) {
+    const sql = "SELECT id FROM org WHERE tag=?"
+    let rows = await executeSQL(sql, [tag])
+    if(rows.length === 0) {
+        console.log(`Adding: ${tag}`)
+        // not found, add to org table
+        await executeSQL("INSERT INTO org (tag) valuies (?)", [tag])
+        rows = await executeSQL(sql, [tag])
+        if (rows.length === 0) {
+            return null
+        }
+        console.log(`found: ${rows[0].id}`)
+        return rows[0].id
+    } else {
+        console.log(`Found: ${rows[0].id}`)
+        return rows[0].id
+    }
+}
+
 module.exports = {
     createCitizen,
     getCitizen,
-    getID
+    getID,
+    getOrg,
+    getOrgID
 }

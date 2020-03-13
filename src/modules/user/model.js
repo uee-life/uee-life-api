@@ -92,8 +92,7 @@ async function removeCitizen(handle) {
 
 async function sync(usr) {
     const user = await getUser(usr)
-    console.log(await getVerificationCode(user))
-    console.log(await fetchCitizen(user.app_metadata.handle))
+
     if(user.app_metadata.handle_verified) {
         const result = await syncCitizen(user.app_metadata.handle).then((citizen) => {
             return {success: true, citizen: citizen}
@@ -110,6 +109,9 @@ async function syncCitizen(handle) {
     console.log('syncing...')
     // get citizen data from RSI
     const citizen = await fetchCitizen(handle)
+
+    // store org affiliation
+    setOrg(citizen)
 
     // update citizen data
     if(citizen) {
@@ -129,6 +131,25 @@ async function syncCitizen(handle) {
         return citizen
     } else {
         return null
+    }
+}
+
+async function setOrg(citizen) {
+    console.log(citizen)
+    if(citizen.org) {
+        const orgID = getOrgID(citizen.org)
+        console.log(orgID)
+        if(orgID) {
+            let rows = await executeSQL('SELECT id FROM org_map WHERE citizen=? AND org=?', [citizen.id, orgID])
+            if (rows.length === 0) {
+                //await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizen.id])
+                //await executeSQL('INSERT INTO org_map (citizen, org) values (?,?)', [citizen.id, orgID])
+            } else {
+                // already exists
+            }
+        } else {
+            // failed to get org ID for some reason...
+        }
     }
 }
 
