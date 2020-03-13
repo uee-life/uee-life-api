@@ -142,7 +142,7 @@ async function setOrg(citizen) {
         console.log(orgID)
         if(orgID) {
             let founder = 0
-            const founders = fetchOrgFounders(citizen.org)
+            const founders = await fetchOrgFounders(citizen.org)
             founders.forEach((item) => {
                 if (item.handle === citizen.handle) {
                     founder = 1
