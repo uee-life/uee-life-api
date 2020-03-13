@@ -147,6 +147,7 @@ async function setOrg(citizen) {
                 //await executeSQL('INSERT INTO org_map (citizen, org) values (?,?)', [citizen.id, orgID])
             } else {
                 // already exists
+                console.log('citizen already registered to org...')
             }
         } else {
             // failed to get org ID for some reason...
