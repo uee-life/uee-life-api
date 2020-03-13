@@ -1,5 +1,5 @@
-const { fetchCitizen } = require('../../helpers/rsi')
-const { createCitizen, getID, getOrgID, getOrgFounders } = require('../../helpers/db')
+const { fetchCitizen, fetchOrgFounders } = require('../../helpers/rsi')
+const { createCitizen, getID, getOrgID } = require('../../helpers/db')
 const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
 const uuid = require('uuid/v4')
@@ -142,7 +142,7 @@ async function setOrg(citizen) {
         console.log(orgID)
         if(orgID) {
             let founder = 0
-            if (getOrgFounders().includes(citizen.handle)) {
+            if (fetchOrgFounders().includes(citizen.handle)) {
                 founder = 1
             }
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
