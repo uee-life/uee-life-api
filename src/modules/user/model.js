@@ -137,10 +137,11 @@ async function syncCitizen(handle) {
 async function setOrg(citizen) {
     console.log(citizen)
     if(citizen.org) {
-        const orgID = getOrgID(citizen.org)
+        const citizenID = await getID(citizen.handle)
+        const orgID = await getOrgID(citizen.org)
         console.log(orgID)
         if(orgID) {
-            let rows = await executeSQL('SELECT id FROM org_map WHERE citizen=? AND org=?', [citizen.id, orgID])
+            let rows = await executeSQL('SELECT id FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
                 //await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizen.id])
                 //await executeSQL('INSERT INTO org_map (citizen, org) values (?,?)', [citizen.id, orgID])
