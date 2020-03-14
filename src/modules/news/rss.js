@@ -7,7 +7,7 @@ async function loadRSS(link) {
         method: 'GET'
     }).then((res) => {
         const $ = cheerio.load(res.data)
-        console.log($('image.url').text())
+        console.log($('image').find('url').text())
         return $('image')
     })
 }
