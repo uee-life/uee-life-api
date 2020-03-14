@@ -1,6 +1,6 @@
 const axios = require("axios")
 const cheerio = require('cheerio')
-const { sub, isBefore, formatDistance } = require('date-fns')
+const { sub, isBefore, formatDistance, differenceInMilliseconds } = require('date-fns')
 
 const { getFeed } = require('./rss')
 
@@ -9,6 +9,7 @@ async function fetchNews(data) {
         const baseURI = "https://robertsspaceindustries.com"
         const resp = await axios.post(baseURI + '/api/hub/getCommlinkItems', data)
         const $ = cheerio.load(resp.data.data)
+
         news = []
 
         $('a').each(function (n, el) {
@@ -28,17 +29,17 @@ async function fetchNews(data) {
                 if(!art.image.startsWith('http')) {
                     art.image = baseURI + art.image
                 }
+
                 art.posted = $(el).find('div.time_ago').find('span.value').text()
-                if(art.posted.substring('ago')) {
+                if(art.posted.includes('ago')) {
                     art.posted_date = computeDate(art.posted)
                 } else {
                     art.posted_date = new Date(art.posted).toUTCString()
-                    art.posted = formatDistance(new Date(art.posted_date), new Date())
+                    art.posted = formatDistance(new Date(art.posted_date), new Date()) + " ago"
                 }
                 news.push(art)
             }
         })
-
         return news
     } catch (error) {
         console.error(error)
@@ -50,10 +51,8 @@ function computeDate(posted) {
     if(posted.startsWith('about')) {
         posted = posted.substring(6)
     }
-    console.log(posted)
     const [count, unit] = posted.split(' ')
     let date = null
-    console.log(unit)
     if (unit.startsWith('second')) {
         date = sub(new Date(), {seconds: count})
     } else if (unit.startsWith('minute')) {
@@ -74,6 +73,7 @@ function computeDate(posted) {
 
 function mergeNews(first, second) {
     let result = []
+    start = new Date()
     while (first.length + second.length > 0) {
         if(first.length === 0) {
             console.log('RSI articles compete')
@@ -90,13 +90,16 @@ function mergeNews(first, second) {
             result.push(first.shift())
         }
     }
+    console.log('data merged: ' + differenceInMilliseconds(new Date(), start))
     return result
 }
 
 async function getNews(data) {
+    start = new Date()
     const rsiNews = await fetchNews(data)
     const earliest = rsiNews[rsiNews.length - 1].posted_date
     const impgeo = await getFeed(earliest)
+
     if(data.series === 'news-update') {
         return mergeNews(rsiNews, impgeo)
     } else {

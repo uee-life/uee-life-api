@@ -1,6 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
-const { format, formatDistance, subDays, isAfter } = require('date-fns')
+const { format, formatDistance, subDays, isAfter, differenceInMilliseconds } = require('date-fns')
 
 async function loadRSS(link, earliest) {
     return await axios({
@@ -25,7 +25,6 @@ async function loadRSS(link, earliest) {
             }
         })
         //items = await addImages(items)
-
         return items
     }).catch((err) => {
         console.error(err)
