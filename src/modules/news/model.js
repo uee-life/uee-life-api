@@ -11,6 +11,8 @@ async function fetchNews(data) {
         $('a').each(function (n, el) {
             if($(el).attr('href')) {
                 art = {}
+                art.source = 'spectrum'
+                art.source_img = '/images/spectrum.png'
                 art.title = $(el).find('div.title').text()
                 art.link = baseURI + $(el).attr('href')
                 art.id = art.link.split('/').slice(-1)[0].split('-')[0]
@@ -24,6 +26,7 @@ async function fetchNews(data) {
                     art.image = baseURI + art.image
                 }
                 art.posted = $(el).find('div.time_ago').find('span.value').text()
+                art.posted_date = computeDate(art.posted)
                 news.push(art)
             }
         })
@@ -33,6 +36,10 @@ async function fetchNews(data) {
         console.error(error)
         return null
     }
+}
+
+function computeDate(posted) {
+    
 }
 
 async function getNews(data) {
