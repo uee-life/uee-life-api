@@ -50,8 +50,10 @@ function computeDate(posted) {
     if(posted.startsWith('about')) {
         posted = posted.substring(6)
     }
+    console.log(posted)
     const [count, unit] = posted.split(' ')
     let date = null
+    console.log(unit)
     if (unit.startsWith('second')) {
         date = sub(new Date(), {seconds: count})
     } else if (unit.startsWith('minute')) {
