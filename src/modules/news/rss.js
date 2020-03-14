@@ -14,7 +14,7 @@ async function loadRSS(link, earliest) {
             const item = {}
             item.source = 'impgeo'
             item.source_img = source_img
-            item.id = $(el).find('guid').text().split('?p=')[1]
+            item.id = 'IG-' + $(el).find('guid').text().split('?p=')[1]
             item.title = $(el).find('title').text()
             item.image = 'https://www.imperialgeographic-official.org/wp-content/uploads/2019/11/Bivaly_ScreenShot10.jpg'
             item.link = $(el).find('link').text()

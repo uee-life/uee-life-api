@@ -1,6 +1,6 @@
 const axios = require("axios")
 const cheerio = require('cheerio')
-const { sub, isBefore } = require('date-fns')
+const { sub, isBefore, formatDistance } = require('date-fns')
 
 const { getFeed } = require('./rss')
 
@@ -29,7 +29,12 @@ async function fetchNews(data) {
                     art.image = baseURI + art.image
                 }
                 art.posted = $(el).find('div.time_ago').find('span.value').text()
-                art.posted_date = computeDate(art.posted)
+                if(art.posted.substring('ago')) {
+                    art.posted_date = computeDate(art.posted)
+                } else {
+                    art.posted_date = new Date(art.posted).toUTCString()
+                    art.posted = formatDistance(new Date(art.posted_date), new Date())
+                }
                 news.push(art)
             }
         })
