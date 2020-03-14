@@ -88,7 +88,7 @@ function mergeNews(first, second) {
 
 async function getNews(data) {
     const rsiNews = await fetchNews(data)
-    const earliest = rsiNews[rsiNews.length].posted_date
+    const earliest = rsiNews[rsiNews.length - 1].posted_date
     const impgeo = await getFeed(earliest)
     if(data.series === 'news-update') {
         return mergeNews(rsiNews, impgeo)
