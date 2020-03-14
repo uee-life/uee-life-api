@@ -70,11 +70,10 @@ function mergeNews(first, second) {
     while (first.length + second.length > 0) {
         console.log(first[0], second[0])
         if(first.length === 0) {
-            console.log('a')
-            result = result.concat(second)
+            console.log('RSI articles compete')
             second = []
         } else if (second.length === 0) {
-            console.log('b')
+            console.log('impgeo articles complete')
             result = result.concat(first)
             first = []
         } else if (isBefore(new Date(first[0].posted_date), new Date(second[0].posted_date))) {
@@ -85,13 +84,17 @@ function mergeNews(first, second) {
             result.push(first.shift())
         }
     }
-    return result.slice(0, 10)
 }
 
 async function getNews(data) {
     const rsiNews = await fetchNews(data)
-    const impgeo = await getFeed()
-    return mergeNews(rsiNews, impgeo)
+    const earliest = rsiNews[rsiNews.length].posted_date
+    const impgeo = await getFeed(earliest)
+    if(data.series === 'news-update') {
+        return mergeNews(rsiNews, impgeo)
+    } else {
+        return rsiNews
+    }
 }
 
 module.exports = {

@@ -1,8 +1,8 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
-const { format, formatDistance, subDays } = require('date-fns')
+const { format, formatDistance, subDays, isAfter } = require('date-fns')
 
-async function loadRSS(link) {
+async function loadRSS(link, earliest) {
     return await axios({
         url: link,
         method: 'GET'
@@ -20,8 +20,9 @@ async function loadRSS(link) {
             item.link = $(el).find('link').text()
             item.posted_date = $(el).find('pubDate').text()
             item.posted = formatDistance(new Date(item.posted_date), new Date()) + " ago"
-            
-            items.push(item)
+            if(isAfter(item.posted_date, earliest)) {
+                items.push(item)
+            }
         })
         //items = await addImages(items)
 
@@ -52,8 +53,8 @@ async function getArticleImage(link) {
     })
 }
 
-async function getFeed() {
-    return await loadRSS('https://www.imperialgeographic-official.org/feed/')
+async function getFeed(earliest) {
+    return await loadRSS('https://www.imperialgeographic-official.org/feed/', earliest)
 }
 
 module.exports = {
