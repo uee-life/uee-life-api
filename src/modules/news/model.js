@@ -85,7 +85,7 @@ function mergeNews(first, second) {
             result.push(first.shift())
         }
     }
-    return result
+    return result.slice(0, 10)
 }
 
 async function getNews(data) {
