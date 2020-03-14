@@ -68,7 +68,6 @@ function computeDate(posted) {
 function mergeNews(first, second) {
     let result = []
     while (first.length + second.length > 0) {
-        console.log(first[0], second[0])
         if(first.length === 0) {
             console.log('RSI articles compete')
             second = []
@@ -84,6 +83,7 @@ function mergeNews(first, second) {
             result.push(first.shift())
         }
     }
+    return result
 }
 
 async function getNews(data) {

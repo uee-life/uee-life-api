@@ -20,7 +20,7 @@ async function loadRSS(link, earliest) {
             item.link = $(el).find('link').text()
             item.posted_date = $(el).find('pubDate').text()
             item.posted = formatDistance(new Date(item.posted_date), new Date()) + " ago"
-            if(isAfter(item.posted_date, earliest)) {
+            if(isAfter(new Date(item.posted_date), new Date(earliest))) {
                 items.push(item)
             }
         })
