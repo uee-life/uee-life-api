@@ -93,8 +93,8 @@ async function checkCitizens(members) {
 }
 
 async function fetchMembers(org, page, isMain) {
-    let members = {
-        count: 1,
+    let res = {
+        count: 0,
         members: []
     }
 
@@ -113,7 +113,7 @@ async function fetchMembers(org, page, isMain) {
 
         console.log(data)
 
-        const res = await axios({
+        res = await axios({
             url: url,
             method: 'POST',
             headers: {
