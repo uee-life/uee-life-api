@@ -61,8 +61,6 @@ async function fetchOrgFounders(org) {
     try {
         const url = 'https://robertsspaceindustries.com/api/orgs/getOrgMembers'
         const data = `{"symbol": "${org}", "rank":1}`
-        console.log("Requesting url:", url)
-        console.log("Using data:", data)
         const resp = await axios({
             url: url,
             method: 'POST',
@@ -71,8 +69,6 @@ async function fetchOrgFounders(org) {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(resp.request)
-        console.log("Got rows:",resp.data.data.totalrows)
         const $ = cheerio.load(resp.data.data.html)
         founders = []
         $('li.member-item').each(function (i, el) {
@@ -82,7 +78,6 @@ async function fetchOrgFounders(org) {
             founders[i]['name'] = name
             founders[i]['handle'] = handle
         })
-        console.log("Found founders:", founders)
         return founders
     } catch (error) {
         console.error(error)
