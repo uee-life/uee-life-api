@@ -84,6 +84,7 @@ async function checkCitizens(members) {
     for(i in members) {
         if(members[i].handle !== 'Redacted') {
             const id = await getID(members[i].handle)
+            console.log(id)
             members[i].verified = !!id
         }
     }
