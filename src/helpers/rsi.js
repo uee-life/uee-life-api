@@ -113,7 +113,7 @@ async function fetchMembers(org, page, isMain) {
 
         console.log(data)
 
-        result = await axios({
+        res = await axios({
             url: url,
             method: 'POST',
             headers: {
@@ -178,9 +178,9 @@ async function fetchMembers(org, page, isMain) {
         }).catch((err) => {
             console.error(err)
         })
-        memb = await checkCitizens(result.members)
+        memb = await checkCitizens(res.members)
         console.log(memb)
-        console.log(result)
+        console.log(res)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
