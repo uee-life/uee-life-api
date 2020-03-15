@@ -17,7 +17,8 @@ async function getOrgFounders(org) {
 
 async function getOrganization(org) {
     return await fetchOrg(org)
-} 
+}
+
 
 async function getOrgMembers(org, page=1, isMain=true) {
     if(!parseInt(page)) {

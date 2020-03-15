@@ -2,6 +2,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 
 const { convertToMarkdown } = require('../modules/helper')
+const { getID } = require('./db')
 
 async function fetchCitizen(handle) {
     console.log('fetching citizen...')
@@ -79,6 +80,16 @@ async function fetchOrgFounders(org) {
     }
 }
 
+async function checkCitizens(members) {
+    for(i in members) {
+        if(members[i].handle !== 'Redacted') {
+            const id = await getID(members[i].handle)
+            members[i].verified = !!id
+        }
+    }
+    return members
+}
+
 async function fetchMembers(org, page, isMain) {
     let members = {
         count: 1,
@@ -100,7 +111,7 @@ async function fetchMembers(org, page, isMain) {
 
         console.log(data)
 
-        members = await axios({
+        result = await axios({
             url: url,
             method: 'POST',
             headers: {
@@ -140,7 +151,8 @@ async function fetchMembers(org, page, isMain) {
                         name: name,
                         handle: handle,
                         stars: stars,
-                        thumb: thumb
+                        thumb: thumb,
+                        verified: false
                     }
                     members.push(member)
                 } else {
@@ -148,7 +160,8 @@ async function fetchMembers(org, page, isMain) {
                         name: 'Redacted',
                         handle: 'Redacted',
                         stars: stars,
-                        thumb: thumb
+                        thumb: thumb,
+                        verified: false
                     }
                     members.push(member)
                 }
@@ -163,11 +176,12 @@ async function fetchMembers(org, page, isMain) {
         }).catch((err) => {
             console.error(err)
         })
+        result.members = await checkCitizens(result.members)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
     }
-    return members
+    return result
 }
 
 module.exports = {
