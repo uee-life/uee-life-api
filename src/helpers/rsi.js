@@ -171,14 +171,14 @@ async function fetchMembers(org, page, isMain) {
                 count: totalMembers,
                 members: members
             }
-
-            console.log(result)
             
             return result
         }).catch((err) => {
             console.error(err)
         })
+        console.log(result)
         result.members = await checkCitizens(result.members)
+        console.log(result)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
