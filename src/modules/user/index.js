@@ -23,6 +23,7 @@ router.put('/user', checkJwt, async (req, res) => {
 
 
 // Protected
+// @deprecated
 router.get("/user/verify", checkJwt, async (req, res) => {
     res.send(await verify(req.user));
 })
@@ -30,6 +31,12 @@ router.get("/user/verify", checkJwt, async (req, res) => {
 // Protected
 router.post("/user/verify", checkJwt, async (req, res) => {
     res.send(await verify(req.user));
+})
+
+// Protected
+// @deprecated
+router.get("/user/sync", checkJwt, async (req, res) => {
+    res.send(await sync(req.user))
 })
 
 // Protected
