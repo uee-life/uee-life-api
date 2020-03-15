@@ -178,7 +178,8 @@ async function fetchMembers(org, page, isMain) {
         }).catch((err) => {
             console.error(err)
         })
-        result.members = await checkCitizens(result.members)
+        memb = await checkCitizens(result.members)
+        console.log(memb)
         console.log(result)
     } catch (error) {
         console.error(error)
