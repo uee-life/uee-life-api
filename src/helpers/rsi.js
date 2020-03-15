@@ -90,6 +90,7 @@ async function checkCitizens(members) {
             }
         }
     }
+    console.log(members)
     return members
 }
 
@@ -181,7 +182,6 @@ async function fetchMembers(org, page, isMain) {
         })
         console.log(result)
         result.members = await checkCitizens(result.members)
-        console.log(result)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
