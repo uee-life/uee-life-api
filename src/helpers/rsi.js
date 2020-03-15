@@ -171,6 +171,8 @@ async function fetchMembers(org, page, isMain) {
                 count: totalMembers,
                 members: members
             }
+
+            console.log(result)
             
             return result
         }).catch((err) => {
