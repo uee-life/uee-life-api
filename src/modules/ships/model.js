@@ -122,7 +122,7 @@ async function getShips() {
 }
 
 async function getShip(id) {
-    sql = 'select a.*, b.manufacturer as make, b.short_name as name, b.model, b.size, b.max_crew, b.cargo, b.type, b.focus from ship_map a left join ship_view b on a.ship = b.id where a.id=?'
+    sql = 'select a.*, b.make, b.short_name as name, b.model, b.size, b.max_crew, b.cargo, b.type, b.focus from ship_map a left join ship_view b on a.ship = b.id where a.id=?'
     return await executeSQL(sql, [id])
 }
 
