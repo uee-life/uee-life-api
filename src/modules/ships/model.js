@@ -122,7 +122,7 @@ async function getShips() {
 }
 
 async function getShip(id) {
-    sql = 'select * from ships where id=?'
+    sql = 'select * from ship_map where id=?'
     return await executeSQL(sql, [id])
 }
 
