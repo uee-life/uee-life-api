@@ -123,7 +123,8 @@ async function getShips() {
 
 async function getShip(id) {
     sql = 'select * from ship_info where id=?'
-    return await executeSQL(sql, [id])
+    const res =  await executeSQL(sql, [id])
+    return res[0]
 }
 
 module.exports = {
