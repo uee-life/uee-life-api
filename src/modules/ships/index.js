@@ -4,6 +4,7 @@ const router = require('express').Router()
 const { 
     syncShips,
     getShips,
+    getShip,
     saveShip
 } = require('./model')
 
@@ -13,6 +14,10 @@ router.get('/ships/sync', async (req, res) => {
 
 router.get('/ships', async (req, res) => {
     res.send(await getShips())
+})
+
+router.get('/ships/:id', async (req, res) => {
+    res.send(await getShip(req.params.id))
 })
 
 /*

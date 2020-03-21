@@ -121,8 +121,14 @@ async function getShips() {
     }
 }
 
+async function getShip(id) {
+    sql = 'select * from ships where id=?'
+    return await executeSQL(sql, [id])
+}
+
 module.exports = {
     syncShips,
     getShips,
+    getShip,
     saveShip
 }
