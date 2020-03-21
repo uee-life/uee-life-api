@@ -32,6 +32,17 @@ async function getID(handle) {
     }
 }
 
+async function getHandle(id) {
+    sql = "SELECT handle FROM citizen WHERE id=?"
+    rows = await executeSQL(sql, [id])
+    if(rows.length === 0) {
+        // not found
+        return ''
+    } else {
+        return rows[0].handle
+    }
+}
+
 async function getOrg(id) {
 
 }
