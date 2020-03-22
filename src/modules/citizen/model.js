@@ -91,6 +91,7 @@ async function loadCitizenLocation(handle) {
 
 async function getInfo(handle) {
     citizen = await getCitizen(handle)
+    console.log('getting info', citizen)
     const info = citizen.info
     if (citizen.id) {
         info.id = citizen.id
