@@ -108,18 +108,22 @@ async function addShip(usr, ship) {
     const res = await executeSQL("INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)", args)
     console.log(res)
     const ship_id = await executeSQL("SELECT id FROM ship_map WHERE ship = ?", [ship.id])
-    args = [ship_id[0].id, user.app_metadata.handle, 1]
+    args = [ship_id[0].id, id, 1]
     await executeSQL("INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)", args)
 }
 
 async function removeShip(usr, ship) {
     const user = await getUser(usr)
     const id = await getID(user.app_metadata.handle)
-    const sql = "DELETE FROM ship_map WHERE citizen=? AND id=?"
-    const args = [id, ship]
-    console.log(args)
-    const res = await executeSQL(sql, args)
-    console.log(res)
+
+    // check the ship exists and is owned by the user
+    const rows = await executeSQL("SELECT FROM ship_map WHERE citizen=? and id=?", [id, ship])
+    if (rows.length !== 0) {
+        // delete ship
+        await executeSQL("DELETE FROM ship_map WHERE citizen=? AND id=?", [id, ship])
+        // delete crew
+        await executeSQL("DELETE FROM ship_crew WHERE ship=?", [ship])
+    }
 }
 
 async function getLocation(handle) {
