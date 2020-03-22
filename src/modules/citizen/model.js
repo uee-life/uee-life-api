@@ -90,7 +90,9 @@ async function loadCitizenLocation(handle) {
 
 async function getInfo(handle) {
     citizen = await getCitizen(handle)
-    return citizen.info
+    const info = citizen.info
+    info.id = citizen.id
+    return info
 }
 
 async function getShips(handle) {
