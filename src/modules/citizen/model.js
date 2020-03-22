@@ -114,15 +114,16 @@ async function addShip(usr, ship) {
 
 async function removeShip(usr, ship) {
     const user = await getUser(usr)
-    const id = await getID(user.app_metadata.handle)
+    const citizen_id = await getID(user.app_metadata.handle)
+    const ship_id = parseInt(ship)
 
     // check the ship exists and is owned by the user
-    const rows = await executeSQL("SELECT FROM ship_map WHERE citizen=? and id=?", [id, ship])
+    const rows = await executeSQL("SELECT FROM ship_map WHERE citizen=? and id=?", [citizen_id, ship_id])
     if (rows.length !== 0) {
         // delete ship
-        await executeSQL("DELETE FROM ship_map WHERE citizen=? AND id=?", [id, ship])
+        await executeSQL("DELETE FROM ship_map WHERE citizen=? AND id=?", [citizen_id, ship_id])
         // delete crew
-        await executeSQL("DELETE FROM ship_crew WHERE ship=?", [ship])
+        await executeSQL("DELETE FROM ship_crew WHERE ship=?", [ship_id])
     }
 }
 
