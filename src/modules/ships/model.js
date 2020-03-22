@@ -127,7 +127,7 @@ async function getShip(id) {
     const rows =  await executeSQL(sql, [id])
     if (rows.length !== 0) {
         ship = rows[0]
-        ship.crew = await executeSQL("SELECT citizen, role FROM v_ship_crew WHERE ship=?", [id])
+        ship.crew = await executeSQL("SELECT citizen, role FROM v_ship_crew WHERE ship=? order by role", [id])
     }
     
     return ship
