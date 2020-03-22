@@ -18,6 +18,7 @@ async function getCitizen(handle) {
         citizen.home = await loadCitizenLocation(handle)
     } else {
         citizen.info = await fetchCitizen(handle)
+        citizen.id = -1
         citizen.ships = []
         citizen.home = {
             system: null,
@@ -91,7 +92,9 @@ async function loadCitizenLocation(handle) {
 async function getInfo(handle) {
     citizen = await getCitizen(handle)
     const info = citizen.info
-    info.id = citizen.id
+    if (citizen.id) {
+        info.id = citizen.id
+    }
     return info
 }
 
