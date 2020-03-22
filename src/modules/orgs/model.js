@@ -26,8 +26,6 @@ async function getOrgMembers(org, page=1, isMain=true) {
     }
     members = await fetchMembers(org, page, isMain)
 
-    console.log({org: org, isMain: isMain})
-
     return members
 }
 
