@@ -107,7 +107,7 @@ async function addShip(usr, ship) {
     console.log(res)
     const ship_id = await executeSQL("SELECT id FROM ship_map WHERE ship = ?", [ship.id])
     args = [ship_id, id, 1]
-    await executeSQL("INERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)")
+    await executeSQL("INERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)", args)
 }
 
 async function removeShip(usr, ship) {
