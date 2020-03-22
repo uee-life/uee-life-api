@@ -118,7 +118,7 @@ async function removeShip(usr, ship) {
     const ship_id = parseInt(ship)
 
     // check the ship exists and is owned by the user
-    const rows = await executeSQL("SELECT FROM ship_map WHERE citizen=? and id=?", [citizen_id, ship_id])
+    const rows = await executeSQL("SELECT id FROM ship_map WHERE citizen=? and id=?", [citizen_id, ship_id])
     if (rows.length !== 0) {
         // delete ship
         await executeSQL("DELETE FROM ship_map WHERE citizen=? AND id=?", [citizen_id, ship_id])
