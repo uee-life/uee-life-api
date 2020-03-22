@@ -122,9 +122,15 @@ async function getShips() {
 }
 
 async function getShip(id) {
+    let ship = {}
     sql = 'select * from ship_info where id=?'
-    const res =  await executeSQL(sql, [id])
-    return res[0]
+    const rows =  await executeSQL(sql, [id])
+    if (rows.length !== 0) {
+        ship = rows[0]
+        ship.crew = await executeSQL("SELECT * FROM ship_crew WHERE ship=?", [id])
+    }
+    
+    return ship
 }
 
 module.exports = {

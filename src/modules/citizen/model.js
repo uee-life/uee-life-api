@@ -102,10 +102,12 @@ async function getShips(handle) {
 async function addShip(usr, ship) {
     const user = await getUser(usr)
     const id = await getID(user.app_metadata.handle)
-    const sql = "INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)"
-    const args = [id, ship.id, ship.name]
-    const res = await executeSQL(sql, args)
+    let args = [id, ship.id, ship.name]
+    const res = await executeSQL("INSERT INTO ship_map (citizen, ship, name) VALUES (?, ?, ?)", args)
     console.log(res)
+    const ship_id = await executeSQL("SELECT id FROM ship_map WHERE ship = ?", [ship.id])
+    args = [ship_id, id, 1]
+    await executeSQL("INERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)")
 }
 
 async function removeShip(usr, ship) {
