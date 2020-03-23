@@ -198,6 +198,7 @@ async function searchCitizen(search) {
             return reply
         })
     })
+    console.log(request)
 
     request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
     request.end()
