@@ -184,7 +184,7 @@ async function searchCitizen(search) {
         method: 'POST',
         data: {
             community_id: null,
-            text: search,
+            text: search.query,
             ignore_self: true
         },
         headers: {
