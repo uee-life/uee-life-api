@@ -203,7 +203,7 @@ async function searchCitizen(search) {
         for (hit in hits) {
             console.log(hit)
         }
-        return data
+        return hits
     } else {
         return {
             error: "Failed to access search api"
