@@ -1,4 +1,4 @@
-const http = require('http')
+const http = require('https')
 const { executeSQL } = require('../mariadb')
 
 const { getUser } = require('../user/model')
@@ -177,7 +177,7 @@ async function createCitizen(handle) {
 }
 
 async function searchCitizen(search) {
-    const request = http.request({
+    const request = https.request({
         host: 'robertsspaceindustries.com',
         path: '/api/spectrum/search/member/autocomplete',
         port: 443,
