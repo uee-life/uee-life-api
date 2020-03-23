@@ -206,8 +206,9 @@ async function searchCitizen(search) {
     })
 
     const res = await request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
-    await request.end()
+    const test = await request.end()
     console.log(res)
+    console.log(test)
     console.log(data)
     return data
 }
