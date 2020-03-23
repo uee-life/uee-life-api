@@ -207,10 +207,7 @@ async function searchCitizen(search) {
             }
             let org = ""
             if (hit.meta.badges.length > 1) {
-                org = {
-                    name: hit.meta.badges[1].name,
-                    tag: hit.meta.badges[1].url.split('/')[-1]
-                }
+                org = hit.meta.badges[1].name
             }
             cit = {
                 handle: hit.nickname,
