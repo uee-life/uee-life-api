@@ -195,7 +195,7 @@ async function searchCitizen(search) {
         })
 
         response.on('end', () => {
-            data = reply
+            this.data = reply
             return reply
         })
     })
