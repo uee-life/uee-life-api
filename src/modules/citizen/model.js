@@ -194,7 +194,8 @@ async function searchCitizen(search) {
         })
 
         response.on('end', function () {
-            return cb(reply)
+            console.log(reply)
+            return reply
         })
     })
 
