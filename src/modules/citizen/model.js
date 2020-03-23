@@ -177,6 +177,7 @@ async function createCitizen(handle) {
 }
 
 async function searchCitizen(search) {
+    let data = null
     const request = https.request({
         host: 'robertsspaceindustries.com',
         path: '/api/spectrum/search/member/autocomplete',
@@ -187,21 +188,28 @@ async function searchCitizen(search) {
             'content-type': 'application/json',
             'accept': 'application/json'
         }
-    }, function (response) {
+    }, (response) => {
         let reply = ''
-        response.on('data', function (chunk) {
+        response.on('data', (chunk) => {
             reply += chunk
         })
 
-        response.on('end', function () {
+        response.on('end', () => {
             console.log(reply)
+            data = reply
             return reply
         })
     })
-    console.log(request)
+
+    request.on('error', (e) => {
+        console.error(e)
+        return `{"error": "${e}"}`
+    })
 
     request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
     request.end()
+    console.log(data)
+    return data
 }
 
 module.exports = {
