@@ -198,19 +198,26 @@ async function searchCitizen(search) {
     })
     if (res.success) {
         const data = {}
-        data.count = res.data.hits.total
-        data.citizens = []
-        const hits = res.data.hits.hits
+        data = []
+        const hits = res.data.members
         for (i in hits) {
             const hit = hits[i]
             let avatar = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
-            if (hit._source.avatar !== null) {
-                avatar = hit._source.avatar
+            if (hit.avatar !== null) {
+                avatar = hit.avatar
+            }
+            let org = ""
+            if (hit.meta.badges.length > 1) {
+                org = {
+                    name: hit.meta.badges[1].name,
+                    tag: hit.meta.badges[1].url.split('/')[-1]
+                }
             }
             cit = {
-                handle: hit._source.nickname,
-                name: hit._source.displayname,
-                portrait: avatar
+                handle: hit.nickname,
+                name: hit.displayname,
+                portrait: avatar,
+                org: org
             }
             data.citizens.push(cit)
         }
