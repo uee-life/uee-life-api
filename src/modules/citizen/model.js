@@ -202,8 +202,18 @@ async function searchCitizen(search) {
         const hits = res.data.hits.hits
         for (hit in hits) {
             console.log(hit)
+            let avatar = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
+            if (hit._source.avatar !== null) {
+                avatar = hit._source.avatar
+            }
+            cit = {
+                handle: hit._source.nickname,
+                name: hit._source.displayname,
+                portrait: avatar
+            }
+            data.citizens.push(cit)
         }
-        return hits
+        return data
     } else {
         return {
             error: "Failed to access search api"
