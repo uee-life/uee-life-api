@@ -17,8 +17,8 @@ const {
     verifyCitizen
 } = require('../verification')
 
-router.get('/citizen/search/:search', async (req, res) => {
-    res.send(await searchCitizen(req.params.search))
+router.post('/citizen/search', async (req, res) => {
+    res.send(await searchCitizen(req.body))
 })
 
 // retrieve citizen basic info
