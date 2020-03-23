@@ -19,7 +19,7 @@ async function fetchCitizen(handle) {
         info.portrait = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
         let image = $('div.thumb', '#public-profile').children()[0]
         if (image && image.attribs.src) {
-            info.portrait = `${baseURI}${thumbimg.attribs.src}`
+            info.portrait = `${baseURI}${image.attribs.src}`
         }
         info.org = $('span:contains("Spectrum Identification (SID)")', '#public-profile').next().text()
         info.orgRank = $('span:contains("Organization rank")', '#public-profile').next().text()

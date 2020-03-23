@@ -133,6 +133,10 @@ async function getShip(id) {
     return ship
 }
 
+async function addCrew(id, citizen, role) {
+
+}
+
 module.exports = {
     syncShips,
     getShips,
