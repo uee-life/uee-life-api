@@ -197,8 +197,7 @@ async function searchCitizen(search) {
         console.error(err)
     })
     if (res.success) {
-        const data = {}
-        data = []
+        const data = []
         const hits = res.data.members
         for (i in hits) {
             const hit = hits[i]
