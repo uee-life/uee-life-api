@@ -206,10 +206,8 @@ async function searchCitizen(search) {
         return `{"error": "${e}"}`
     })
 
-    const res = await request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
-    await request.end()
-    console.log(res)
-    console.log(this.data)
+    request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
+    request.end()
 
     data = await axios({
         url: 'https://robertsspaceindustries.com/api/spectrum/search/member/autocomplete',
@@ -222,12 +220,13 @@ async function searchCitizen(search) {
         headers: {
             origin: 'robertsspaceindustries.com'
         }
-    }).then((res) => {
-        console.log(res)
-        return res
+    }).then((resp) => {
+        console.log(resp)
+        return resp
     }).catch((err) => {
         console.error(err)
     })
+    console.log(data)
     return data
 }
 
