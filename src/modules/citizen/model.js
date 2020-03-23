@@ -221,12 +221,11 @@ async function searchCitizen(search) {
             origin: 'robertsspaceindustries.com'
         }
     }).then((resp) => {
-        console.log(resp)
-        return resp
+        console.log(resp.data)
+        return resp.data
     }).catch((err) => {
         console.error(err)
     })
-    console.log(data)
     return data
 }
 
