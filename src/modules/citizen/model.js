@@ -195,7 +195,6 @@ async function searchCitizen(search) {
         })
 
         response.on('end', () => {
-            console.log(reply)
             data = reply
             return reply
         })
@@ -206,8 +205,8 @@ async function searchCitizen(search) {
         return `{"error": "${e}"}`
     })
 
-    request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
-    request.end()
+    await request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
+    await request.end()
     console.log(data)
     return data
 }
