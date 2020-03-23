@@ -1,4 +1,4 @@
-const http = require('https')
+const https = require('https')
 const { executeSQL } = require('../mariadb')
 
 const { getUser } = require('../user/model')
