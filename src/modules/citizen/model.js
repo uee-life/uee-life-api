@@ -178,38 +178,7 @@ async function createCitizen(handle) {
 }
 
 async function searchCitizen(search) {
-    let data = null
-    const request = https.request({
-        host: 'robertsspaceindustries.com',
-        path: '/api/spectrum/search/member/autocomplete',
-        port: 443,
-        method: 'POST',
-        headers: {
-            'origin': 'robertsspaceindustries.com',
-            'content-type': 'application/json',
-            'accept': 'application/json'
-        }
-    }, (response) => {
-        let reply = ''
-        response.on('data', (chunk) => {
-            reply += chunk
-        })
-
-        response.on('end', () => {
-            this.data = reply
-            return reply
-        })
-    })
-
-    request.on('error', (e) => {
-        console.error(e)
-        return `{"error": "${e}"}`
-    })
-
-    request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
-    request.end()
-
-    data = await axios({
+    const res = await axios({
         url: 'https://robertsspaceindustries.com/api/spectrum/search/member/autocomplete',
         method: 'POST',
         data: {
@@ -226,7 +195,20 @@ async function searchCitizen(search) {
     }).catch((err) => {
         console.error(err)
     })
-    return data
+    if (res.success) {
+        const data = {}
+        data.count = res.data.hits.total
+        data.citizens = []
+        const hits = res.data.hits.hits
+        for (hit in hits) {
+            console.log(hit)
+        }
+        return data
+    } else {
+        return {
+            error: "Failed to access search api"
+        }
+    }
 }
 
 module.exports = {
