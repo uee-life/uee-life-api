@@ -218,7 +218,7 @@ async function searchCitizen(search) {
                 portrait: avatar,
                 org: org
             }
-            data.citizens.push(cit)
+            data.push(cit)
         }
         return data
     } else {
