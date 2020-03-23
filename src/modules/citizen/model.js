@@ -209,6 +209,24 @@ async function searchCitizen(search) {
     await request.end()
     console.log(res)
     console.log(this.data)
+
+    data = await axios({
+        url: 'https://robertsspaceindustries.com/api/spectrum/search/member/autocomplete',
+        method: 'POST',
+        data: {
+            community_id: null,
+            text: search,
+            ignore_self: true
+        },
+        headers: {
+            origin: 'robertsspaceindustries.com'
+        }
+    }).then((res) => {
+        console.log(res)
+        return res
+    }).catch((err) => {
+        console.error(err)
+    })
     return data
 }
 
