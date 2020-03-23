@@ -1,4 +1,4 @@
-
+const http = require('http')
 const { executeSQL } = require('../mariadb')
 
 const { getUser } = require('../user/model')
@@ -176,7 +176,34 @@ async function createCitizen(handle) {
     }
 }
 
+async function searchCitizen(search) {
+    const request = http.request({
+        host: 'robertsspaceindustries.com',
+        path: '/api/spectrum/search/member/autocomplete',
+        port: 443,
+        method: 'POST',
+        headers: {
+            'origin': 'robertsspaceindustries.com',
+            'content-type': 'application/json',
+            'accept': 'application/json'
+        }
+    }, function (response) {
+        let reply = ''
+        response.on('data', function (chunk) {
+            reply += chunk
+        })
+
+        response.on('end', function () {
+            return cb(reply)
+        })
+    })
+
+    request.write(`{"community_id":null,"text":"${search}","ignore_self":true}`)
+    request.end()
+}
+
 module.exports = {
+    searchCitizen,
     getCitizen,
     fetchCitizen,
     getInfo,

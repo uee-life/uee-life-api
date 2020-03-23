@@ -2,7 +2,8 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const {
-    getCitizen, 
+    searchCitizen,
+    getCitizen,
     getInfo, 
     getLocation,
     getShips,
@@ -16,6 +17,9 @@ const {
     verifyCitizen
 } = require('../verification')
 
+router.get('/citizen/search/:search', async (req, res) => {
+    res.send(await searchCitizen(req.params.search))
+})
 
 // retrieve citizen basic info
 router.get('/citizens/:handle', cache(600), async (req, res) => {
