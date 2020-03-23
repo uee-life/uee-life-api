@@ -200,8 +200,8 @@ async function searchCitizen(search) {
         data.count = res.data.hits.total
         data.citizens = []
         const hits = res.data.hits.hits
-        for (hit in hits) {
-            console.log(hit)
+        for (i in hits) {
+            const hit = hits[i]
             let avatar = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
             if (hit._source.avatar !== null) {
                 avatar = hit._source.avatar
