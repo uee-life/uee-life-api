@@ -26,10 +26,14 @@ async function loadRSS(feed, earliest) {
                 items.push(item)
             }
         })
-        return items
+        return sortItems(items)
     }).catch((err) => {
         console.error(err)
     })
+}
+
+async function sortItems(items) {
+    return items.sort((a, b) => (isAfter(new Date(a.posted_date), new Date(b.posted_date))) ? 1 : -1)
 }
 
 async function getYTFeed(feed, earliest) {
