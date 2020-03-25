@@ -2,7 +2,8 @@ const axios = require("axios")
 const cheerio = require('cheerio')
 const { sub, isBefore, formatDistance, differenceInMilliseconds } = require('date-fns')
 
-const { getFeed } = require('./rss')
+const { getFeed } = require('./ImpGeoRSS')
+const { getYTFeed } = require('./youtubeRSS')
 
 async function fetchNews(data) {
     try {
@@ -99,12 +100,16 @@ async function getNews(data) {
     const rsiNews = await fetchNews(data)
     const earliest = rsiNews[rsiNews.length - 1].posted_date
     const impgeo = await getFeed(earliest)
+    const youtube = await getYTFeed(earliest)
 
+    let news = rsiNews
     if(data.series === 'news-update') {
-        return mergeNews(rsiNews, impgeo)
+        news = mergeNews(news, impgeo)
+        news = mergeNews(news, youtube)
     } else {
         return rsiNews
     }
+    return news
 }
 
 module.exports = {
