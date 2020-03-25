@@ -66,10 +66,16 @@ async function getOrgID(tag) {
     }
 }
 
+async function getFeeds() {
+    const rows = await executeSQL('SELECT * FROM news_feeds')
+    return rows
+}
+
 module.exports = {
     createCitizen,
     getCitizen,
     getID,
     getOrg,
-    getOrgID
+    getOrgID,
+    getFeeds
 }

@@ -4,6 +4,7 @@ const { sub, isBefore, formatDistance, differenceInMilliseconds } = require('dat
 
 const { getFeed } = require('./ImpGeoRSS')
 const { getYTFeed } = require('./youtubeRSS')
+const { getFeeds } = require('../../helpers/db')
 
 async function fetchNews(data) {
     try {
@@ -93,19 +94,26 @@ function mergeNews(first, second) {
 
 async function getNews(data) {
     start = new Date()
-    const rsiNews = await fetchNews(data)
+    let news = await fetchNews(data)
     const earliest = rsiNews[rsiNews.length - 1].posted_date
-    const impgeo = await getFeed(earliest)
-    const youtube = await getYTFeed(earliest)
-    console.log(youtube)
 
-    let news = rsiNews
-    if(data.series === 'news-update') {
-        news = mergeNews(news, impgeo)
-        news = mergeNews(news, youtube)
+    const feeds = await getFeeds()
+    if (data.series === 'news-updates') {
+        for (f in feeds) {
+            const feed = feeds[f]
+            if (feed.type == 1) {
+                data = await getYTFeed(feed, earliest)
+                news = mergeNews(news, data)
+            } else {
+                // placeholder. This should pass in the feed object for generic wordpress RSS feeds
+                data = await getFeed(earliest)
+                news = mergeNews(news, data)
+            }
+        }
     } else {
-        return rsiNews
+        return news
     }
+    
     return news
 }
 

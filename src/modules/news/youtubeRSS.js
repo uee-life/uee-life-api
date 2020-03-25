@@ -2,7 +2,8 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const { format, formatDistance, subDays, isAfter, differenceInMilliseconds } = require('date-fns')
 
-async function loadRSS(link, earliest) {
+async function loadRSS(feed, earliest) {
+    const link = `https://www.youtube.com/feeds/videos.xml?playlist_id=${feed.id}`
     return await axios({
         url: link,
         method: 'GET'
@@ -10,10 +11,10 @@ async function loadRSS(link, earliest) {
         console.log(res)
         let items = []
         const $ = cheerio.load(res.data, { xmlMode: true })
-        const source_img = "/images/astropub.png"
+        const source_img = feed.logo
         $('entry').each((i, el) => {
             const item = {}
-            item.source = 'Galactic Historian'
+            item.source = feed.source
             item.source_img = source_img
             item.id = $(el).find('id').text()
             item.title = $(el).find('title').text()
@@ -31,8 +32,8 @@ async function loadRSS(link, earliest) {
     })
 }
 
-async function getYTFeed(earliest) {
-    return await loadRSS('https://www.youtube.com/feeds/videos.xml?playlist_id=PLeBcPM4MDA6TYa5WSKlxeZv6htnJWJybc', earliest)
+async function getYTFeed(feed, earliest) {
+    return await loadRSS(feed, earliest)
 }
 
 module.exports = {
