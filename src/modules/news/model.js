@@ -98,17 +98,18 @@ async function getNews(data) {
     const earliest = news[news.length - 1].posted_date
 
     const feeds = await getFeeds()
+    console.log("series", data.series)
     if (data.series === 'news-updates') {
         for (f in feeds) {
             const feed = feeds[f]
             console.log("feed", feed)
             if (feed.type == 1) {
-                data = await getYTFeed(feed, earliest)
-                news = mergeNews(news, data)
+                d = await getYTFeed(feed, earliest)
+                news = mergeNews(news, d)
             } else {
                 // placeholder. This should pass in the feed object for generic wordpress RSS feeds
-                data = await getFeed(earliest)
-                news = mergeNews(news, data)
+                d = await getFeed(earliest)
+                news = mergeNews(news, d)
             }
         }
     } else {
