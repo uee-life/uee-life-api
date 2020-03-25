@@ -98,6 +98,7 @@ async function getNews(data) {
     const earliest = news[news.length - 1].posted_date
 
     const feeds = await getFeeds()
+    console.log(feeds)
     if (data.series === 'news-updates') {
         for (f in feeds) {
             const feed = feeds[f]
