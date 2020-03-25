@@ -20,6 +20,21 @@ router.get('/ships/:id', async (req, res) => {
     res.send(await getShip(req.params.id))
 })
 
+router.get('/ships/:id/crew', async (req, res) => {
+    res.send(await getCrew(req.params.id))
+})
+
+// Add a crewmember to a ship
+// protected
+router.put('/ships/:id/crew', checkJwt, async (req, res) => {
+    res.send(await addCrew(req.user, req.params.id, req.body))
+})
+
+// Delete a crewmember (or yourself from a crew)
+router.delete('/crew/:crew_id', checkJwt, async (req, res) => {
+    res.send(await removeCrew(req.user, req.params.ship_id, req.params.crew_id))
+})
+
 /*
 *   Protected APIs
 */
