@@ -99,7 +99,7 @@ async function getNews(data) {
 
     const feeds = await getFeeds()
     console.log("series", data.series)
-    if (data.series === 'news-updates') {
+    if (data.series === 'news-update') {
         for (f in feeds) {
             const feed = feeds[f]
             console.log("feed", feed)
