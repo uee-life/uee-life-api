@@ -77,17 +77,13 @@ function mergeNews(first, second) {
     start = new Date()
     while (first.length + second.length > 0) {
         if(first.length === 0) {
-            console.log('RSI articles compete')
             second = []
         } else if (second.length === 0) {
-            console.log('impgeo articles complete')
             result = result.concat(first)
             first = []
         } else if (isBefore(new Date(first[0].posted_date), new Date(second[0].posted_date))) {
-            console.log('c')
             result.push(second.shift())
         } else {
-            console.log('d')
             result.push(first.shift())
         }
     }
