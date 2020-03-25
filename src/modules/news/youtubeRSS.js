@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const { format, formatDistance, subDays, isAfter, differenceInMilliseconds } = require('date-fns')
 
 async function loadRSS(feed, earliest) {
-    const link = `https://www.youtube.com/feeds/videos.xml?playlist_id=${feed.id}`
+    const link = `https://www.youtube.com/feeds/videos.xml?playlist_id=${feed.link}`
     console.log(link)
     return await axios({
         url: link,
