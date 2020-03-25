@@ -17,7 +17,7 @@ async function fetchNews(data) {
         $('a').each(function (n, el) {
             if($(el).attr('href')) {
                 art = {}
-                art.source = 'spectrum'
+                art.source = 'Spectrum'
                 art.source_img = '/images/spectrum.png'
                 art.title = $(el).find('div.title').text()
                 art.link = baseURI + $(el).attr('href')

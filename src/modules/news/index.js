@@ -3,7 +3,7 @@ const router = require('express').Router()
 
 const { getNews } = require('./model');
 
-router.get('/news', cache(60), async (req, res) => {
+router.get('/news', cache(600), async (req, res) => {
     let data = {"channel": "","series":"","type":"","text":"","sort":"publish_new","page":1};
     for (const prop in req.query) {
         if(prop in data) {
