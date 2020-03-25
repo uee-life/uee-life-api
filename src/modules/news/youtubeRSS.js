@@ -7,6 +7,7 @@ async function loadRSS(link, earliest) {
         url: link,
         method: 'GET'
     }).then(async (res) => {
+        console.log(res)
         let items = []
         const $ = cheerio.load(res.data, { xmlMode: true })
         const source_img = ""

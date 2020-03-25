@@ -101,6 +101,7 @@ async function getNews(data) {
     const earliest = rsiNews[rsiNews.length - 1].posted_date
     const impgeo = await getFeed(earliest)
     const youtube = await getYTFeed(earliest)
+    console.log(youtube)
 
     let news = rsiNews
     if(data.series === 'news-update') {
