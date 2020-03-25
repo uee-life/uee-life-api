@@ -33,7 +33,7 @@ async function loadRSS(feed, earliest) {
 }
 
 async function sortItems(items) {
-    return items.sort((a, b) => (isAfter(new Date(a.posted_date), new Date(b.posted_date))) ? 1 : -1)
+    return items.sort((a, b) => (isAfter(new Date(a.posted_date), new Date(b.posted_date))) ? -1 : 1)
 }
 
 async function getYTFeed(feed, earliest) {
