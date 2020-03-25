@@ -4,11 +4,11 @@ const { format, formatDistance, subDays, isAfter, differenceInMilliseconds } = r
 
 async function loadRSS(feed, earliest) {
     const link = `https://www.youtube.com/feeds/videos.xml?playlist_id=${feed.id}`
+    console.log(link)
     return await axios({
         url: link,
         method: 'GET'
     }).then(async (res) => {
-        console.log(res)
         let items = []
         const $ = cheerio.load(res.data, { xmlMode: true })
         const source_img = feed.logo
