@@ -19,7 +19,7 @@ async function loadRSS(feed, earliest) {
             item.id = $(el).find('id').text()
             item.title = $(el).find('title').text()
             item.image = $(el).find('media\\:group').find('media\\:thumbnail').attr('url')
-            item.link = $(el).find('media\\:group').find('media\\:content').attr('url')
+            item.link = $(el).find('link').attr('href')
             item.posted_date = $(el).find('published').text()
             item.posted = formatDistance(new Date(item.posted_date), new Date()) + " ago"
             if(isAfter(new Date(item.posted_date), new Date(earliest))) {
