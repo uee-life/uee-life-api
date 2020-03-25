@@ -133,6 +133,11 @@ async function getShip(id) {
     return ship
 }
 
+async function getRoles() {
+    const rows = await executeSQL('SELECT * from ship_crew_roles')
+    return rows
+}
+
 async function addCrew(id, citizen, role) {
 
 }
@@ -141,5 +146,6 @@ module.exports = {
     syncShips,
     getShips,
     getShip,
+    getRoles,
     saveShip
 }
