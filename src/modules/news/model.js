@@ -95,7 +95,7 @@ function mergeNews(first, second) {
 async function getNews(data) {
     start = new Date()
     let news = await fetchNews(data)
-    const earliest = rsiNews[news.length - 1].posted_date
+    const earliest = news[news.length - 1].posted_date
 
     const feeds = await getFeeds()
     if (data.series === 'news-updates') {
