@@ -12,7 +12,7 @@ async function loadRSS(link, earliest) {
         const source_img = $('image').find('url').text()
         $('item').each((i, el) => {
             const item = {}
-            item.source = 'impgeo'
+            item.source = 'Imperial Geographic'
             item.source_img = source_img
             item.id = 'IG-' + $(el).find('guid').text().split('?p=')[1]
             item.title = $(el).find('title').text()

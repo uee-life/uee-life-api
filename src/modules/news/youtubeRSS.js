@@ -10,10 +10,10 @@ async function loadRSS(link, earliest) {
         console.log(res)
         let items = []
         const $ = cheerio.load(res.data, { xmlMode: true })
-        const source_img = ""
+        const source_img = "/images/astropub.png"
         $('entry').each((i, el) => {
             const item = {}
-            item.source = 'Galactic-Historian'
+            item.source = 'Galactic Historian'
             item.source_img = source_img
             item.id = $(el).find('id').text()
             item.title = $(el).find('title').text()
