@@ -11,11 +11,11 @@ async function loadRSS(feed, earliest) {
     }).then(async (res) => {
         let items = []
         const $ = cheerio.load(res.data, { xmlMode: true })
-        const source_img = feed.logo
+
         $('entry').each((i, el) => {
             const item = {}
             item.source = feed.source
-            item.source_img = source_img
+            item.source_img = feed.image
             item.id = $(el).find('id').text()
             item.title = $(el).find('title').text()
             item.image = $(el).find('media\\:group').find('media\\:thumbnail').attr('url')
