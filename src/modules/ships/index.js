@@ -5,6 +5,7 @@ const {
     syncShips,
     getShips,
     getShip,
+    getCrew,
     getRoles,
     saveShip
 } = require('./model')
