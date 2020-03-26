@@ -1,6 +1,9 @@
 const axios = require("axios")
 const {executeSQL} = require('../mariadb')
 
+const { getID } = require('../../helpers/db')
+const { getUser } = require('../user/model')
+
 const manufacturers = {
     'Origin Jumpworks GmbH': 1,
     'Anvil Aerospace': 2,
@@ -127,7 +130,6 @@ async function getShip(id) {
     const rows =  await executeSQL(sql, [id])
     if (rows.length !== 0) {
         ship = rows[0]
-        ship.crew = await executeSQL("SELECT id, citizen, role FROM v_ship_crew WHERE ship=? order by role", [id])
     }
     
     return ship
@@ -139,6 +141,21 @@ async function getCrew(id) {
         return rows
     } else {
         return []
+    }
+}
+
+async function addCrew(usr, ship_id, data) {
+    // data: {handle: "crazyonerob", role: 2}
+    // TODO: Validate valid role specified
+    const owner = getUser(usr)
+
+    // Check requesting user is owner of ship
+    // retrieve identified ship
+    const rows = await executeSQL('SELECT * FROM ship_map WHERE id=? and citizen=?', [ship_id, getID(owner.app_metadata.handle)])
+    if (rows.length > 0) {
+        await executeSQL('INSERT INTO ship_crew (ship, crew, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
+    } else {
+        return {error: 'You don\'t own that ship!'}
     }
 }
 
@@ -156,6 +173,7 @@ module.exports = {
     getShips,
     getShip,
     getCrew,
+    addCrew,
     getRoles,
     saveShip
 }

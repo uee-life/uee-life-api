@@ -6,6 +6,7 @@ const {
     getShips,
     getShip,
     getCrew,
+    addCrew,
     getRoles,
     saveShip
 } = require('./model')
@@ -32,7 +33,7 @@ router.get('/ships/:id/crew', async (req, res) => {
 
 // Add a crewmember to a ship
 // protected
-router.put('/ships/:id/crew', checkJwt, async (req, res) => {
+router.post('/ships/:id/crew', checkJwt, async (req, res) => {
     res.send(await addCrew(req.user, req.params.id, req.body))
 })
 
