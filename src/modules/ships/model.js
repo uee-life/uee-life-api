@@ -146,13 +146,12 @@ async function getCrew(id) {
 
 async function addCrew(usr, ship_id, data) {
     console.log("Adding crew: ", data)
-    console.log(usr)
-    const owner = getUser(usr)
-    console.log(owner)
-    console.log("owner", owner.app_metadata.handle, getID(owner.app_metadata.handle))
+    const owner = await getUser(usr)
+    const owner_id = await getID(owner.app_metadata.handle)
+    console.log("owner", owner.app_metadata.handle, owner_id)
     // Check requesting user is owner of ship
     // retrieve identified ship
-    const rows = await executeSQL('SELECT * FROM ship_map WHERE id=? and citizen=?', [ship_id, getID(owner.app_metadata.handle)])
+    const rows = await executeSQL('SELECT * FROM ship_map WHERE id=? and citizen=?', [ship_id, owner_id])
     if (rows.length > 0) {
         console.log('ship found! Adding crew')
         await executeSQL('INSERT INTO ship_crew (ship, crew, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
