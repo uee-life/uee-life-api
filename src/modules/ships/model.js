@@ -154,6 +154,7 @@ async function addCrew(usr, ship_id, data) {
     if (rows.length > 0) {
         console.log('ship found! Adding crew')
         await executeSQL('INSERT INTO ship_crew (ship, crew, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
+        return {success: 'ship added'}
     } else {
         console.log('error - not found')
         return {error: 'You don\'t own that ship!'}
@@ -163,10 +164,6 @@ async function addCrew(usr, ship_id, data) {
 async function getRoles() {
     const rows = await executeSQL('SELECT * from ship_crew_roles')
     return rows
-}
-
-async function addCrew(id, citizen, role) {
-
 }
 
 module.exports = {
