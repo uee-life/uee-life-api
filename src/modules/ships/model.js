@@ -145,21 +145,35 @@ async function getCrew(id) {
 }
 
 async function addCrew(usr, ship_id, data) {
-    console.log("Adding crew: ", data)
-    const owner = await getUser(usr)
-    const owner_id = await getID(owner.app_metadata.handle)
-    console.log("owner", owner.app_metadata.handle, owner_id)
-    // Check requesting user is owner of ship
-    // retrieve identified ship
-    const rows = await executeSQL('SELECT * FROM ship_map WHERE id=? and citizen=?', [ship_id, owner_id])
-    if (rows.length > 0) {
-        console.log('ship found! Adding crew')
+    const user = await getUser(usr)
+
+    if (isOwner(user, ship_id)) {
         await executeSQL('INSERT INTO ship_crew (ship, crew, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
         return {success: 'ship added'}
     } else {
-        console.log('error - not found')
         return {error: 'You don\'t own that ship!'}
     }
+}
+
+async function removeCrew(usr, crew_id) {
+    const user = await getUser(usr)
+    const res = await executeSQL('SELECT ship, crew from ship_crew where id=?', [crew_id])
+
+    if (isOwner(user, res.ship) || res.crew === user.app_metadata.handle) {
+        await executeSQL('DELETE FROM ship_crew WHERE id=?', [crew_id])
+        return {success: 'crew removed'}
+    } else {
+        return {error: 'you cannot remove this crewmen'}
+    }
+}
+
+async function isOwner(user, ship) {
+    const user_id = await getID(user.app_metadata.handle)
+    const rows = await executeSQL('SELECT * FROM ship_map WHERE id=? and citizen=?', [ship, user_id])
+    if (rows.length > 0) {
+        return true
+    }
+    return false
 }
 
 async function getRoles() {
@@ -173,6 +187,7 @@ module.exports = {
     getShip,
     getCrew,
     addCrew,
+    removeCrew,
     getRoles,
     saveShip
 }

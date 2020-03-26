@@ -7,6 +7,7 @@ const {
     getShip,
     getCrew,
     addCrew,
+    removeCrew,
     getRoles,
     saveShip
 } = require('./model')
@@ -39,7 +40,7 @@ router.post('/ships/:id/crew', checkJwt, async (req, res) => {
 
 // Delete a crewmember (or yourself from a crew)
 router.delete('/crew/:crew_id', checkJwt, async (req, res) => {
-    res.send(await removeCrew(req.user, req.params.ship_id, req.params.crew_id))
+    res.send(await removeCrew(req.user, req.params.crew_id))
 })
 
 /*
