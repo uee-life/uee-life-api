@@ -178,7 +178,6 @@ async function createCitizen(handle) {
 }
 
 async function searchCitizen(search) {
-    console.log(search)
     const res = await axios({
         url: 'https://robertsspaceindustries.com/api/spectrum/search/member/autocomplete',
         method: 'POST',
@@ -191,7 +190,6 @@ async function searchCitizen(search) {
             origin: 'robertsspaceindustries.com'
         }
     }).then((resp) => {
-        console.log(resp.data)
         return resp.data
     }).catch((err) => {
         console.error(err)
