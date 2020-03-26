@@ -146,7 +146,9 @@ async function getCrew(id) {
 
 async function addCrew(usr, ship_id, data) {
     console.log("Adding crew: ", data)
+    console.log(usr)
     const owner = getUser(usr)
+    console.log(owner)
     console.log("owner", owner.app_metadata.handle, getID(owner.app_metadata.handle))
     // Check requesting user is owner of ship
     // retrieve identified ship
