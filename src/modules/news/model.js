@@ -2,7 +2,7 @@ const axios = require("axios")
 const cheerio = require('cheerio')
 const { sub, isBefore, formatDistance, differenceInMilliseconds } = require('date-fns')
 
-const { getFeed } = require('./ImpGeoRSS')
+const { wpFeed } = require('./ImpGeoRSS')
 const { getYTFeed } = require('./youtubeRSS')
 const { getFeeds } = require('../../helpers/db')
 
@@ -103,9 +103,9 @@ async function getNews(data) {
             console.log(feed)
             if (feed.type == 1) {
                 news = mergeNews(news, await getYTFeed(feed, earliest))
-            } else {
+            } else if (feed.type == 2) {
                 // placeholder. This should pass in the feed object for generic wordpress RSS feeds
-                news = mergeNews(news, await getFeed(earliest))
+                news = mergeNews(news, await wpFeed(earliest))
             }
         }
     } else {

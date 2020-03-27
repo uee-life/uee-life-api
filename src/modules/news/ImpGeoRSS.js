@@ -52,11 +52,11 @@ async function getArticleImage(link) {
     })
 }
 
-async function getFeed(earliest) {
+async function wpFeed(earliest) {
     console.log('loading imp geo feed...')
     return await loadRSS('https://www.imperialgeographic-official.org/feed/', earliest)
 }
 
 module.exports = {
-    getFeed
+    wpFeed
 }
