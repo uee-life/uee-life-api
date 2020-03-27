@@ -75,7 +75,6 @@ function computeDate(posted) {
 
 function mergeNews(first, second) {
     let result = []
-    start = new Date()
     while (first.length + second.length > 0) {
         if(first.length === 0) {
             second = []
@@ -88,7 +87,6 @@ function mergeNews(first, second) {
             result.push(first.shift())
         }
     }
-    console.log('data merged: ' + differenceInMilliseconds(new Date(), start))
     return result
 }
 
@@ -102,6 +100,7 @@ async function getNews(data) {
     if (data.series === 'news-update') {
         for (f in feeds) {
             const feed = feeds[f]
+            console.log(feed)
             if (feed.type == 1) {
                 news = mergeNews(news, await getYTFeed(feed, earliest))
             } else {
