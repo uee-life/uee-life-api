@@ -53,6 +53,7 @@ async function getArticleImage(link) {
 }
 
 async function getFeed(earliest) {
+    console.log('loading imp geo feed...')
     return await loadRSS('https://www.imperialgeographic-official.org/feed/', earliest)
 }
 

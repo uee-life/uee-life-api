@@ -103,12 +103,10 @@ async function getNews(data) {
         for (f in feeds) {
             const feed = feeds[f]
             if (feed.type == 1) {
-                d = await getYTFeed(feed, earliest)
-                news = mergeNews(news, d)
+                news = mergeNews(news, await getYTFeed(feed, earliest))
             } else {
                 // placeholder. This should pass in the feed object for generic wordpress RSS feeds
-                d = await getFeed(earliest)
-                news = mergeNews(news, d)
+                news = mergeNews(news, await getFeed(earliest))
             }
         }
     } else {
