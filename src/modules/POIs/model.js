@@ -14,7 +14,7 @@ async function getAllPOIs() {
 }
 
 async function getPOI(id) {
-    return await executeSQL('SELECT * FROM pois WHERE id=?', [id])
+    return await executeSQL('SELECT * FROM pois WHERE id=?', [parseInt(id)])
 }
 
 async function addPOI(user, data) {
@@ -36,7 +36,7 @@ async function updatePOI(user, id, data) {
 }
 
 async function getPOIData(id) {
-    return await executeSQL('SELECT * FROM poi_data WHERE poi=?', [id])
+    return await executeSQL('SELECT * FROM poi_data WHERE poi=?', [parseInt(id)])
 }
 
 async function updatePOIData(user, id, data) {
