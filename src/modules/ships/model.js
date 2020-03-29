@@ -163,7 +163,19 @@ async function removeCrew(usr, crew_id) {
         await executeSQL('DELETE FROM ship_crew WHERE id=?', [crew_id])
         return {success: 'crew removed'}
     } else {
-        return {error: 'you cannot remove this crewmen'}
+        return {error: 'you do not have permission to remove this crewmen'}
+    }
+}
+
+async function updateCrew(usr, crew_id, data) {
+    const user = await getUser(usr)
+    const res = await executeSQL('SELECT ship, citizen from ship_crew where id=?', [crew_id])
+
+    if (data.role && isOwner(user, res.ship)) {
+        await executeSQL('UPDATE ship_crew SET role=? WHERE id=?', [data.role, crew_id])
+        return {success: 'crew updated'}
+    } else {
+        return {error: 'you do not have permission to update this crewmen'}
     }
 }
 
@@ -183,5 +195,6 @@ module.exports = {
     getCrew,
     addCrew,
     removeCrew,
+    updateCrew,
     saveShip
 }
