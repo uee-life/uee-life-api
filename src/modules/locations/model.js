@@ -42,7 +42,7 @@ async function updateLocationData(id, data) {
 
 async function getLocations(id) {
     locations = []
-    rows = await executeSQL('SELECT * from locs_view parent_id = ?', [id])
+    rows = await executeSQL('SELECT * from locs_view parent_id = ?', [parseInt(id)])
     if(rows.length > 0) {
         locations = rows
     }
@@ -50,8 +50,9 @@ async function getLocations(id) {
 }
 
 async function getPOIs(id) {
+    const p_id = parseInt(id)
     sql = "SELECT * FROM poi_view where parent_id=? or system_id=?"
-    rows = await executeSQL(sql, [id, id])
+    rows = await executeSQL(sql, [p_id, p_id])
     return rows
 }
 

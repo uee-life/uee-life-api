@@ -16,7 +16,7 @@ async function getSystem(id) {
 }
 
 async function getLocations(id) {
-    return await executeSQL('SELECT * locs where parent_id = ?', [id])
+    return await executeSQL('SELECT * locs where parent_id = ?', [parseInt(id)])
 }
 
 async function getPOIs(id) {
