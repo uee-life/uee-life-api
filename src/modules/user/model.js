@@ -27,7 +27,6 @@ async function getUser(usr) {
 
 async function handleExists(handle) {
     const rows = await executeSQL('SELECT handle FROM citizen WHERE handle=?', [handle])
-    console.log(rows)
     if(rows.length === 0) {
         return false
     } else {
@@ -135,11 +134,9 @@ async function syncCitizen(handle) {
 }
 
 async function setOrg(citizen) {
-    console.log(citizen)
     if(citizen.org) {
         const citizenID = await getID(citizen.handle)
         const orgID = await getOrgID(citizen.org)
-        console.log(orgID)
         if(orgID) {
             let founder = 0
             const founders = await fetchOrgFounders(citizen.org)

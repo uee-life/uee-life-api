@@ -31,14 +31,6 @@ async function loadRSS(link, earliest) {
     })
 }
 
-async function addImages(items) {
-    for(i in items) {
-        console.log(i)
-        items[i].image = await getArticleImage(items[i].link)
-    }
-    return items
-}
-
 async function getArticleImage(link) {
     return axios({
         url: link,
@@ -53,7 +45,6 @@ async function getArticleImage(link) {
 }
 
 async function wpFeed(earliest) {
-    console.log('loading imp geo feed...')
     return await loadRSS('https://www.imperialgeographic-official.org/feed/', earliest)
 }
 

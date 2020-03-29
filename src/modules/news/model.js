@@ -96,11 +96,9 @@ async function getNews(data) {
     const earliest = news[news.length - 1].posted_date
 
     const feeds = await getFeeds()
-    console.log("series", data.series)
     if (data.series === 'news-update') {
         for (f in feeds) {
             const feed = feeds[f]
-            console.log(feed)
             if (feed.type == 1) {
                 news = mergeNews(news, await getYTFeed(feed, earliest))
             } else if (feed.type == 2) {

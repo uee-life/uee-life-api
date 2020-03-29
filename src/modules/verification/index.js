@@ -8,8 +8,7 @@ async function setVerificationCode(user, code) {
     await executeSQL("DELETE FROM verification WHERE email = ?", [user.email]);
 
     // add new code
-    const res = await executeSQL("INSERT INTO verification (email, vcode) value (?, ?)", [user.email, code]);
-    console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    await executeSQL("INSERT INTO verification (email, vcode) value (?, ?)", [user.email, code]);
 }
 
 async function getVerificationCode(user) {
@@ -32,7 +31,6 @@ async function setVerified(user) {
         handle_verified: true
     }
     const usr = await manager.updateAppMetadata(params, metadata).then(function(res) {
-        console.log(res)
         return res
     }).catch(function(err) {
         console.error(err)
