@@ -16,10 +16,6 @@ router.get('/ships/sync', async (req, res) => {
     res.send(await syncShips())
 })
 
-router.get('/ships/roles', async (req, res) => {
-    res.send(await getRoles())
-})
-
 router.get('/ships', async (req, res) => {
     res.send(await getShips())
 })

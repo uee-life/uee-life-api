@@ -148,7 +148,7 @@ async function addCrew(usr, ship_id, data) {
     const user = await getUser(usr)
 
     if (isOwner(user, ship_id)) {
-        await executeSQL('INSERT INTO ship_crew (ship, crew, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
+        await executeSQL('INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
         return {success: 'ship added'}
     } else {
         return {error: 'You don\'t own that ship!'}
@@ -157,7 +157,7 @@ async function addCrew(usr, ship_id, data) {
 
 async function removeCrew(usr, crew_id) {
     const user = await getUser(usr)
-    const res = await executeSQL('SELECT ship, crew from ship_crew where id=?', [crew_id])
+    const res = await executeSQL('SELECT ship, citizen from ship_crew where id=?', [crew_id])
 
     if (isOwner(user, res.ship) || res.crew === user.app_metadata.handle) {
         await executeSQL('DELETE FROM ship_crew WHERE id=?', [crew_id])
@@ -176,11 +176,6 @@ async function isOwner(user, ship) {
     return false
 }
 
-async function getRoles() {
-    const rows = await executeSQL('SELECT * from ship_crew_roles')
-    return rows
-}
-
 module.exports = {
     syncShips,
     getShips,
@@ -188,6 +183,5 @@ module.exports = {
     getCrew,
     addCrew,
     removeCrew,
-    getRoles,
     saveShip
 }
