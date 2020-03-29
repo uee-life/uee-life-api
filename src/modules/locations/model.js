@@ -14,44 +14,44 @@ async function getLocationSpec() {
     return spec
 }
 
-async function getLocation(code) {
+async function getLocation(id) {
     res = {};
-    rows = await executeSQL("SELECT * FROM locs_view WHERE code = ?", [code]);
+    rows = await executeSQL("SELECT * FROM locs_view WHERE id = ?", [id]);
     if(rows.length > 0) {
         res = rows[0]
     }
     return res
 }
 
-async function updateLocation(code, data) {
+async function updateLocation(id, data) {
     // update location
 }
 
-async function getLocationData(code) {
+async function getLocationData(id) {
     res = {}
-    rows = await executeSQL('SELECT * FROM location_data where code = ?', [code])
+    rows = await executeSQL('SELECT * FROM location_data where id = ?', [id])
     if(rows.length > 0) {
         res = rows[0]
     }
     return res
 }
 
-async function updateLocationData(code, data) {
+async function updateLocationData(id, data) {
     // update location data
 }
 
-async function getLocations(code) {
+async function getLocations(id) {
     locations = []
-    rows = await executeSQL('SELECT a.* from locs_view a left join locs_view b on a.parent_id = b.id where b.code = ?', [code])
+    rows = await executeSQL('SELECT * from locs_view parent_id = ?', [id])
     if(rows.length > 0) {
         locations = rows
     }
     return locations
 }
 
-async function getPOIs(code) {
-    sql = "SELECT * FROM poi_view where parent_id=(select id from locs_view where code=?) or system_id=(select id from locs_view where code=?)"
-    rows = await executeSQL(sql, [code, code])
+async function getPOIs(id) {
+    sql = "SELECT * FROM poi_view where parent_id=? or system_id=?"
+    rows = await executeSQL(sql, [id, id])
     return rows
 }
 

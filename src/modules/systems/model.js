@@ -2,24 +2,25 @@ const {executeSQL} = require('../mariadb')
 
 
 async function getSystems() {
-    return await executeSQL("SELECT a.id, a.code, a.name, b.affiliation FROM locs a LEFT JOIN affiliation b ON a.affiliation = b.id where a.code='stanton'")
+    const systems = ['stanton', 'pyro']
+    return await executeSQL("SELECT * FROM v_systems where a.code in ('stanton')")
 }
 
-async function getSystem(sys) {
+async function getSystem(id) {
     system = {}
-    const rows = await executeSQL("SELECT * from system_view where code = ?", [sys])
+    const rows = await executeSQL("SELECT * from system_view where id = ?", [id])
     if(rows.length > 0) { // rows + meta info
         system = rows[0]
     }
     return system;
 }
 
-async function getLocations(code) {
-    return await executeSQL('SELECT a.*, b.code from locs a left join locs b on a.parent_id = b.id where b.code = ?', [code])
+async function getLocations(id) {
+    return await executeSQL('SELECT * locs where parent_id = ?', [id])
 }
 
-async function getPOIs(code) {
-    return await executeSQL("SELECT a.* FROM poi_view a left join locs b on a.system_id = b.id where b.code=?", [code])
+async function getPOIs(id) {
+    return await executeSQL("SELECT * FROM poi_view where system_id = ?", [id])
 }
 
 module.exports = {

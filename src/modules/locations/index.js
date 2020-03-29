@@ -20,28 +20,28 @@ router.get('/locations/spec', cache(60), async (req, res) => {
     res.send(await getLocationSpec())
 })
 
-router.get('/locations/:code', cache(60), async (req, res) => {
-    res.send(await getLocation(req.params.code))
+router.get('/locations/:id', cache(60), async (req, res) => {
+    res.send(await getLocation(req.params.id))
 })
 
-router.put('/locations/:code', checkJwt, async (req, res) => {
-    res.send(await updateLocation(req.params.code, req.body))
+router.put('/locations/:id', checkJwt, async (req, res) => {
+    res.send(await updateLocation(req.params.id, req.body))
 })
 
-router.get('/locations/:code/data', cache(60), async (req, res) => {
-    res.send(await getLocationData(req.params.code))
+router.get('/locations/:id/data', cache(60), async (req, res) => {
+    res.send(await getLocationData(req.params.id))
 })
 
-router.put('/locations/:code/data', checkJwt, async (req, res) => {
-    res.send(await updateLocationData(req.params.code, req.body))
+router.put('/locations/:id/data', checkJwt, async (req, res) => {
+    res.send(await updateLocationData(req.params.id, req.body))
 })
 
-router.get('/locations/:code/locations', cache(60), async (req, res) => {
-    res.send(await getLocations(req.params.code))
+router.get('/locations/:id/locations', cache(60), async (req, res) => {
+    res.send(await getLocations(req.params.id))
 })
 
-router.get('/locations/:code/pois', cache(60), async (req, res) => {
-    res.send(await getPOIs(req.params.code))
+router.get('/locations/:id/pois', cache(60), async (req, res) => {
+    res.send(await getPOIs(req.params.id))
     // test
 })
 
