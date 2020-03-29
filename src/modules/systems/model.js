@@ -2,10 +2,8 @@ const {executeSQL} = require('../mariadb')
 
 
 async function getSystems() {
-    const systems = ['stanton','pyro','nyx']
-    const sys = await executeSQL("SELECT * FROM v_systems where code in ?", [systems])
-    console.log(sys)
-    return sys
+    const systems = ['stanton','pyro']
+    return await executeSQL("SELECT * FROM v_systems where code in ?", [systems])
 }
 
 async function getSystem(id) {
