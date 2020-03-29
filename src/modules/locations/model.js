@@ -16,7 +16,7 @@ async function getLocationSpec() {
 
 async function getLocation(id) {
     res = {};
-    rows = await executeSQL("SELECT * FROM locs_view WHERE id = ?", [id]);
+    rows = await executeSQL("SELECT * FROM locs_view WHERE id = ?", [parseInt(id)]);
     if(rows.length > 0) {
         res = rows[0]
     }
@@ -29,7 +29,7 @@ async function updateLocation(id, data) {
 
 async function getLocationData(id) {
     res = {}
-    rows = await executeSQL('SELECT * FROM location_data where id = ?', [id])
+    rows = await executeSQL('SELECT * FROM location_data where id = ?', [parseInt(id)])
     if(rows.length > 0) {
         res = rows[0]
     }
