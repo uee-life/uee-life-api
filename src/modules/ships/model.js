@@ -135,6 +135,21 @@ async function getShip(id) {
     return ship
 }
 
+async function updateShip(usr, ship_id, data) {
+    const user = await getUser(usr)
+    if (isOwner(user, ship_id) && data.name != null) {
+        const res = await executeSQL('UPDATE ship_map SET name=? WHERE id=?', [data.name, ship_id])
+        if (res) {
+            return {success: 1, msg: 'Ship updated!'}
+        } else {
+            return {success: 0, msg: 'Unable to update ship'}
+        }
+        return 
+    } else {
+        return {success: 0, msg: 'Unable t0 update ship'}
+    }
+}
+
 async function getCrew(id) {
     const rows = await executeSQL("SELECT id, citizen, role, joined FROM ship_crew WHERE ship=? order by role", [id])
     if (rows.length !== 0) {
@@ -147,7 +162,7 @@ async function getCrew(id) {
 async function addCrew(usr, ship_id, data) {
     const user = await getUser(usr)
 
-    if (isOwner(user, ship_id)) {
+    if (isOwner(user, ship_id) && data.handle && data.role) {
         await executeSQL('INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
         return {success: 'ship added'}
     } else {
@@ -191,6 +206,7 @@ async function isOwner(user, ship) {
 module.exports = {
     syncShips,
     getShips,
+    updateShip,
     getShip,
     getCrew,
     addCrew,

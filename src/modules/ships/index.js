@@ -5,6 +5,7 @@ const {
     syncShips,
     getShips,
     getShip,
+    updateShip,
     getCrew,
     addCrew,
     removeCrew,
