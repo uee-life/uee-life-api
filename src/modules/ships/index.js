@@ -24,6 +24,11 @@ router.get('/ships/:id', async (req, res) => {
     res.send(await getShip(req.params.id))
 })
 
+// protected
+router.put('/ships/:id', checkJwt, async (req, res) => {
+    res.send(await updateShip(req.user, req.params.id, req.body))
+})
+
 router.get('/ships/:id/crew', async (req, res) => {
     res.send(await getCrew(req.params.id))
 })
