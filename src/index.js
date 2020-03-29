@@ -16,7 +16,7 @@ app.use(morgan('combined'));
 
 
 app.use(require('./modules/citizen'))
-app.use(require('./modules/location'))
+//app.use(require('./modules/location'))
 app.use(require('./modules/locations'))
 app.use(require('./modules/systems'))
 app.use(require('./modules/POIs'))
