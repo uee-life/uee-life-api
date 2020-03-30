@@ -208,8 +208,9 @@ async function randomActiveUser() {
         per_page: 100
     }
     const user = manager.getUsers(params).then((res) => {
-        console.log(res.length)
-        return res[Math.random() * res.length]
+        const i = Math.random() * res.length
+        console.log(res.length, i, res[i])
+        return res[i]
     })
     return user
 }
