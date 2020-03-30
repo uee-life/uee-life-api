@@ -214,7 +214,9 @@ async function randomActiveUser() {
         const user = {
             handle: res[i].app_metadata.handle,
             verified: res[i].app_metadata.handle_verified,
-            email: res[i].email
+            email: res[i].email,
+            visits: res[i].logins_count,
+            last_visit: res[i].last_login
         }
         return user
     })
