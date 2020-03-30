@@ -198,7 +198,7 @@ async function getBioCode(handle) {
 }
 
 async function randomActiveUser() {
-    const now = new Date
+    const d = new Date
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
     console.log(year, month)
