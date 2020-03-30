@@ -199,7 +199,8 @@ async function getBioCode(handle) {
 
 async function randomActiveUser() {
     const params = {
-        q: 'last_login: 2020-03'
+        q: 'last_login: 2020-03',
+        per_page: 100
     }
     const user = manager.getUsers().then((res) => {
         console.log(res.length)
