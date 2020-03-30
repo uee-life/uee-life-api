@@ -198,11 +198,14 @@ async function getBioCode(handle) {
 }
 
 async function randomActiveUser() {
+    const now = new Date
+    const year = d.getFullYear();
+    const month = d.getMonth() + 1;
+    console.log(year, month)
     const params = {
-        q: 'last_login: 2020-03',
-        per_page: 100
+        q: `last_login: ${year}-${month}`
     }
-    const user = manager.getUsers().then((res) => {
+    const user = manager.getUsers(params).then((res) => {
         console.log(res.length)
         return res
     })
