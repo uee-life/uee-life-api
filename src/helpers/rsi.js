@@ -6,6 +6,7 @@ const { getID } = require('./db')
 
 async function validCitizen(handle) {
     const res = fetchCitizen(handle)
+    console.log(res)
     if (res) {
         return true
     } else {
@@ -36,7 +37,7 @@ async function fetchCitizen(handle) {
         info.verified = 0
         return info
     } catch (error) {
-        console.error(error)
+        console.error("fetchCitizen", error)
         return null
     }
 }
