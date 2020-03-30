@@ -5,7 +5,7 @@ const { convertToMarkdown } = require('../modules/helper')
 const { getID } = require('./db')
 
 async function validCitizen(handle) {
-    const res = fetchCitizen(handle)
+    const res = await fetchCitizen(handle)
     console.log(res)
     if (res) {
         return true
