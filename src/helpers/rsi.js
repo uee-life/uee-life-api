@@ -37,7 +37,7 @@ async function fetchCitizen(handle) {
         info.verified = 0
         return info
     } catch (error) {
-        console.error("fetchCitizen", error)
+        console.error("fetchCitizen - Error retrieving citizen")
         return null
     }
 }

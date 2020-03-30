@@ -164,7 +164,7 @@ async function addCrew(usr, ship_id, data) {
     const user = await getUser(usr)
 
     if (isOwner(user, ship_id) && data.handle && data.role) {
-        if (validCitizen(data.handle)) {
+        if (await validCitizen(data.handle)) {
             await executeSQL('INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
             return {success: 1, msg: 'Crewmen added!'}
         } else {
