@@ -204,7 +204,7 @@ async function randomActiveUser() {
     console.log(year, month)
     const params = {
         q: `last_login: ${year}-${month}`,
-        per_page: 1000
+        per_page: 100
     }
     const user = manager.getUsers(params).then((res) => {
         console.log(res.length)
