@@ -202,8 +202,8 @@ async function randomActiveUser() {
         q: 'last_login: 2020-03'
     }
     const user = manager.getUsers().then((res) => {
-        console.log(users)
-        return users
+        console.log(res)
+        return res
     })
     return user
 }
