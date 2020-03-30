@@ -204,14 +204,19 @@ async function randomActiveUser() {
     const month = d.getMonth() + 1;
     console.log(year, month)
     const params = {
-        q: `last_login: ${year}-${month}`,
+        q: `app_metadata.handle_verified: true AND last_login: ${year}-${month}`,
         per_page: 100
     }
     const user = manager.getUsers(params).then((res) => {
         const i = Math.round(Math.random() * res.length)
         console.log(res.length, i)
         console.log(res[i])
-        return res[i]
+        const user = {
+            handle: res[i].app_metadata.handle,
+            verified: res[i].app_metadata.handle_verified,
+            email: res[i].email
+        }
+        return user
     })
     return user
 }
