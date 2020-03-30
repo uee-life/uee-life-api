@@ -209,8 +209,8 @@ async function randomActiveUser() {
     }
     const user = manager.getUsers(params).then((res) => {
         const i = Math.round(Math.random() * res.length)
-        console.log(res.length, i, res.data[i])
-        return res.data[i]
+        console.log(res.length, i, res)
+        return res
     })
     return user
 }
