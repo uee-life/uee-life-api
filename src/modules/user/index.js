@@ -5,7 +5,8 @@ const {
     getUser,
     updateHandle,
     verify,
-    sync
+    sync,
+    randomActiveUser
 } = require('./model');
 
 // Protected
@@ -42,6 +43,10 @@ router.get("/user/sync", checkJwt, async (req, res) => {
 // Protected
 router.get("/user/sync", checkJwt, async (req, res) => {
     res.send(await sync(req.user))
+})
+
+router.get("/user/random", async (req, res) => {
+    res.send(await randomActiveUser())
 })
 
 module.exports = router

@@ -197,11 +197,23 @@ async function getBioCode(handle) {
     return code
 }
 
+async function randomActiveUser() {
+    const params = {
+        q: 'last_login: 2020-03'
+    }
+    const user = manager.getUsers().then((res) => {
+        console.log(users)
+        return users
+    })
+    return user
+}
+
 
 module.exports = {
     getUser,
     updateHandle,
     sync,
     syncCitizen,
-    verify
+    verify,
+    randomActiveUser
 }
