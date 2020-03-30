@@ -2,6 +2,7 @@ const axios = require("axios")
 const {executeSQL} = require('../mariadb')
 
 const { getID } = require('../../helpers/db')
+const { validCitizen } = require('../../helpers/rsi')
 const { getUser } = require('../user/model')
 
 const manufacturers = {
@@ -163,10 +164,14 @@ async function addCrew(usr, ship_id, data) {
     const user = await getUser(usr)
 
     if (isOwner(user, ship_id) && data.handle && data.role) {
-        await executeSQL('INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
-        return {success: 'ship added'}
+        if (validCitizen(data.handle)) {
+            await executeSQL('INSERT INTO ship_crew (ship, citizen, role) values (?, ?, ?)', [ship_id, data.handle, data.role])
+            return {success: 1, msg: 'Crewmen added!'}
+        } else {
+            return {success: 0, msg: 'Sorry, that citizen is invalid. Please check you are picking the right person!'}
+        }
     } else {
-        return {error: 'You don\'t own that ship!'}
+        return {success: 0, msg: 'You don\'t own that ship!'}
     }
 }
 
@@ -176,9 +181,9 @@ async function removeCrew(usr, crew_id) {
 
     if (isOwner(user, res.ship) || res.crew === user.app_metadata.handle) {
         await executeSQL('DELETE FROM ship_crew WHERE id=?', [crew_id])
-        return {success: 'crew removed'}
+        return {success: 1, msg: 'crew removed'}
     } else {
-        return {error: 'you do not have permission to remove this crewmen'}
+        return {success: 0, msg: 'you do not have permission to remove this crewmen'}
     }
 }
 
@@ -188,9 +193,9 @@ async function updateCrew(usr, crew_id, data) {
 
     if (data.role && isOwner(user, res.ship)) {
         await executeSQL('UPDATE ship_crew SET role=? WHERE id=?', [data.role, crew_id])
-        return {success: 'crew updated'}
+        return {success: 1, msg: 'Crewmen updated'}
     } else {
-        return {error: 'you do not have permission to update this crewmen'}
+        return {success: 0, msg: 'You do not have permission to update this crewmen'}
     }
 }
 

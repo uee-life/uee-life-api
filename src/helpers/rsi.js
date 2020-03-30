@@ -4,6 +4,15 @@ const cheerio = require('cheerio')
 const { convertToMarkdown } = require('../modules/helper')
 const { getID } = require('./db')
 
+async function validCitizen(handle) {
+    const res = fetchCitizen(handle)
+    if (res) {
+        return true
+    } else {
+        return false
+    }
+}
+
 async function fetchCitizen(handle) {
     console.log('fetching citizen...')
     try {
@@ -197,6 +206,7 @@ async function fetchMembers(org, page, isMain) {
 }
 
 module.exports = {
+    validCitizen,
     fetchCitizen,
     fetchOrg,
     fetchOrgFounders,
