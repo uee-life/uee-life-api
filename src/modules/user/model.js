@@ -211,7 +211,7 @@ async function randomActiveUser() {
         const i = Math.round(Math.random() * res.length)
         console.log(res.length, i)
         console.log(res[i])
-        return res
+        return res[i]
     })
     return user
 }
