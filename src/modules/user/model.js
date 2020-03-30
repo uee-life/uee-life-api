@@ -198,6 +198,7 @@ async function getBioCode(handle) {
 }
 
 async function randomActiveUser() {
+    //TODO: do a check first to get active user count, then retrieve that many users.
     const d = new Date
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
@@ -208,7 +209,7 @@ async function randomActiveUser() {
     }
     const user = manager.getUsers(params).then((res) => {
         console.log(res.length)
-        return res
+        return res[Math.random() * res.length]
     })
     return user
 }
