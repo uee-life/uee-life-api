@@ -202,15 +202,12 @@ async function randomActiveUser() {
     const d = new Date
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
-    console.log(year, month)
     const params = {
         q: `app_metadata.handle_verified: true AND last_login: ${year}-${month}`,
         per_page: 100
     }
     const user = manager.getUsers(params).then((res) => {
         const i = Math.round(Math.random() * res.length)
-        console.log(res.length, i)
-        console.log(res[i])
         const user = {
             handle: res[i].app_metadata.handle,
             verified: res[i].app_metadata.handle_verified,
