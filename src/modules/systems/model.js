@@ -8,7 +8,7 @@ async function getSystems() {
 
 async function getSystem(id) {
     system = {}
-    const rows = await executeSQL("SELECT * from system_view where id = ?", [id])
+    const rows = await executeSQL("SELECT * from locs_view where id = ?", [id])
     if(rows.length > 0) { // rows + meta info
         system = rows[0]
     }
