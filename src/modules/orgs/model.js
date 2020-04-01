@@ -15,9 +15,9 @@ async function getOrgFounders(org) {
     return await fetchOrgFounders(org)
 }
 
-async function getOrganization(org) {
-    const org = await fetchOrg(org)
-    const orgID = await getOrgID(org)
+async function getOrganization(tag) {
+    const org = await fetchOrg(tag)
+    const orgID = await getOrgID(tag)
     org.id = orgID
     return org
 }
