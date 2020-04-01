@@ -2,7 +2,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const { convertToMarkdown } = require('../helper')
 const { executeSQL } = require('../mariadb')
-const { getCitizen } = require('../../helpers/db')
+const { getCitizen, getOrgID } = require('../../helpers/db')
 const { fetchOrgFounders, fetchOrg, fetchMembers } = require("../../helpers/rsi")
 
 
@@ -16,7 +16,10 @@ async function getOrgFounders(org) {
 }
 
 async function getOrganization(org) {
-    return await fetchOrg(org)
+    const org = await fetchOrg(org)
+    const orgID = await getOrgID(org)
+    org.id = orgID
+    return org
 }
 
 
