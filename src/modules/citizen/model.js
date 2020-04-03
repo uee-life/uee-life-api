@@ -228,6 +228,10 @@ async function searchCitizen(search) {
     }
 }
 
+async function getAssignments(handle) {
+    return await executeSQL('select b.id, b.name, a.role, a.joined from ship_crew a left join ship_map b on a.ship = b.id where a.citizen=?', [handle])
+}
+
 module.exports = {
     searchCitizen,
     getCitizen,
@@ -238,5 +242,6 @@ module.exports = {
     removeShip,
     getLocation,
     setLocation,
-    createCitizen
+    createCitizen,
+    getAssignments
 }
