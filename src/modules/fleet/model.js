@@ -29,7 +29,8 @@ async function removeFleet(usr, fleetID) {
 async function getFleet(fleetID) {
     // use a recursive query to retrieve all squadrons (groups) for given fleet
     const sql = "SELECT * FROM fleet_groups WHERE id=?"
-    return await executeSQL(sql, [fleetID])
+    const rows = await executeSQL(sql, [fleetID])
+    return rows[0]
 }
 
 // crew functions
