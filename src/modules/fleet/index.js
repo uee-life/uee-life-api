@@ -20,3 +20,4 @@ router.get('/fleets/:fleetID', async (req, res) => {
     res.send(await getFleet(req.params.fleetID))
 })
 
+module.exports = router
