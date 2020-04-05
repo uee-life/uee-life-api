@@ -24,8 +24,10 @@ async function removeFleet(usr, fleetID) {
     // check usr owns org that owns the fleet
 
     // remove all ships in the fleet group
-    
+
     // delete the fleet group
+
+    return {success: 1, msg: 'Group Removed!'}
 }
 
 async function getFleet(fleetID) {
