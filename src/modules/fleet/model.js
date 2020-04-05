@@ -20,12 +20,14 @@ async function addFleet(usr, orgID, data) {
     return res
 }
 
-async function removeFleet(usr, fleetID) {
+async function removeFleet(usr, groupID) {
     // check usr owns org that owns the fleet
 
     // remove all ships in the fleet group
+    await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
     // delete the fleet group
+    await executeSQL('DELETE FROM fleet_groups WHERE id=?', [groupID])
 
     return {success: 1, msg: 'Group Removed!'}
 }
