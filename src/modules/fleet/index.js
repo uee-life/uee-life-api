@@ -27,7 +27,7 @@ router.get('/fleet/:fleetID/groups', async (req, res) => {
     res.send(await getGroups(req.params.fleetID))
 })
 
-router.put('/fleet/:fleetID/groups', checkJwt, async (req, res) => {
+router.post('/fleet/:fleetID/groups', checkJwt, async (req, res) => {
     res.send(await addGroup(req.user, req.params.fleetID, req.body))
 })
 
