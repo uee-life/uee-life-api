@@ -6,7 +6,7 @@ const { validCitizen } = require('../../helpers/rsi')
 const { getUser } = require('../user/model')
 
 async function getFleets(orgID) {
-    return await executeSQL('SELECT * FROM fleet_groups WHERE org=? AND parent=0', [orgID])
+    return await executeSQL('SELECT * FROM v_fleet_groups WHERE org=? AND parent=0', [orgID])
 }
 
 // fleet functions
@@ -28,7 +28,7 @@ async function removeFleet(usr, fleetID) {
 
 async function getFleet(fleetID) {
     // use a recursive query to retrieve all squadrons (groups) for given fleet
-    const sql = "SELECT * FROM fleet_groups WHERE id=?"
+    const sql = "SELECT * FROM v_fleet_groups WHERE id=?"
     const rows = await executeSQL(sql, [fleetID])
     return rows[0]
 }
