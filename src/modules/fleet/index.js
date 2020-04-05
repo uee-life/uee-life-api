@@ -4,7 +4,8 @@ const router = require('express').Router()
 const { 
     getFleets,
     addFleet,
-    getFleet
+    getFleet,
+    getGroups
 } = require('./model')
 
 router.get('/orgs/:orgID/fleets', async (req, res) => {
@@ -18,6 +19,10 @@ router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
 
 router.get('/fleets/:fleetID', async (req, res) => {
     res.send(await getFleet(req.params.fleetID))
+})
+
+router.get('/fleets/:fleetID/groups', async (req, res) => {
+    res.send(await getGroups(req.params.fleetID))
 })
 
 module.exports = router

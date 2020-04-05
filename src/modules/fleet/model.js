@@ -33,6 +33,15 @@ async function getFleet(fleetID) {
     return rows[0]
 }
 
+async function getGroups(parent) {
+    const rows = await executeSQL("SELECT * FROM v_fleet_groups WHERE parent=?")
+    if (rows.length > 0) {
+        return rows
+    } else {
+        return []
+    }
+}
+
 // crew functions
 
 async function getCrew(shipID) {
@@ -50,5 +59,6 @@ async function removeCrew(crewID) {
 module.exports = {
     getFleets,
     addFleet,
-    getFleet
+    getFleet,
+    getGroups
 }
