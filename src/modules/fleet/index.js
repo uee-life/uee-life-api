@@ -5,6 +5,7 @@ const {
     getFleets,
     addFleet,
     getFleet,
+    updateFleet,
     getGroups,
     addGroup,
     removeFleet
@@ -21,6 +22,10 @@ router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
 
 router.get('/fleet/:fleetID', async (req, res) => {
     res.send(await getFleet(req.params.fleetID))
+})
+
+router.put('/fleet/:fleetID', checkJwt, async (req, res) => {
+    res.send(await updateFleet(req.user, req.params.fleetID, req.body))
 })
 
 router.get('/fleet/:fleetID/groups', async (req, res) => {

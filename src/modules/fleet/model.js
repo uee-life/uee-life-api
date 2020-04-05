@@ -33,6 +33,12 @@ async function getFleet(fleetID) {
     return rows[0]
 }
 
+async function updateFleet(usr, fleetID, data) {
+    // TODO: Check permission
+    const sql = "UPDATE fleet_groups SET cmdr=? WHERE id=?"
+    await executeSQL(sql, [data.cmdr, fleetID])
+}
+
 async function getGroups(parent) {
     const rows = await executeSQL("SELECT * FROM v_fleet_groups WHERE parent=?", [parent])
     if (rows.length > 0) {
@@ -67,6 +73,7 @@ module.exports = {
     addFleet,
     removeFleet,
     getFleet,
+    updateFleet,
     getGroups,
     addGroup
 }
