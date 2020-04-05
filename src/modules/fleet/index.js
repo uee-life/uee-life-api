@@ -28,6 +28,10 @@ router.put('/fleet/:fleetID', checkJwt, async (req, res) => {
     res.send(await updateFleet(req.user, req.params.fleetID, req.body))
 })
 
+router.delete('/fleet/:fleetID', checkJwt, async (req, res) => {
+    res.send(await removeFleet(req.user, req.params.fleetID))
+})
+
 router.get('/fleet/:fleetID/groups', async (req, res) => {
     res.send(await getGroups(req.params.fleetID))
 })

@@ -23,7 +23,9 @@ async function addFleet(usr, orgID, data) {
 async function removeFleet(usr, fleetID) {
     // check usr owns org that owns the fleet
 
-    // delete the fleet
+    // remove all ships in the fleet group
+    
+    // delete the fleet group
 }
 
 async function getFleet(fleetID) {
