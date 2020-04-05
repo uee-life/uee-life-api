@@ -42,6 +42,12 @@ async function getGroups(parent) {
     }
 }
 
+async function addGroup (usr, fleetID, data) {
+    const sql = "INSERT INTO fleet_groups (parent, org, name, title) values (?, ?, ?, ?)"
+    await executeSQL(sql, [fleetID, data.org, data.name, data.title])
+    return {success: 1, msg: 'Group added!'}
+}
+
 // crew functions
 
 async function getCrew(shipID) {
@@ -59,6 +65,8 @@ async function removeCrew(crewID) {
 module.exports = {
     getFleets,
     addFleet,
+    removeFleet,
     getFleet,
-    getGroups
+    getGroups,
+    addGroup
 }
