@@ -65,6 +65,10 @@ async function getShips (fleetID) {
     return executeSQL('SELECT * FROM fleet_ships WHERE parent=?', [fleetID])
 }
 
+async function addShip (usr, fleetID, data) {
+    
+}
+
 // crew functions
 
 async function getCrew(shipID) {
@@ -87,5 +91,6 @@ module.exports = {
     updateFleet,
     getGroups,
     addGroup,
-    getShips
+    getShips,
+    addShip
 }
