@@ -32,9 +32,16 @@ async function getOrgMembers(org, page=1, isMain=true) {
     return members
 }
 
-async function getOrgShips(org) {
-    const sql = 'select m.id, m.name, s.short_name, s.make, s.make_abbr, s.model, s.size, s.max_crew, s.cargo, s.type, s.focus, c.* from ship_map m left join ship_view s on m.ship = s.id left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on m.citizen = c.citizen where tag=?'
-    const rows = await executeSQL(sql, [org])
+async function getOrgShips(org, fleet) {
+    let rows = []
+    if (fleet) {
+        const sql = "select * from v_ship_map where tag=? and not exists (select * from fleet_ships where fleet_ships.fleet=? and  fleet_ships.ship = v_ship_map.id)"
+        rows = await executeSQL(sql, [org, fleet])
+    } else {
+        const sql = 'select * from v_ship_map where tag=?'
+        rows = await executeSQL(sql, [org])
+    }
+    
     let ships = []
     if (rows.length > 0) {
         for (i in [...Array(rows.length).keys()]) {
@@ -47,6 +54,14 @@ async function getOrgShips(org) {
         return []
     }
 }
+ 
+ const rows = await executeSQL(sql, [org_tag, fleet])
+ if (rows.length > 0) {
+     return rows
+ } else {
+     return []
+ }
+}
 
 
 module.exports = {
@@ -54,5 +69,6 @@ module.exports = {
     getOrgFounders,
     getOrgMembers,
     getOrgShips,
+    getOrgShipPool,
     test
 };

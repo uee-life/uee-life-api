@@ -27,7 +27,11 @@ router.get('/orgs/:id/affiliates', async (req, res) => {
 })
 
 router.get('/orgs/:id/ships', async (req, res) => {
-    res.send(await getOrgShips(req.params.id))
+    res.send(await getOrgShips(req.params.id, 0))
+})
+
+router.get('/orgs/:id/ships/:fleet', async (req, res) => {
+    res.send(await getOrgShips(req.params.id, req.params.fleet))
 })
 
 module.exports = router
