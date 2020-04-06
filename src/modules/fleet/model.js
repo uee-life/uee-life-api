@@ -61,6 +61,10 @@ async function addGroup (usr, fleetID, data) {
     return {success: 1, msg: 'Group added!'}
 }
 
+async function getShips (fleetID) {
+    return executeSQL('SELECT * FROM fleet_ships WHERE parent=?', [fleetID])
+}
+
 // crew functions
 
 async function getCrew(shipID) {
@@ -82,5 +86,6 @@ module.exports = {
     getFleet,
     updateFleet,
     getGroups,
-    addGroup
+    addGroup,
+    getShips
 }
