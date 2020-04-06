@@ -54,14 +54,6 @@ async function getOrgShips(org, fleet) {
         return []
     }
 }
- 
- const rows = await executeSQL(sql, [org_tag, fleet])
- if (rows.length > 0) {
-     return rows
- } else {
-     return []
- }
-}
 
 
 module.exports = {
@@ -69,6 +61,5 @@ module.exports = {
     getOrgFounders,
     getOrgMembers,
     getOrgShips,
-    getOrgShipPool,
     test
 };
