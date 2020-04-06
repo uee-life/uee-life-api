@@ -62,7 +62,7 @@ async function addGroup (usr, fleetID, data) {
 }
 
 async function getShips (fleetID) {
-    return executeSQL('SELECT * FROM fleet_ships LEFT JOIN ship_map ON fleet_ships.ship = ship_map.id WHERE parent=?', [fleetID])
+    return executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
 }
 
 async function addShip (usr, fleetID, data) {
