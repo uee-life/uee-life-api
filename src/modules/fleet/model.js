@@ -50,6 +50,7 @@ async function getGroups(parent) {
     const rows = await executeSQL("SELECT * FROM v_fleet_groups WHERE parent=?", [parent])
     if (rows.length > 0) {
         let result = []
+        console.log("rows", rows)
         rows.forEach((item, idx) => {
             console.log("getting ships for id:", item.id)
             const ships = getShips(item.id)
