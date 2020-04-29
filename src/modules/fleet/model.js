@@ -49,13 +49,16 @@ async function updateFleet(usr, fleetID, data) {
 async function getGroups(parent) {
     const rows = await executeSQL("SELECT * FROM v_fleet_groups WHERE parent=?", [parent])
     if (rows.length > 0) {
-        result = []
+        let result = []
         rows.forEach((item, idx) => {
+            console.log("getting ships for id:", item.id)
             const ships = getShips(item.id)
             item.ships = ships.length
+            console.log("item:",item)
             result.push(item)
+            console.log("result",result)
         })
-        return result
+        return rows
     } else {
         return []
     }
