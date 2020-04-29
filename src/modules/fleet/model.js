@@ -53,11 +53,12 @@ async function getGroups(parent) {
         console.log("rows", rows)
         rows.forEach((item, idx) => {
             console.log("getting ships for id:", item.id)
-            const ships = await getShips(item.id)
-            item.ships = ships.length
-            console.log("item:",item)
-            result.push(item)
-            console.log("result",result)
+            getShips(item.id).then((ships) => {
+                item.ships = ships.length
+                console.log("item:",item)
+                result.push(item)
+                console.log("result",result)
+            })
         })
         return result
     } else {
