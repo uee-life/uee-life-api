@@ -57,8 +57,8 @@ async function getGroups(parent) {
             item.ships = ships.length
             console.log("item:",item)
             result.push(item)
-            console.log("result",result)
         })
+        console.log("result",result)
         return result
     } else {
         return []
