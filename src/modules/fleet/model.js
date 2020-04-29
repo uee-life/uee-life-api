@@ -51,15 +51,14 @@ async function getGroups(parent) {
     if (rows.length > 0) {
         let result = []
         console.log("rows", rows)
-        rows.forEach((item, idx) => {
+        await rows.forEach(async (item, idx) => {
             console.log("getting ships for id:", item.id)
-            getShips(item.id).then((ships) => {
-                item.ships = ships.length
-                console.log("item:",item)
-                result.push(item)
-            })
+            const ships = await getShips(item.id)
+            item.ships = ships.length
+            console.log("item:",item)
+            result.push(item)
+            console.log("result",result)
         })
-        console.log("result",result)
         return result
     } else {
         return []
