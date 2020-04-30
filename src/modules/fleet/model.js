@@ -36,7 +36,11 @@ async function getFleet(fleetID) {
     // use a recursive query to retrieve all squadrons (groups) for given fleet
     const sql = "SELECT * FROM v_fleet_groups WHERE id=?"
     const rows = await executeSQL(sql, [fleetID])
-    return rows[0]
+    if (rows.length > 0) {
+        return rows[0]
+    } else {
+        return {}
+    }
 }
 
 async function updateFleet(usr, fleetID, data) {
