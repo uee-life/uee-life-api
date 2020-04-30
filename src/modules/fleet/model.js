@@ -14,7 +14,7 @@ async function getFleets(orgID) {
 async function addFleet(usr, orgID, data) {
     // TODO: check user CAN add to this orgID
 
-    const sql = "INSERT INTO fleet_groups ('parent', 'org', 'name', 'purpose') VALUES (?,?,?,?)"
+    const sql = "INSERT INTO fleet_groups (parent, org, name, purpose) VALUES (?,?,?,?)"
     const params = [0, orgID, data.name, data.purpose]
     const res = await executeSQL(sql, params)
     return res
@@ -57,7 +57,7 @@ async function getGroups(parent) {
 
 async function addGroup (usr, fleetID, data) {
     const sql = "INSERT INTO fleet_groups (parent, org, name, purpose) values (?, ?, ?, ?)"
-    await executeSQL(sql, [fleetID, data.org, data.name, data.purpose])
+    await executeSQL(sql, [fleetID, data.org, data.name, data.title])
     return {success: 1, msg: 'Group added!'}
 }
 
