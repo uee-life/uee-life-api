@@ -101,5 +101,6 @@ module.exports = {
     getGroups,
     addGroup,
     getShips,
-    addShip
+    addShip,
+    removeShip
 }
