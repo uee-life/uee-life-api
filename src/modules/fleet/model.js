@@ -57,7 +57,7 @@ async function getGroups(parent) {
 
 async function addGroup (usr, fleetID, data) {
     const sql = "INSERT INTO fleet_groups (parent, org, name, purpose) values (?, ?, ?, ?)"
-    await executeSQL(sql, [fleetID, data.org, data.name, data.title])
+    await executeSQL(sql, [fleetID, data.org, data.name, data.purpose])
     return {success: 1, msg: 'Group added!'}
 }
 
