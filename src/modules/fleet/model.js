@@ -6,7 +6,7 @@ const { validCitizen } = require('../../helpers/rsi')
 const { getUser } = require('../user/model')
 
 async function getFleets(orgID) {
-    return await executeSQL('SELECT * FROM v_fleet_groups WHERE org=? AND parent=0', [orgID])
+    return await executeSQL('SELECT * FROM v_fleets WHERE org=?', [orgID])
 }
 
 // fleet functions
