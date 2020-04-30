@@ -72,6 +72,12 @@ async function addShip (usr, fleetID, data) {
     return {success: 1, msg: 'Ship added!'}
 }
 
+async function removeShip (usr, fleetID, shipID) {
+    const sql = "DELETE FROM fleet_ships WHERE fleet=? AND ship=?"
+    await executeSQL(sql, [fleetID, shipID])
+    return {success: 1, msg: 'Ship removed!'}
+}
+
 // crew functions
 
 async function getCrew(shipID) {

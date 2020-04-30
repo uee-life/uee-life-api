@@ -10,7 +10,8 @@ const {
     addGroup,
     removeFleet,
     getShips,
-    addShip
+    addShip,
+    removeShip
 } = require('./model')
 
 router.get('/orgs/:orgID/fleets', async (req, res) => {
@@ -48,6 +49,10 @@ router.get('/fleet/:fleetID/ships', async (req, res) => {
 
 router.post('/fleet/:fleetID/ships', checkJwt, async (req, res) => {
     res.send(await addShip(req.user, req.params.fleetID, req.body))
+})
+
+router.delete('/fleet/:fleetID/ships/:shipID', checkJwt, async (req, res) => {
+    res.send(await removeShip(req.user, req.params.fleetID, req.params.shipID))
 })
 
 module.exports = router
