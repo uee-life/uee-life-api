@@ -66,7 +66,9 @@ async function getShips (fleetID) {
 }
 
 async function addShip (usr, fleetID, data) {
-
+    const sql = "INSERT INTO fleet_ships (fleet, parent, ship) values (?, ?, ?)"
+    await executeSQL(sql, [fleetID, data.group, data.ship])
+    return {success: 1, msg: 'Ship added!'}
 }
 
 // crew functions

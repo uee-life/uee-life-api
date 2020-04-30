@@ -47,7 +47,7 @@ router.get('/fleet/:fleetID/ships', async (req, res) => {
 })
 
 router.post('/fleet/:fleetID/ships', checkJwt, async (req, res) => {
-    res.send(await addShips(req.user, req.params.fleetID, req.body))
+    res.send(await addShip(req.user, req.params.fleetID, req.body))
 })
 
 module.exports = router
