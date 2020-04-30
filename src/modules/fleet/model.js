@@ -17,7 +17,7 @@ async function addFleet(usr, orgID, data) {
     const sql = "INSERT INTO fleet_groups (parent, org, name, purpose) VALUES (?,?,?,?)"
     const params = [0, orgID, data.name, data.purpose]
     const res = await executeSQL(sql, params)
-    return res
+    return {success: 1, msg: 'Fleet Added!'}
 }
 
 async function removeFleet(usr, groupID) {
