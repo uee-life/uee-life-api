@@ -109,11 +109,11 @@ async function syncCitizen(handle) {
     // get citizen data from RSI
     const citizen = await fetchCitizen(handle)
 
-    // store org affiliation
-    setOrg(citizen)
-
     // update citizen data
     if(citizen) {
+        // store org affiliation
+        setOrg(citizen)
+
         sql = "REPLACE INTO citizen_sync (handle, record, name, bio, enlisted, portrait, org, orgrank, website) VALUES (?,?,?,?,?,?,?,?,?)"
         data = [
             citizen.handle,
@@ -138,6 +138,7 @@ async function setOrg(citizen) {
         const citizenID = await getID(citizen.handle)
         const orgID = await getOrgID(citizen.org)
         if(orgID) {
+            // check if they are a founder
             let founder = 0
             const founders = await fetchOrgFounders(citizen.org)
             founders.forEach((item) => {
@@ -145,16 +146,26 @@ async function setOrg(citizen) {
                     founder = 1
                 }
             })
+
+            // get their current rank
+            const rank = await getOrgRank(citizen.org, citizen.handle)
+
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
                 // clear up old org mapping
                 await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizen.id])
                 // map to new org
-                await executeSQL('INSERT INTO org_map (citizen, org, founder, type) values (?, ?, ?, ?)', [citizen.id, orgID, founder, 1])
+                await executeSQL('INSERT INTO org_map (citizen, org, founder, rank, type) values (?, ?, ?, ?)', [citizen.id, orgID, founder, rank, 1])
             } else {
                 // already exists
-                // need to add logic to update if founder flag changes, or type changes (member/affiliate)
-                console.log('citizen already registered to org...')
+                console.log('citizen already registered to org. Checking if update required.')
+                let member = rows[0]
+                if (member.rank !== rank) {
+                    await executeSQL('UPDATE org_map SET rank=? WHERE citizen=? AND org=?', [rank, citizenID, orgID])
+                }
+                if (member.founder !== founder) {
+                    await executeSQL('UPDATE org_map SET founder=? WHERE citizen=? AND org=?', [founder, citizenID, orgID])
+                }
             }
         } else {
             // failed to get org ID for some reason...

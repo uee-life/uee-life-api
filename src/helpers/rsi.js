@@ -111,7 +111,21 @@ async function checkCitizens(members) {
     return members
 }
 
-async function fetchMembers(org, page, isMain) {
+function computeRank(stars) {
+    let rank = 0
+    if (stars) {
+        starsize = parseInt(starspan.match(/width\:\ (.*)\%/)[1])
+
+        if(starsize) {
+            rank = starsize / 20
+        }
+
+    } else {
+        rank = 0
+    }
+}
+
+async function fetchMembers(org, page=1, isMain=true, handle='') {
     let res = {
         count: 0,
         members: []
@@ -124,7 +138,7 @@ async function fetchMembers(org, page, isMain) {
         let i = 0
         data = {
             symbol: org,
-            search: '',
+            search: handle,
             pagesize: 32,
             main_org: isMain == true ? "1" : "0",
             page: page
@@ -148,30 +162,21 @@ async function fetchMembers(org, page, isMain) {
             $('li.member-item').each(function (i, el) {
                 let handle = $(el).find('span.nick').text()
                 let name = $(el).find('span.name').text()
-                let starspan = $(el).find('span.stars').attr('style')
+
                 let thumb = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
-                let stars = 0
-                if (starspan) {
-                    stars = parseInt(starspan.match(/width\:\ (.*)\%/)[1])
-
-                    if(stars) {
-                        stars = stars / 20
-                    }
-
-                    thumbimg = $(el).find('span.thumb').find('img')[0]
-                    if(thumbimg && thumbimg.attribs.src) {
-                        thumb = `https://robertsspaceindustries.com${thumbimg.attribs.src}`
-                    }
-
-                } else {
-                    stars = 0
+                thumbimg = $(el).find('span.thumb').find('img')[0]
+                if(thumbimg && thumbimg.attribs.src) {
+                    thumb = `https://robertsspaceindustries.com${thumbimg.attribs.src}`
                 }
+
+                let rank = computeRank($(el).find('span.stars').attr('style'))
+                let stars = 0
 
                 if(handle.trim() != '') {
                     member = {
                         name: name,
                         handle: handle,
-                        stars: stars,
+                        rank: stars,
                         thumb: thumb,
                         verified: false
                     }
@@ -180,7 +185,7 @@ async function fetchMembers(org, page, isMain) {
                     member = {
                         name: 'Redacted',
                         handle: 'Redacted',
-                        stars: stars,
+                        rank: stars,
                         thumb: thumb,
                         verified: false
                     }
