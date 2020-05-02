@@ -3,18 +3,15 @@ const {executeSQL} = require('../mariadb')
 const { getHandle } = require('../../helpers/db')
 const { getCitizen } = require ('../citizen/model')
 
-async function getFleets(orgID) {
-    return await executeSQL('SELECT * FROM v_fleets WHERE org=?', [orgID])
-}
-
 // fleet functions
 
-async function addFleet(usr, orgID, data) {
-    // TODO: check user CAN add to this orgID
+async function addFleet(usr, data) {
+    // TODO: check user CAN add to this owner
 
-    const sql = "INSERT INTO fleet_groups (parent, org, name, purpose) VALUES (?,?,?,?)"
-    const params = [0, orgID, data.name, data.purpose]
+    const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose) VALUES (?,?,?,?)"
+    const params = [data.type, data.owner, 0, data.name, data.purpose]
     const res = await executeSQL(sql, params)
+    // TODO: check the sql result
     return {success: 1, msg: 'Fleet Added!'}
 }
 
@@ -69,7 +66,6 @@ async function getShips (fleetID) {
     let ships = []
 
     if (rows.length > 0) {
-        console.log('got ships')
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
             const owner = await getCitizen(await getHandle(ship.citizen))
@@ -78,7 +74,6 @@ async function getShips (fleetID) {
         }
         return ships
     } else {
-        console.log('no got ships')
         return []
     }
 }
@@ -111,7 +106,6 @@ async function removeCrew(crewID) {
 }
 
 module.exports = {
-    getFleets,
     addFleet,
     removeFleet,
     getFleet,

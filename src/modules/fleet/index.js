@@ -2,7 +2,6 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const { 
-    getFleets,
     addFleet,
     getFleet,
     updateFleet,
@@ -14,44 +13,40 @@ const {
     removeShip
 } = require('./model')
 
-router.get('/orgs/:orgID/fleets', async (req, res) => {
-    res.send(await getFleets(req.params.orgID))
-})
-
 // protected
-router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
+router.post('/fleets', checkJwt, async (req, res) => {
     res.send(await addFleet(req.user, req.params.orgID, req.body))
 })
 
-router.get('/fleet/:fleetID', async (req, res) => {
+router.get('/fleets/:fleetID', async (req, res) => {
     res.send(await getFleet(req.params.fleetID))
 })
 
-router.put('/fleet/:fleetID', checkJwt, async (req, res) => {
+router.put('/fleets/:fleetID', checkJwt, async (req, res) => {
     res.send(await updateFleet(req.user, req.params.fleetID, req.body))
 })
 
-router.delete('/fleet/:fleetID', checkJwt, async (req, res) => {
+router.delete('/fleets/:fleetID', checkJwt, async (req, res) => {
     res.send(await removeFleet(req.user, req.params.fleetID))
 })
 
-router.get('/fleet/:fleetID/groups', async (req, res) => {
+router.get('/fleets/:fleetID/groups', async (req, res) => {
     res.send(await getGroups(req.params.fleetID))
 })
 
-router.post('/fleet/:fleetID/groups', checkJwt, async (req, res) => {
+router.post('/fleets/:fleetID/groups', checkJwt, async (req, res) => {
     res.send(await addGroup(req.user, req.params.fleetID, req.body))
 })
 
-router.get('/fleet/:fleetID/ships', async (req, res) => {
+router.get('/fleets/:fleetID/ships', async (req, res) => {
     res.send(await getShips(req.params.fleetID))
 })
 
-router.post('/fleet/:fleetID/ships', checkJwt, async (req, res) => {
+router.post('/fleets/:fleetID/ships', checkJwt, async (req, res) => {
     res.send(await addShip(req.user, req.params.fleetID, req.body))
 })
 
-router.delete('/fleet/:fleetID/ships/:shipID', checkJwt, async (req, res) => {
+router.delete('/fleets/:fleetID/ships/:shipID', checkJwt, async (req, res) => {
     res.send(await removeShip(req.user, req.params.fleetID, req.params.shipID))
 })
 

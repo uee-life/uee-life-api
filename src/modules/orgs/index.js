@@ -5,7 +5,8 @@ const {
     getOrganization, 
     getOrgFounders, 
     getOrgMembers,
-    getOrgShips
+    getOrgShips,
+    getOrgFleets
 } = require('./model');
 
 router.get('/orgs/:id', cache(60), async (req, res) => {
@@ -26,10 +27,15 @@ router.get('/orgs/:id/affiliates', async (req, res) => {
     res.send(await getOrgMembers(req.params.id, page, false));
 })
 
+router.get('/orgs/:orgID/fleets', async (req, res) => {
+    res.send(await getOrgFleets(req.params.orgID))
+})
+
 router.get('/orgs/:id/ships', async (req, res) => {
     res.send(await getOrgShips(req.params.id, 0))
 })
 
+// Get unused ship pool for specified fleet
 router.get('/orgs/:id/ships/:fleet', async (req, res) => {
     res.send(await getOrgShips(req.params.id, req.params.fleet))
 })

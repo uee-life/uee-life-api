@@ -7,11 +7,6 @@ const { getCitizen } = require ('../citizen/model')
 const { fetchOrgFounders, fetchOrg, fetchMembers } = require("../../helpers/rsi")
 
 
-async function test() {
-    return convertToMarkdown()
-}
-
-
 async function getOrgFounders(org) {
     return await fetchOrgFounders(org)
 }
@@ -57,11 +52,15 @@ async function getOrgShips(org, fleet) {
     }
 }
 
+async function getOrgFleets(orgID) {
+    return await executeSQL('SELECT * FROM v_fleets WHERE type=1 and owner=?', [orgID])
+}
+
 
 module.exports = {
     getOrganization,
     getOrgFounders,
     getOrgMembers,
     getOrgShips,
-    test
+    getOrgFleets
 };
