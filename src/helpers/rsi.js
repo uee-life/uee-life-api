@@ -123,7 +123,7 @@ function computeRank(stars) {
     } else {
         rank = 0
     }
-    
+
     return rank
 }
 
@@ -178,7 +178,7 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
                     member = {
                         name: name,
                         handle: handle,
-                        rank: strankars,
+                        rank: rank,
                         thumb: thumb,
                         verified: false
                     }
