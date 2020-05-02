@@ -7,6 +7,14 @@ const { getCitizen } = require ('../citizen/model')
 const { fetchOrgFounders, fetchOrg, fetchMembers } = require("../../helpers/rsi")
 
 
+async function checkOrgID(param) {
+    if (parseInt(param)) {
+        return parseInt(param)
+    } else {
+        return await getOrgID(param)
+    }
+}
+
 async function getOrgFounders(org) {
     return await fetchOrgFounders(org)
 }
@@ -17,7 +25,6 @@ async function getOrganization(tag) {
     org.id = orgID
     return org
 }
-
 
 async function getOrgMembers(org, page=1, isMain=true) {
     if(!parseInt(page)) {
@@ -53,7 +60,7 @@ async function getOrgShips(org, fleet) {
 }
 
 async function getOrgFleets(orgID) {
-    return await executeSQL('SELECT * FROM v_fleets WHERE type=1 and owner=?', [orgID])
+    return await executeSQL('SELECT a.*, b.tag as org_tag FROM v_fleets a left join org b on a.owner = b.id WHERE type=1 and owner=?', [orgID])
 }
 
 

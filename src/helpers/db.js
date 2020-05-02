@@ -49,6 +49,7 @@ async function getOrgID(tag) {
     const sql = "SELECT id FROM org WHERE tag=?"
     let rows = await executeSQL(sql, [tag])
     if(rows.length === 0) {
+        //TODO: check org tag is actually a valid org
         console.log(`Adding: ${tag}`)
         // not found, add to org table
         await executeSQL("INSERT INTO org (tag) values (?)", [tag])

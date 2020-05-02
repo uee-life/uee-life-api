@@ -2,6 +2,7 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const {
+    getOrgTag,
     getOrganization, 
     getOrgFounders, 
     getOrgMembers,
@@ -9,8 +10,12 @@ const {
     getOrgFleets
 } = require('./model');
 
-router.get('/orgs/:id', cache(60), async (req, res) => {
-    res.send(await getOrganization(req.params.id));
+/**
+ * This has to use tag as this may be requesting an org we don't have
+ * in our DB yet.
+ **/
+router.get('/orgs/:tag', cache(60), async (req, res) => {
+    res.send(await getOrganization(req.params.tag));
 });
 
 router.get('/orgs/:id/founders', cache(60), async (req, res) => {
