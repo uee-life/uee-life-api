@@ -212,8 +212,9 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
 }
 
 async function fetchOrgRank(org, handle) {
-    member = await fetchMembers(org, handle=handle)[0]
-    return parseInt(member.rank)
+    member = await fetchMembers(org, handle=handle)
+    console.log("member", member)
+    return parseInt(member[0].rank)
 }
 
 module.exports = {
