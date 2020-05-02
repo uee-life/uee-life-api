@@ -114,7 +114,7 @@ async function syncCitizen(handle) {
         // store org affiliation
         setOrg(citizen)
 
-        sql = "REPLACE INTO citizen_sync (handle, record, name, bio, enlisted, portrait, org, orgrank, website) VALUES (?,?,?,?,?,?,?,?,?)"
+        sql = "REPLACE INTO citizen_sync (handle, record, name, bio, enlisted, portrait, org, orgRank, orgTitle, website) VALUES (?,?,?,?,?,?,?,?,?,?)"
         data = [
             citizen.handle,
             citizen.record,
@@ -124,6 +124,7 @@ async function syncCitizen(handle) {
             citizen.portrait,
             citizen.org,
             citizen.orgRank,
+            citizen.orgTitle,
             citizen.website
         ]
         await executeSQL(sql, data)

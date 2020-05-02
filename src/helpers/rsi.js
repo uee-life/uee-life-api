@@ -32,7 +32,8 @@ async function fetchCitizen(handle) {
             info.portrait = `${baseURI}${image.attribs.src}`
         }
         info.org = $('span:contains("Spectrum Identification (SID)")', '#public-profile').next().text()
-        info.orgRank = $('span:contains("Organization rank")', '#public-profile').next().text()
+        info.orgTitle = $('span:contains("Organization rank")', '#public-profile').next().text()
+        info.orgRank = await fetchOrgRank(org, handle)
         info.website = $('span:contains("Website")', '#public-profile').next().attr('href') || ''
         info.verified = 0
         return info
