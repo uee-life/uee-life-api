@@ -116,7 +116,7 @@ function computeRank(stars) {
     console.log(stars)
     if (stars) {
         starsize = parseInt(stars.match(/width\:\ (.*)\%/)[1])
-
+        console.log("starsize", starsize)
         if(starsize) {
             rank = starsize / 20
         }
