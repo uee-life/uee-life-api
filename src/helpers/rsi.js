@@ -213,7 +213,7 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
 }
 
 async function fetchOrgRank(org, handle) {
-    member = await fetchMembers(org, handle=handle)
+    member = await fetchMembers(org, undefined, undefined, handle=handle)
     console.log("member", member)
     return parseInt(member[0].rank)
 }
