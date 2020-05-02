@@ -15,7 +15,7 @@ async function validCitizen(handle) {
 }
 
 async function fetchCitizen(handle) {
-    console.log('fetching citizen...')
+    console.log('fetching citizen...', handle)
 
     const baseURI = 'https://robertsspaceindustries.com'
     const res = await axios({
@@ -41,7 +41,7 @@ async function fetchCitizen(handle) {
         info.verified = 0
         return info
     }).catch((error) => {
-        console.error("fetchCitizen - Error retrieving citizen: ", error)
+        //console.error("fetchCitizen - Error retrieving citizen: ", error)
         return null
     })
     return res
