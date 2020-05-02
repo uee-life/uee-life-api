@@ -47,7 +47,7 @@ async function getOrgShips(org, fleet) {
     if (rows.length > 0) {
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
-            ship.owner = await getCitizen(ship.citizen)
+            ship.owner = await getCitizen(getHandle(ship.citizen))
             ships.push(ship)
         }
         return ships
