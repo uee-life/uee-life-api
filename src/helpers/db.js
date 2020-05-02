@@ -33,13 +33,11 @@ async function getID(handle) {
 }
 
 async function getHandle(id) {
-    sql = "SELECT handle FROM citizen WHERE id=?"
-    rows = await executeSQL(sql, [id])
-    if(rows.length === 0) {
-        // not found
-        return ''
+    const citizen = await getCitizen(id)
+    if (citizen) {
+        return citizen.handle
     } else {
-        return rows[0].handle
+        return null
     }
 }
 
@@ -75,6 +73,7 @@ module.exports = {
     createCitizen,
     getCitizen,
     getID,
+    getHandle,
     getOrg,
     getOrgID,
     getFeeds
