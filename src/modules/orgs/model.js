@@ -59,8 +59,8 @@ async function getOrgShips(org, fleet) {
     }
 }
 
-async function getOrgFleets(orgID) {
-    return await executeSQL('SELECT a.*, b.tag as org_tag FROM v_fleets a left join org b on a.owner = b.id WHERE type=1 and owner=?', [orgID])
+async function getOrgFleets(orgTag) {
+    return await executeSQL('SELECT a.*, b.tag as org_tag FROM v_fleets a left join org b on a.owner = b.id WHERE a.type=1 and b.tag=?', [orgTag])
 }
 
 
