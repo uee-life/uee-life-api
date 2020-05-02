@@ -32,11 +32,6 @@ async function getOrgMembers(org, page=1, isMain=true) {
     return members
 }
 
-async function getOrgRank(org, handle) {
-    member = await fetchMembers(org, handle=handle)
-    return parseInt(member.rank)
-}
-
 async function getOrgShips(org, fleet) {
     let rows = []
     if (fleet) {
@@ -65,7 +60,6 @@ module.exports = {
     getOrganization,
     getOrgFounders,
     getOrgMembers,
-    getOrgRank,
     getOrgShips,
     test
 };

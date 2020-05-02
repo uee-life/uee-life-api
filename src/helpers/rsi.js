@@ -211,10 +211,16 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
     return res
 }
 
+async function fetchOrgRank(org, handle) {
+    member = await fetchMembers(org, handle=handle)[0]
+    return parseInt(member.rank)
+}
+
 module.exports = {
     validCitizen,
     fetchCitizen,
     fetchOrg,
     fetchOrgFounders,
-    fetchMembers
+    fetchMembers,
+    fetchOrgRank
 }

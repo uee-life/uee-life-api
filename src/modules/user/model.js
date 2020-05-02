@@ -1,4 +1,4 @@
-const { fetchCitizen, fetchOrgFounders } = require('../../helpers/rsi')
+const { fetchCitizen, fetchOrgFounders, fetchOrgRank } = require('../../helpers/rsi')
 const { createCitizen, getID, getOrgID } = require('../../helpers/db')
 const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
@@ -148,7 +148,7 @@ async function setOrg(citizen) {
             })
 
             // get their current rank
-            const rank = await getOrgRank(citizen.org, citizen.handle)
+            const rank = await fetchOrgRank(citizen.org, citizen.handle)
 
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
