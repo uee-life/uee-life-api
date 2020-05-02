@@ -1,6 +1,6 @@
 const {executeSQL} = require('../mariadb')
 
-const { getHandle } = require('../../helpers/db')
+const { getHandle, getOrgTag } = require('../../helpers/db')
 const { getCitizen } = require ('../citizen/model')
 
 // fleet functions
@@ -32,7 +32,13 @@ async function getFleet(fleetID) {
     const sql = "SELECT * FROM fleet_groups WHERE id=?"
     const rows = await executeSQL(sql, [fleetID])
     if (rows.length > 0) {
-        return rows[0]
+        const fleet = rows[0]
+        if (fleet.type === 1) {
+            fleet.org_tag = getOrgTag(fleet.owner)
+        } else if (fleet.type === 2) {
+            fleet.handle = getHandle(fleet.owner)
+        }
+        return fleet
     } else {
         return {}
     }

@@ -41,8 +41,14 @@ async function getHandle(id) {
     }
 }
 
-async function getOrg(id) {
-
+async function getOrgTag(id) {
+    const rows = await executeSQL("SELECT tag FROM org WHERE id=?", [id])
+    if (rows.length === 0) {
+        console.log('Org not found...')
+        return 0
+    } else {
+        return rows[0].tag
+    }
 }
 
 async function getOrgID(tag) {
@@ -77,5 +83,6 @@ module.exports = {
     getHandle,
     getOrg,
     getOrgID,
+    getOrgTag,
     getFeeds
 }
