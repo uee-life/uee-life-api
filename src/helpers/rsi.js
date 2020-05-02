@@ -205,7 +205,6 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
             console.error(err)
         })
         res.members = await checkCitizens(res.members)
-        console.log(res)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
@@ -216,7 +215,7 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
 async function fetchOrgRank(org, handle) {
     const res = await fetchMembers(org, undefined, undefined, handle=handle)
     const member = res.members[0]
-    console.log("member", member)
+
     return parseInt(member.rank)
 }
 
