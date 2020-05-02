@@ -113,6 +113,7 @@ async function checkCitizens(members) {
 
 function computeRank(stars) {
     let rank = 0
+    console.log(stars)
     if (stars) {
         starsize = parseInt(stars.match(/width\:\ (.*)\%/)[1])
 
@@ -213,9 +214,10 @@ async function fetchMembers(org, page=1, isMain=true, handle='') {
 }
 
 async function fetchOrgRank(org, handle) {
-    member = await fetchMembers(org, undefined, undefined, handle=handle)
+    const res = await fetchMembers(org, undefined, undefined, handle=handle)
+    const member = res.members[0]
     console.log("member", member)
-    return parseInt(member[0].rank)
+    return parseInt(member.rank)
 }
 
 module.exports = {
