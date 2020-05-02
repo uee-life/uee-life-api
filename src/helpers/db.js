@@ -81,7 +81,6 @@ module.exports = {
     getCitizen,
     getID,
     getHandle,
-    getOrg,
     getOrgID,
     getOrgTag,
     getFeeds
