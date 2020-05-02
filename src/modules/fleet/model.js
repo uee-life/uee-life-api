@@ -64,9 +64,10 @@ async function addGroup (usr, fleetID, data) {
 }
 
 async function getShips (fleetID) {
-    const rows = executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
+    const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
 
     let ships = []
+
     if (rows.length > 0) {
         console.log('got ships')
         for (i in [...Array(rows.length).keys()]) {
