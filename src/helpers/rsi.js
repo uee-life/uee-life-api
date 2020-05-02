@@ -21,7 +21,7 @@ async function fetchCitizen(handle) {
     const res = await axios({
         url: `${baseURI}/citizens/${handle}`,
         method: 'GET'
-    }).then((resp) => {
+    }).then(async (resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.handle = handle
@@ -52,7 +52,7 @@ async function fetchOrg(org) {
     const resp = await axios({
         url: baseURI + '/orgs/' + org,
         method: 'GET'
-    }).then((resp) => {
+    }).then(async (resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.name = $('h1', '#organization').text().split("/")[0].trim()
