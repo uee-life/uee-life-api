@@ -16,9 +16,12 @@ async function validCitizen(handle) {
 
 async function fetchCitizen(handle) {
     console.log('fetching citizen...')
-    try {
-        const baseURI = 'https://robertsspaceindustries.com'
-        const resp = await axios.get(baseURI + '/citizens/' + handle)
+
+    const baseURI = 'https://robertsspaceindustries.com'
+    const res = await axios({
+        url: `${baseURI}/citizens/${handle}`,
+        method: 'GET'
+    }).then((resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.handle = handle
@@ -37,16 +40,19 @@ async function fetchCitizen(handle) {
         info.website = $('span:contains("Website")', '#public-profile').next().attr('href') || ''
         info.verified = 0
         return info
-    } catch (error) {
-        console.error("fetchCitizen - Error retrieving citizen")
+    }).catch((error) => {
+        console.error("fetchCitizen - Error retrieving citizen: ", error)
         return null
-    }
+    })
+    return res
 }
 
 async function fetchOrg(org) {
-    try {
-        const baseURI = "https://robertsspaceindustries.com"
-        const resp = await axios.get(baseURI + '/orgs/' + org)
+    const baseURI = "https://robertsspaceindustries.com"
+    const resp = await axios({
+        url: baseURI + '/orgs/' + org,
+        method: 'GET'
+    }).then((resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.name = $('h1', '#organization').text().split("/")[0].trim()
@@ -66,10 +72,11 @@ async function fetchOrg(org) {
         info.tag = org
 
         return info
-    } catch (error) {
+    }).catch((err) => {
         console.error(error)
         return {error: "Org Not found!"}
-    }
+    })
+    return resp
 }
 
 async function fetchOrgFounders(org) {
