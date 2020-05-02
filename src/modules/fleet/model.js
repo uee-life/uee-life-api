@@ -34,7 +34,9 @@ async function getFleet(fleetID) {
     if (rows.length > 0) {
         const fleet = rows[0]
         if (fleet.type === 1) {
-            fleet.org_tag = getOrgTag(fleet.owner)
+            const tag = getOrgTag(fleet.owner)
+            console.log(tag)
+            fleet.org_tag = tag
         } else if (fleet.type === 2) {
             fleet.handle = getHandle(fleet.owner)
         }
