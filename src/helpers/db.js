@@ -47,6 +47,7 @@ async function getOrgTag(id) {
         console.log('Org not found...')
         return 0
     } else {
+        console.log('org found: ', rows[0])
         return rows[0].tag
     }
 }
