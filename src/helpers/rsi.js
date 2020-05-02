@@ -114,7 +114,7 @@ async function checkCitizens(members) {
 function computeRank(stars) {
     let rank = 0
     if (stars) {
-        starsize = parseInt(starspan.match(/width\:\ (.*)\%/)[1])
+        starsize = parseInt(stars.match(/width\:\ (.*)\%/)[1])
 
         if(starsize) {
             rank = starsize / 20
@@ -123,6 +123,7 @@ function computeRank(stars) {
     } else {
         rank = 0
     }
+    return rank
 }
 
 async function fetchMembers(org, page=1, isMain=true, handle='') {
