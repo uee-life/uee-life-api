@@ -124,6 +124,7 @@ function computeRank(stars) {
     } else {
         rank = 0
     }
+    console.log(rank)
     return rank
 }
 
