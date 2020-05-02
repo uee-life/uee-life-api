@@ -29,7 +29,7 @@ async function removeFleet(usr, groupID) {
 
 async function getFleet(fleetID) {
     // use a recursive query to retrieve all squadrons (groups) for given fleet
-    const sql = "SELECT * FROM v_fleet_groups WHERE id=?"
+    const sql = "SELECT * FROM fleet_groups WHERE id=?"
     const rows = await executeSQL(sql, [fleetID])
     if (rows.length > 0) {
         return rows[0]
@@ -46,7 +46,7 @@ async function updateFleet(usr, fleetID, data) {
 }
 
 async function getGroups(parent) {
-    const rows = await executeSQL("SELECT * FROM v_fleet_groups WHERE parent=?", [parent])
+    const rows = await executeSQL("SELECT * FROM fleet_groups WHERE parent=?", [parent])
     if (rows.length > 0) {
         return rows
     } else {
