@@ -68,6 +68,7 @@ async function getShips (fleetID) {
 
     let ships = []
     if (rows.length > 0) {
+        console.log('got ships')
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
             const owner = await getCitizen(await getHandle(ship.citizen))
@@ -76,6 +77,7 @@ async function getShips (fleetID) {
         }
         return ships
     } else {
+        console.log('no got ships')
         return []
     }
 }
