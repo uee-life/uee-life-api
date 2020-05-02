@@ -2,7 +2,8 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const { convertToMarkdown } = require('../helper')
 const { executeSQL } = require('../mariadb')
-const { getCitizen, getOrgID } = require('../../helpers/db')
+const { getOrgID } = require('../../helpers/db')
+const { getCitizen } = require ('../citizen/model')
 const { fetchOrgFounders, fetchOrg, fetchMembers } = require("../../helpers/rsi")
 
 
