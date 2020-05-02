@@ -1,9 +1,7 @@
-const axios = require("axios")
 const {executeSQL} = require('../mariadb')
 
-const { getID } = require('../../helpers/db')
-const { validCitizen } = require('../../helpers/rsi')
-const { getUser } = require('../user/model')
+const { getHandle } = require('../../helpers/db')
+const { getCitizen } = require ('../citizen/model')
 
 async function getFleets(orgID) {
     return await executeSQL('SELECT * FROM v_fleets WHERE org=?', [orgID])
@@ -66,7 +64,20 @@ async function addGroup (usr, fleetID, data) {
 }
 
 async function getShips (fleetID) {
-    return executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
+    const rows = executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
+
+    let ships = []
+    if (rows.length > 0) {
+        for (i in [...Array(rows.length).keys()]) {
+            ship = rows[i]
+            const owner = await getCitizen(await getHandle(ship.citizen))
+            ship.owner = owner.info
+            ships.push(ship)
+        }
+        return ships
+    } else {
+        return []
+    }
 }
 
 async function addShip (usr, fleetID, data) {
