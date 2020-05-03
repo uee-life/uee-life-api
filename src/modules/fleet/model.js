@@ -107,7 +107,7 @@ async function getCrew(fleetID, shipID) {
 
 async function addCrew(fleetID, shipID, data) {
     // add a crewmen to the specified fleet ship
-    await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.citizen, data.role])
+    await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.handle, data.role])
     return {success: 1, msg: 'Successfully added crewmember!'}
 }
 
