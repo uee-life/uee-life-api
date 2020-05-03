@@ -101,15 +101,20 @@ async function removeShip (usr, fleetID, shipID) {
 
 async function getCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    return await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND ship=?', [fleetID, shipID])
+    const crew = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND ship=?', [fleetID, shipID])
+    return crew
 }
 
-async function addCrew(shipID) {
+async function addCrew(fleetID, shipID, data) {
     // add a crewmen to the specified fleet ship
+    await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.citizen, data.role])
+    return {success: 1, msg: 'Successfully added crewmember!'}
 }
 
-async function removeCrew(crewID) {
+async function removeCrew(fleetID, shipID, crewID) {
     // remove the specified crewmember
+    await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND ship=? AND citizen=?')
+    return {success: 1, msg: 'Successfully removed crewmember!'}
 }
 
 module.exports = {
@@ -122,5 +127,7 @@ module.exports = {
     getShips,
     addShip,
     removeShip,
-    getCrew
+    getCrew,
+    addCrew,
+    removeCrew
 }
