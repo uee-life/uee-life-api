@@ -105,15 +105,15 @@ async function getCrew(fleetID, shipID) {
     return crew
 }
 
-async function addCrew(fleetID, shipID, data) {
+async function addCrew(usr, fleetID, shipID, data) {
     // add a crewmen to the specified fleet ship
     await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.handle, data.role])
     return {success: 1, msg: 'Successfully added crewmember!'}
 }
 
-async function removeCrew(fleetID, shipID, crewID) {
+async function removeCrew(usr, fleetID, shipID, crewID) {
     // remove the specified crewmember
-    await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND ship=? AND citizen=?')
+    await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND ship=? AND citizen=?', [fleetID, shipID, crewID])
     return {success: 1, msg: 'Successfully removed crewmember!'}
 }
 

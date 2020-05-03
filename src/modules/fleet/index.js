@@ -55,13 +55,13 @@ router.get('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
 })
 
 // Add crewmember
-router.post('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
-    res.send(await addCrew(req.params.fleetID, req.params.shipID))
+router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) => {
+    res.send(await addCrew(req.user, req.params.fleetID, req.params.shipID))
 })
 
 // Remove crewmember
-router.delete('/fleets/:fleetID/ships/:shipID/crew/:crewID', async (req, res) => {
-    res.send(await removeCrew(req.params.fleetID, req.params.shipID, req.params.crewID))
+router.delete('/fleets/:fleetID/ships/:shipID/crew/:crewID', checkJwt, async (req, res) => {
+    res.send(await removeCrew(req.user, req.params.fleetID, req.params.shipID, req.params.crewID))
 })
 
 // Remove ship
