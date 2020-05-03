@@ -99,8 +99,9 @@ async function removeShip (usr, fleetID, shipID) {
 
 // crew functions
 
-async function getCrew(shipID) {
+async function getCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
+    return await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND ship=?', [fleetID, shipID])
 }
 
 async function addCrew(shipID) {
@@ -120,5 +121,6 @@ module.exports = {
     addGroup,
     getShips,
     addShip,
-    removeShip
+    removeShip,
+    getCrew
 }
