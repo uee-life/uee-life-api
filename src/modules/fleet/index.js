@@ -56,7 +56,7 @@ router.get('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
 
 // Add crewmember
 router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) => {
-    res.send(await addCrew(req.user, req.params.fleetID, req.params.shipID))
+    res.send(await addCrew(req.user, req.params.fleetID, req.params.shipID, req.body))
 })
 
 // Remove crewmember
