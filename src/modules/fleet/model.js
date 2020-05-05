@@ -43,7 +43,7 @@ async function canEdit(usr, group) {
 
 async function addFleet(usr, data) {
     // TODO: check user CAN add to this owner
-    if (canEdit(usr, data)) {
+    if (await canEdit(usr, data)) {
         const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose) VALUES (?,?,?,?)"
         const params = [data.type, data.owner, 0, data.name, data.purpose]
         const res = await executeSQL(sql, params)
@@ -56,7 +56,7 @@ async function addFleet(usr, data) {
 
 async function removeFleet(usr, groupID) {
     // check usr owns org that owns the fleet
-    if (canEdit(usr, await getFleet(groupID))) {
+    if (await canEdit(usr, await getFleet(groupID))) {
         // remove all ships in the fleet group
         await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
@@ -87,7 +87,7 @@ async function getFleet(fleetID) {
 }
 
 async function updateFleet(usr, fleetID, data) {
-    if (canEdit(usr, await getFleet(fleetID))) {
+    if (await canEdit(usr, await getFleet(fleetID))) {
         // TODO: Check permission
         const sql = "UPDATE fleet_groups SET cmdr=? WHERE id=?"
         await executeSQL(sql, [data.cmdr, fleetID])
@@ -107,7 +107,7 @@ async function getGroups(parent) {
 }
 
 async function addGroup (usr, fleetID, data) {
-    const edit = canEdit(usr, await getFleet(fleetID))
+    const edit = await canEdit(usr, await getFleet(fleetID))
     console.log("addGroup", edit)
     if (edit) {
         console.log(data)
@@ -145,7 +145,7 @@ async function getShips (fleetID) {
 }
 
 async function addShip (usr, fleetID, data) {
-    if (canEdit(usr, await getFleet(data.group))) {
+    if (await canEdit(usr, await getFleet(data.group))) {
         console.log('adding ship', data)
         const sql = "INSERT INTO fleet_ships (fleet, parent, ship) values (?, ?, ?)"
         await executeSQL(sql, [fleetID, data.group, data.ship])
@@ -156,7 +156,7 @@ async function addShip (usr, fleetID, data) {
 }
 
 async function removeShip (usr, fleetID, shipID) {
-    if (canEdit(usr, await getFleet(fleetID))) {
+    if (await canEdit(usr, await getFleet(fleetID))) {
         const sql = "DELETE FROM fleet_ships WHERE fleet=? AND ship=?"
         await executeSQL(sql, [fleetID, shipID])
         return {success: 1, msg: 'Ship removed!'}
@@ -174,7 +174,7 @@ async function getCrew(fleetID, shipID) {
 }
 
 async function addCrew(usr, fleetID, shipID, data) {
-    if (canEdit(usr, await getFleet(fleetID))) {
+    if (await canEdit(usr, await getFleet(fleetID))) {
         // add a crewmen to the specified fleet ship
         await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.handle, data.role])
         return {success: 1, msg: 'Successfully added crewmember!'}
@@ -184,7 +184,7 @@ async function addCrew(usr, fleetID, shipID, data) {
 }
 
 async function removeCrew(usr, fleetID, shipID, crewID) {
-    if (canEdit(usr, await getFleet(fleetID))) {
+    if (await canEdit(usr, await getFleet(fleetID))) {
         // remove the specified crewmember
         await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND ship=? AND citizen=?', [fleetID, shipID, crewID])
         return {success: 1, msg: 'Successfully removed crewmember!'}
