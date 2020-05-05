@@ -127,7 +127,7 @@ async function getCommanders(fleetID) {
             commanders.push(data.cmdr)
         } else {
             commanders.push(data.cmdr)
-            commanders.concat(await getCommanders(data.parent))
+            commanders = commanders.concat(await getCommanders(data.parent))
         }
         return commanders
     } else {
