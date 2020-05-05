@@ -149,7 +149,11 @@ async function setOrg(citizen) {
             })
 
             // get their current rank
-            const rank = await fetchOrgRank(citizen.org, citizen.handle)
+            let rank = await fetchOrgRank(citizen.org, citizen.handle)
+
+            if(!rank) {
+                rank = 0
+            }
 
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
