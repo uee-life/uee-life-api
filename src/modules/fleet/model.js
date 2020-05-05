@@ -15,7 +15,11 @@ async function canEdit(usr, group) {
     let edit = false
     switch (group.type) {
         case 1: // org fleet
+            console.log('adding to org fleet:', group)
             const rank = await getOrgRank(group.owner, id)
+            console.log('org rank:', rank)
+            console.log('Commanders:', cmdrs)
+            console.log('Requested by:', user.app_metadata.handle)
             if (rank == 5 || cmdrs.includes(user.app_metadata.handle)) {
                 edit = true
             }
