@@ -124,7 +124,10 @@ async function getCommanders(fleetID) {
         const data = rows[0]
         console.log(data)
         if (data.parent === 0) { // fleet root group
-            return commanders.push(data.cmdr)
+            console.log('root found, adding', data.cmdr)
+            commanders.push(data.cmdr)
+            console.log('commanders', commanders)
+            return commanders
         } else {
             commanders.push(data.cmdr)
             return commanders.concat(await getCommanders(data.parent))
