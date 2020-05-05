@@ -20,11 +20,15 @@ async function canEdit(usr, group) {
             console.log('org rank:', rank)
             console.log('Commanders:', cmdrs)
             console.log('Requested by:', user.app_metadata.handle)
-            if (rank == 5 || cmdrs.includes(user.app_metadata.handle)) {
+            if (rank === 5 || cmdrs.includes(user.app_metadata.handle)) {
+                console.log('matched...')
                 edit = true
+            } else {
+                console.log('no match')
             }
             break;
         case 2: // personal fleet
+            console.log('hit case 2')
             if (group.owner === id) {
                 edit = true
             }
