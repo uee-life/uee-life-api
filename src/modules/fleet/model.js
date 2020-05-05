@@ -107,7 +107,9 @@ async function getGroups(parent) {
 }
 
 async function addGroup (usr, fleetID, data) {
-    if (canEdit(usr, await getFleet(fleetID))) {
+    const edit = canEdit(usr, await getFleet(fleetID))
+    console.log("addGroup", edit)
+    if (edit) {
         console.log(data)
         // get parent groups type
         const rows = await executeSQL("SELECT type FROM fleet_groups WHERE id=?", [fleetID])
