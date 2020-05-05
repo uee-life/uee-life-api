@@ -155,10 +155,10 @@ async function addShip (usr, fleetID, data) {
     }
 }
 
-async function removeShip (usr, fleetID, shipID) {
-    if (await canEdit(usr, await getFleet(fleetID))) {
-        const sql = "DELETE FROM fleet_ships WHERE fleet=? AND ship=?"
-        await executeSQL(sql, [fleetID, shipID])
+async function removeShip (usr, groupID, shipID) {
+    if (await canEdit(usr, await getFleet(groupID))) {
+        const sql = "DELETE FROM fleet_ships WHERE parent=? AND ship=?"
+        await executeSQL(sql, [groupID, shipID])
         return {success: 1, msg: 'Ship removed!'}
     } else {
         return {success: 0, msg: 'No permission to remove ship from this fleet group'}
