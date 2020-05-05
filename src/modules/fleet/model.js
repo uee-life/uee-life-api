@@ -118,7 +118,7 @@ async function removeCrew(usr, fleetID, shipID, crewID) {
 }
 
 async function getCommanders(fleetID) {
-    const commanders = []
+    let commanders = []
     const rows = await executeSQL('SELECT cmdr, parent FROM fleet_groups WHERE id=?', [fleetID])
     if (rows.length > 0) {
         const data = rows[0]
