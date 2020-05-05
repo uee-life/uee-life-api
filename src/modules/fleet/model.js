@@ -1,6 +1,6 @@
 const {executeSQL} = require('../mariadb')
 
-const { getHandle, getOrgTag, getOrgRank } = require('../../helpers/db')
+const { getHandle, getOrgTag, getOrgRank, getID } = require('../../helpers/db')
 const { getUser } = require('../user/model')
 const { getCitizen } = require ('../citizen/model')
 
