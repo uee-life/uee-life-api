@@ -122,13 +122,14 @@ async function getCommanders(fleetID) {
     const rows = await executeSQL('SELECT cmdr, parent FROM fleet_groups WHERE id=?', [fleetID])
     if (rows.length > 0) {
         const data = rows[0]
-        console.log(data)
-        if (data.parent === 0) { // fleet root group
+
+        if (data.cmdr) {
             commanders.push(data.cmdr)
-        } else {
-            commanders.push(data.cmdr)
+        }
+        if (data.parent !== 0) { // fleet root group
             commanders = commanders.concat(await getCommanders(data.parent))
         }
+        
         return commanders
     } else {
         return []
