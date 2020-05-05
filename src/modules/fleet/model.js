@@ -117,6 +117,22 @@ async function removeCrew(usr, fleetID, shipID, crewID) {
     return {success: 1, msg: 'Successfully removed crewmember!'}
 }
 
+async function getCommanders(fleetID) {
+    const commanders = []
+    const rows = await executeSQL('SELECT cmdr, parent FROM fleet_groups WHERE id=?', [fleetID])
+    if (rows.length > 0) {
+        const data = rows[0]
+        if (data.parent === 0) { // fleet root group
+            return commanders.push(data.cmdr)
+        } else {
+            commanders.push(data.cmdr)
+            return commanders.append(getCommanders(data.parent))
+        }
+    } else {
+        return []
+    }
+}
+
 module.exports = {
     addFleet,
     removeFleet,
@@ -129,5 +145,6 @@ module.exports = {
     removeShip,
     getCrew,
     addCrew,
-    removeCrew
+    removeCrew,
+    getCommanders
 }

@@ -13,7 +13,8 @@ const {
     removeShip,
     getCrew,
     addCrew,
-    removeCrew
+    removeCrew,
+    getCommanders
 } = require('./model')
 
 // protected
@@ -31,6 +32,10 @@ router.put('/fleets/:fleetID', checkJwt, async (req, res) => {
 
 router.delete('/fleets/:fleetID', checkJwt, async (req, res) => {
     res.send(await removeFleet(req.user, req.params.fleetID))
+})
+
+router.get('/fleets/:fleetID/commanders', async (req, res) => {
+    res.send(await getCommanders(req.params.fleetID))
 })
 
 router.get('/fleets/:fleetID/groups', async (req, res) => {
