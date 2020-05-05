@@ -1,6 +1,7 @@
 const {executeSQL} = require('../mariadb')
 
 const { getHandle, getOrgTag, getOrgRank } = require('../../helpers/db')
+const { getUser } = require('../user/model')
 const { getCitizen } = require ('../citizen/model')
 
 async function canEdit(usr, group) {
@@ -11,9 +12,7 @@ async function canEdit(usr, group) {
         cmdrs = await getCommanders(group.id)
     } 
     
-
     let edit = false
-    
     switch (group.type) {
         case 1: // org fleet
             const rank = await getOrgRank(group.owner, id)
@@ -101,6 +100,7 @@ async function getGroups(parent) {
 
 async function addGroup (usr, fleetID, data) {
     if (canEdit(usr, await getFleet(fleetID))) {
+        console.log(data)
         // get parent groups type
         const rows = await executeSQL("SELECT type FROM fleet_groups WHERE id=?", [fleetID])
         if (rows.length > 0) {
