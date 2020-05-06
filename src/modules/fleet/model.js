@@ -150,15 +150,12 @@ async function getFleetShip (fleetID, shipID) {
     let ships = []
 
     if (rows.length > 0) {
-        for (i in [...Array(rows.length).keys()]) {
-            ship = rows[i]
-            const owner = await getCitizen(await getHandle(ship.citizen))
-            ship.owner = owner.info
-            ships.push(ship)
-        }
-        return ships
+        ship = rows[0]
+        const owner = await getCitizen(await getHandle(ship.citizen))
+        ship.owner = owner.info
+        return ship
     } else {
-        return []
+        return {}
     }
 }
 
