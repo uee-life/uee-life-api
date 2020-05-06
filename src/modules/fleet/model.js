@@ -244,6 +244,7 @@ module.exports = {
     getGroups,
     addGroup,
     getShips,
+    getFleetShip,
     addShip,
     removeShip,
     getPersonnel,
