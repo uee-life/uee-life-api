@@ -173,6 +173,12 @@ async function getCrew(fleetID, shipID) {
     return crew
 }
 
+async function getPersonnel(fleetID) {
+    // get all crewmembers for the whole fleet
+    const crew = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=?', [fleetID])
+    return crew
+}
+
 async function addCrew(usr, fleetID, shipID, data) {
     if (await canEdit(usr, await getFleet(fleetID))) {
         // add a crewmen to the specified fleet ship
@@ -222,6 +228,7 @@ module.exports = {
     getShips,
     addShip,
     removeShip,
+    getPersonnel,
     getCrew,
     addCrew,
     removeCrew,

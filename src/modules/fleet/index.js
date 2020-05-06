@@ -4,6 +4,7 @@ const router = require('express').Router()
 const { 
     addFleet,
     getFleet,
+    getPersonnel,
     updateFleet,
     getGroups,
     addGroup,
@@ -36,6 +37,10 @@ router.delete('/fleets/:fleetID', checkJwt, async (req, res) => {
 
 router.get('/fleets/:fleetID/commanders', async (req, res) => {
     res.send(await getCommanders(req.params.fleetID))
+})
+
+router.get('/fleets/:fleetID/crew', async (req, res) => {
+    res.send(await getPersonnel(req.params.fleetID))
 })
 
 router.get('/fleets/:fleetID/groups', async (req, res) => {
