@@ -144,6 +144,24 @@ async function getShips (fleetID) {
     }
 }
 
+async function getFleetShip (fleetID, shipID) {
+    const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE fleet=? and ship=?', [fleetID, shipID])
+
+    let ships = []
+
+    if (rows.length > 0) {
+        for (i in [...Array(rows.length).keys()]) {
+            ship = rows[i]
+            const owner = await getCitizen(await getHandle(ship.citizen))
+            ship.owner = owner.info
+            ships.push(ship)
+        }
+        return ships
+    } else {
+        return []
+    }
+}
+
 async function addShip (usr, fleetID, data) {
     if (await canEdit(usr, await getFleet(data.group))) {
         console.log('adding ship', data)
