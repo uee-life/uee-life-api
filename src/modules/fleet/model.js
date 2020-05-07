@@ -57,11 +57,11 @@ async function addFleet(usr, data) {
 async function removeFleet(usr, groupID) {
     // check usr owns org that owns the fleet
     if (await canEdit(usr, await getFleet(groupID))) {
-        // remove all ships in the fleet group
-        await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
-
         // remove all crew in the fleet group
         await executeSQL('DELETE FROM fleet_personnel WHERE id in (select id from v_fleet_crew where `group`=?)', [groupID])
+        
+        // remove all ships in the fleet group
+        await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
         // delete the fleet group
         await executeSQL('DELETE FROM fleet_groups WHERE id=?', [groupID])
