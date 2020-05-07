@@ -78,7 +78,7 @@ async function fetchOrg(org) {
 
         return info
     }).catch((err) => {
-        console.error(error)
+        console.error(err)
         return {error: "Org Not found!"}
     })
     return resp
