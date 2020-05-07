@@ -94,6 +94,7 @@ async function shipCount() {
 
 async function fleetCount() {
     const res = await executeSQL('SELECT count(*) from fleet_groups WHERE parent=0')
+    console.log(res)
     return res[0].count
 }
 
