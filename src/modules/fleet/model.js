@@ -184,7 +184,19 @@ async function removeShip (usr, groupID, shipID) {
 
 async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=? AND ship=?', [fleetID, shipID])
+    const rows = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=? AND ship=?', [fleetID, shipID])
+    let crew = []
+
+    if (rows.length > 0) {
+        for (i in [...Array(rows.length).keys()]) {
+            c = rows[i]
+            const group = await getFleet(c.group)
+            c.group = group
+            crew.push(c)
+        }
+    } else {
+        return []
+    }
     return crew
 }
 
