@@ -132,6 +132,7 @@ async function addGroup (usr, fleetID, data) {
 async function getShipGroupID(fleetID, shipID) {
     const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
     if (rows.length > 0) {
+        console.log(rows[0].parent)
         return await getFleet(rows[0].parent)
     } else {
         return 0
