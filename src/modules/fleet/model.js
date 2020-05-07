@@ -41,6 +41,10 @@ async function canEdit(usr, group) {
 
 // fleet functions
 
+async function getOrgFleets(orgTag) {
+    return await executeSQL('SELECT a.*, b.tag as org_tag FROM v_fleets a left join org b on a.owner = b.id WHERE a.type=1 and b.tag=?', [orgTag])
+}
+
 async function addFleet(usr, data) {
     // TODO: check user CAN add to this owner
     if (await canEdit(usr, data)) {
@@ -255,6 +259,7 @@ async function getCommanders(fleetID) {
 }
 
 module.exports = {
+    getOrgFleets,
     addFleet,
     removeFleet,
     getFleet,

@@ -7,8 +7,14 @@ const {
     getOrgFounders, 
     getOrgMembers,
     getOrgShips,
-    getOrgFleets
+    getOrgFleets,
+    addOrgFleet
 } = require('./model');
+
+const {
+    getOrgFleets,
+    addFleet
+} = require('../fleet/model')
 
 /**
  * This has to use tag as this may be requesting an org we don't have
@@ -34,6 +40,16 @@ router.get('/orgs/:id/affiliates', async (req, res) => {
 
 router.get('/orgs/:orgID/fleets', async (req, res) => {
     res.send(await getOrgFleets(req.params.orgID))
+})
+
+router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
+    const data = {
+        name: req.body.name,
+        purpose: req.body.purpose,
+        type: 1,
+        owner: req.params.orgID
+    }
+    res.send(await addOrgFleet(req.user, req.params.orgID, data))
 })
 
 router.get('/orgs/:id/ships', async (req, res) => {
