@@ -129,14 +129,18 @@ async function addGroup (usr, fleetID, data) {
     }
 }
 
-async function getShipGroup(fleetID, shipID) {
-    //TODO: potentially change this to return the actual group rather than an ID...
+async function getShipGroupID(fleetID, shipID) {
     const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
     if (rows.length > 0) {
-        return rows[0].parent
+        return await getFleet(rows[0].parent)
     } else {
         return 0
     }
+}
+
+async function getShipGroup(fleetID, shipID) {
+    const groupID = await getShipGroupID(fleetID, shipID)
+    return await getFleet(groupID)
 }
 
 async function getShips (fleetID) {
@@ -197,7 +201,7 @@ async function removeShip (usr, groupID, shipID) {
 
 async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [await getShipGroup(fleetID, shipID), shipID])
+    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [await getShipGroupID(fleetID, shipID), shipID])
     return crew
 }
 
@@ -221,7 +225,7 @@ async function getFleetCrew(fleetID) {
 
 async function addCrew(usr, fleetID, shipID, data) {
     console.log('in add crew')
-    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
+    if (await canEdit(usr, await getShipGroup(fleetID, shipID))) {
         // add a crewmen to the specified fleet ship
         // check if crewmember is already in the fleet
         const rows = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND citizen=?', [fleetID, data.handle])
@@ -237,7 +241,12 @@ async function addCrew(usr, fleetID, shipID, data) {
 }
 
 async function updateCrew(usr, fleetID, shipID, crewID, data) {
-    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
+    if (await canEdit(usr, await getShipGroup(fleetID, shipID))) {
+
+        /*
+         we check fleet and ship ID's here even though it's redundant to make sure people cant bypass the edit check
+         by specifying a fleet and ship they can edit, but an arbitrary crewID
+         */
         await executeSQL('UPDATE fleet_personnel SET role=? WHERE fleet=? AND ship=? AND id=?', [data.role, fleetID, shipID, crewID])
         return {success: 1, msg: 'Successfully updated crewmember!'}
     } else {
@@ -246,10 +255,10 @@ async function updateCrew(usr, fleetID, shipID, crewID, data) {
 }
 
 async function removeCrew(usr, fleetID, shipID, crewID) {
-    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
+    if (await canEdit(usr, await getShipGroup(fleetID, shipID))) {
         // remove the specified crewmember
-        //TODO: fleetID is redundant here...?
-        await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND id=?', [fleetID, crewID])
+        // also checks FleetID to ensure edit check is enforced
+        await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND ship=? AND id=?', [fleetID, shipID, crewID])
         return {success: 1, msg: 'Successfully removed crewmember!'}
     } else {
         return {success: 0, msg: 'No permission to edit the crew of this fleet ship'}
