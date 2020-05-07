@@ -60,6 +60,9 @@ async function removeFleet(usr, groupID) {
         // remove all ships in the fleet group
         await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
+        // remove all crew in the fleet group
+        await executeSQL('DELETE FROM fleet_personnel WHERE id=?', [groupID])
+
         // delete the fleet group
         await executeSQL('DELETE FROM fleet_groups WHERE id=?', [groupID])
 
@@ -194,7 +197,7 @@ async function removeShip (usr, groupID, shipID) {
 
 async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [fleetID, shipID])
+    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [getShipGroup(fleetID, shipID), shipID])
     return crew
 }
 
