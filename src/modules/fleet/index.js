@@ -76,6 +76,7 @@ router.get('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
 
 // Add crewmember
 router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) => {
+    console.log('adding crewmen')
     res.send(await addCrew(req.user, req.params.fleetID, req.params.shipID, req.body))
 })
 

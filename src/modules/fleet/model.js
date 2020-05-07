@@ -131,6 +131,7 @@ async function addGroup (usr, fleetID, data) {
 }
 
 async function getShipGroup(fleetID, shipID) {
+    //TODO: potentially change this to return the actual group rather than an ID...
     const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
     if (rows.length > 0) {
         return rows[0].parent
@@ -220,7 +221,7 @@ async function getFleetCrew(fleetID) {
 }
 
 async function addCrew(usr, fleetID, shipID, data) {
-
+    console.log('in add crew')
     if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
         // add a crewmen to the specified fleet ship
         // check if crewmember is already in the fleet
