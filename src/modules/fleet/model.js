@@ -236,9 +236,9 @@ async function addCrew(usr, fleetID, shipID, data) {
     }
 }
 
-async function updateCrew(usr, fleetID, shipID, data) {
+async function updateCrew(usr, fleetID, shipID, crewID, data) {
     if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
-        await executeSQL('UPDATE fleet_personnel SET role=? WHERE fleet=? AND ship=? AND citizen=?', [data.role, fleetID, shipID, data.handle])
+        await executeSQL('UPDATE fleet_personnel SET role=? WHERE fleet=? AND ship=? AND id=?', [data.role, fleetID, shipID, crewID])
         return {success: 1, msg: 'Successfully updated crewmember!'}
     } else {
         return {success: 0, msg: 'No permission to edit the crew of this fleet ship'}

@@ -83,7 +83,7 @@ router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) =>
 
 // update crewmember
 router.put('/fleets/:fleetID/ships/:shipID/crew/:crewID', checkJwt, async (req, res) => {
-    res.send(await updateCrew(req.user, req.params.fleetID, req.params.shipID, req.body))
+    res.send(await updateCrew(req.user, req.params.fleetID, req.params.shipID, req.params.crewID, req.body))
 })
 
 // Remove crewmember
