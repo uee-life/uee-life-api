@@ -2,13 +2,10 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const {
-    getOrgTag,
     getOrganization, 
     getOrgFounders, 
     getOrgMembers,
-    getOrgShips,
-    getOrgFleets,
-    addOrgFleet
+    getOrgShips
 } = require('./model');
 
 const {
@@ -49,7 +46,7 @@ router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
         type: 1,
         owner: req.params.orgID
     }
-    res.send(await addOrgFleet(req.user, req.params.orgID, data))
+    res.send(await addFleet(req.user, req.params.orgID, data))
 })
 
 router.get('/orgs/:id/ships', async (req, res) => {
