@@ -219,7 +219,8 @@ async function addCrew(usr, fleetID, shipID, data) {
 async function removeCrew(usr, fleetID, crewID) {
     if (await canEdit(usr, await getFleet(fleetID))) {
         // remove the specified crewmember
-        await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND citizen=?', [fleetID, crewID])
+        console.log(fleetID, crewID)
+        await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND id=?', [fleetID, crewID])
         return {success: 1, msg: 'Successfully removed crewmember!'}
     } else {
         return {success: 0, msg: 'No permission to edit the crew of this fleet ship'}
