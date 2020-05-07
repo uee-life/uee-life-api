@@ -48,7 +48,7 @@ async function getOrgFleets(orgTag) {
 async function addFleet(usr, data) {
     // TODO: check user CAN add to this owner
     if (await canEdit(usr, data)) {
-        const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose) VALUES (?,?,?,?)"
+        const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose) VALUES (?,?,?,?,?)"
         const params = [data.type, data.owner, 0, data.name, data.purpose]
         const res = await executeSQL(sql, params)
         // TODO: check the sql result
