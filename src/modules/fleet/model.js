@@ -221,7 +221,7 @@ async function getFleetCrew(fleetID) {
 
 async function addCrew(usr, fleetID, shipID, data) {
 
-    if (await canEdit(usr, await getFleet(getShipGroup(fleetID, shipID)))) {
+    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
         // add a crewmen to the specified fleet ship
         // check if crewmember is already in the fleet
         const rows = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND citizen=?', [fleetID, data.handle])
