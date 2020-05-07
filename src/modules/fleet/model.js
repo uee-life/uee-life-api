@@ -236,6 +236,15 @@ async function addCrew(usr, fleetID, shipID, data) {
     }
 }
 
+async function updateCrew(usr, fleetID, shipID, data) {
+    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
+        await executeSQL('UPDATE fleet_personnel SET role=? WHERE fleet=? AND ship=? AND citizen=?', [data.role, fleetID, shipID, data.handle])
+        return {success: 1, msg: 'Successfully updated crewmember!'}
+    } else {
+        return {success: 0, msg: 'No permission to edit the crew of this fleet ship'}
+    }
+}
+
 async function removeCrew(usr, fleetID, shipID, crewID) {
     if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
         // remove the specified crewmember
@@ -281,6 +290,7 @@ module.exports = {
     getFleetCrew,
     getShipCrew,
     addCrew,
+    updateCrew,
     removeCrew,
     getCommanders
 }

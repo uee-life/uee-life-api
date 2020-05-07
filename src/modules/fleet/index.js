@@ -16,6 +16,7 @@ const {
     removeShip,
     getShipCrew,
     addCrew,
+    updateCrew,
     removeCrew,
     getCommanders
 } = require('./model')
@@ -78,6 +79,11 @@ router.get('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
 router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) => {
     console.log('adding crewmen')
     res.send(await addCrew(req.user, req.params.fleetID, req.params.shipID, req.body))
+})
+
+// update crewmember
+router.put('/fleets/:fleetID/ships/:shipID/crew/:crewID', checkJwt, async (req, res) => {
+    res.send(await updateCrew(req.user, req.params.fleetID, req.params.shipID, req.body))
 })
 
 // Remove crewmember
