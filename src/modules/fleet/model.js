@@ -61,7 +61,7 @@ async function removeFleet(usr, groupID) {
         await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
         // remove all crew in the fleet group
-        await executeSQL('DELETE FROM fleet_personnel WHERE id=?', [groupID])
+        await executeSQL('DELETE FROM fleet_personnel WHERE id in (select id from v_fleet_crew where `group`=?)', [groupID])
 
         // delete the fleet group
         await executeSQL('DELETE FROM fleet_groups WHERE id=?', [groupID])
