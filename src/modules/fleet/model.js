@@ -209,8 +209,14 @@ async function getFleetCrew(fleetID) {
 async function addCrew(usr, fleetID, shipID, data) {
     if (await canEdit(usr, await getFleet(fleetID))) {
         // add a crewmen to the specified fleet ship
-        await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.handle, data.role])
-        return {success: 1, msg: 'Successfully added crewmember!'}
+        // check if crewmember is already in the fleet
+        const rows = await executeSQL('SELECT * FROM fleet_personnel WHERE citizen=?', [data.handle])
+        if (rows.length > 0) {
+            return {success: 0, msg: 'That Citizen is already assigned to the fleet!'}
+        } else {
+            await executeSQL('INSERT INTO fleet_personnel (fleet, ship, citizen, role) VALUES (?, ?, ?, ?)', [fleetID, shipID, data.handle, data.role])
+            return {success: 1, msg: 'Successfully added crewmember!'}
+        }
     } else {
         return {success: 0, msg: 'No permission to edit the crew of this fleet ship'}
     }
@@ -219,7 +225,7 @@ async function addCrew(usr, fleetID, shipID, data) {
 async function removeCrew(usr, fleetID, crewID) {
     if (await canEdit(usr, await getFleet(fleetID))) {
         // remove the specified crewmember
-        console.log(fleetID, crewID)
+        //TODO: fleetID is redundant here...?
         await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND id=?', [fleetID, crewID])
         return {success: 1, msg: 'Successfully removed crewmember!'}
     } else {
