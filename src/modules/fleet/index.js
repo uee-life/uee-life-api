@@ -80,8 +80,8 @@ router.post('/fleets/:fleetID/ships/:shipID/crew', checkJwt, async (req, res) =>
 })
 
 // Remove crewmember
-router.delete('/fleets/:fleetID/crew/:crewID', checkJwt, async (req, res) => {
-    res.send(await removeCrew(req.user, req.params.fleetID, req.params.crewID))
+router.delete('/fleets/:fleetID/ships/:shipID/crew/:crewID', checkJwt, async (req, res) => {
+    res.send(await removeCrew(req.user, req.params.fleetID, req.params.shipID, req.params.crewID))
 })
 
 // Remove ship

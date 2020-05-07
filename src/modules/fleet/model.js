@@ -236,8 +236,8 @@ async function addCrew(usr, fleetID, shipID, data) {
     }
 }
 
-async function removeCrew(usr, fleetID, crewID) {
-    if (await canEdit(usr, await getFleet(fleetID))) {
+async function removeCrew(usr, fleetID, shipID, crewID) {
+    if (await canEdit(usr, await getFleet(await getShipGroup(fleetID, shipID)))) {
         // remove the specified crewmember
         //TODO: fleetID is redundant here...?
         await executeSQL('DELETE FROM fleet_personnel WHERE fleet=? AND id=?', [fleetID, crewID])
