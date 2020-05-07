@@ -130,6 +130,15 @@ async function addGroup (usr, fleetID, data) {
     }
 }
 
+async function getShipGroup(fleetID, shipID) {
+    const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
+    if (rows.length > 0) {
+        return rows[0].parent
+    } else {
+        return 0
+    }
+}
+
 async function getShips (fleetID) {
     const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
 
@@ -152,8 +161,6 @@ async function getShips (fleetID) {
 
 async function getFleetShip (fleetID, shipID) {
     const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE fleet=? and ship=?', [fleetID, shipID])
-
-    let ships = []
 
     if (rows.length > 0) {
         ship = rows[0]
@@ -213,10 +220,11 @@ async function getFleetCrew(fleetID) {
 }
 
 async function addCrew(usr, fleetID, shipID, data) {
-    if (await canEdit(usr, await getFleet(fleetID))) {
+
+    if (await canEdit(usr, await getFleet(getShipGroup(fleetID, shipID)))) {
         // add a crewmen to the specified fleet ship
         // check if crewmember is already in the fleet
-        const rows = await executeSQL('SELECT * FROM fleet_personnel WHERE citizen=?', [data.handle])
+        const rows = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND citizen=?', [fleetID, data.handle])
         if (rows.length > 0) {
             return {success: 0, msg: 'That Citizen is already assigned to the fleet!'}
         } else {
