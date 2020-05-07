@@ -195,7 +195,7 @@ async function addShip (usr, fleetID, data) {
 async function removeShip (usr, groupID, shipID) {
     if (await canEdit(usr, await getGroup(groupID))) {
         // remove crew first
-        await executeSQL('DELETE FROM fleet_personnel WHERE ship=? and id in (select id from v_fleet_crew where `group`=?)', [groupID])
+        await executeSQL('DELETE FROM fleet_personnel WHERE ship=? and id in (select id from v_fleet_crew where `group`=?)', [shipID, groupID])
 
         const sql = "DELETE FROM fleet_ships WHERE parent=? AND ship=?"
         await executeSQL(sql, [groupID, shipID])
