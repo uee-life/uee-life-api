@@ -4,7 +4,7 @@ const router = require('express').Router()
 const { 
     addFleet,
     getFleet,
-    getPersonnel,
+    getFleetCrew,
     updateFleet,
     getGroups,
     addGroup,
@@ -13,7 +13,7 @@ const {
     getFleetShip,
     addShip,
     removeShip,
-    getCrew,
+    getShipCrew,
     addCrew,
     removeCrew,
     getCommanders
@@ -41,7 +41,7 @@ router.get('/fleets/:fleetID/commanders', async (req, res) => {
 })
 
 router.get('/fleets/:fleetID/crew', async (req, res) => {
-    res.send(await getPersonnel(req.params.fleetID))
+    res.send(await getFleetCrew(req.params.fleetID))
 })
 
 router.get('/fleets/:fleetID/groups', async (req, res) => {
@@ -66,7 +66,7 @@ router.get('/fleets/:fleetID/ships/:shipID', async (req, res) => {
 
 // Get crew
 router.get('/fleets/:fleetID/ships/:shipID/crew', async (req, res) => {
-    res.send(await getCrew(req.params.fleetID, req.params.shipID))
+    res.send(await getShipCrew(req.params.fleetID, req.params.shipID))
 })
 
 // Add crewmember

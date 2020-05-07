@@ -182,15 +182,15 @@ async function removeShip (usr, groupID, shipID) {
 
 // crew functions
 
-async function getCrew(fleetID, shipID) {
+async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    const crew = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=? AND ship=?', [fleetID, shipID])
+    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=? AND ship=?', [fleetID, shipID])
     return crew
 }
 
-async function getPersonnel(fleetID) {
+async function getFleetCrew(fleetID) {
     // get all crewmembers for the whole fleet
-    const crew = await executeSQL('SELECT * FROM fleet_personnel WHERE fleet=?', [fleetID])
+    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=?', [fleetID])
     return crew
 }
 
@@ -244,8 +244,8 @@ module.exports = {
     getFleetShip,
     addShip,
     removeShip,
-    getPersonnel,
-    getCrew,
+    getFleetCrew,
+    getShipCrew,
     addCrew,
     removeCrew,
     getCommanders
