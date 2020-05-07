@@ -91,7 +91,7 @@ async function updateFleet(usr, fleetID, data) {
         // TODO: Check permission
         const sql = "UPDATE fleet_groups SET cmdr=?, name=?, purpose=? WHERE id=?"
         await executeSQL(sql, [data.cmdr, data.name, data.purpose, fleetID])
-        return {success: 1, msg: 'Commander Updated!'}
+        return {success: 1, msg: 'Fleet Group Updated!'}
     } else {
         return {success: 0, msg: 'No permission to update fleet group'}
     }
