@@ -93,8 +93,7 @@ async function shipCount() {
 }
 
 async function fleetCount() {
-    const res = await executeSQL('SELECT count(*) from fleet_groups WHERE parent=0')
-    console.log(res)
+    const res = await executeSQL('SELECT count(*) as count from fleet_groups WHERE parent=0')
     return res[0].count
 }
 
@@ -107,7 +106,6 @@ async function getStats() {
     stats.users.verified = await verifiedCount()
     stats.ships = await shipCount()
     stats.fleets = await fleetCount()
-    console.log(stats)
     return stats
 }
 
