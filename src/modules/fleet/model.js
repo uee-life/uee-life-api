@@ -132,8 +132,7 @@ async function addGroup (usr, fleetID, data) {
 async function getShipGroupID(fleetID, shipID) {
     const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
     if (rows.length > 0) {
-        console.log(rows[0].parent)
-        return await getFleet(rows[0].parent)
+        return rows[0].parent
     } else {
         return 0
     }
@@ -203,7 +202,6 @@ async function removeShip (usr, groupID, shipID) {
 async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
     const groupID = await getShipGroupID(fleetID, shipID)
-    console.log('getShipCrew', groupID, shipID)
     const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [groupID, shipID])
     return crew
 }
