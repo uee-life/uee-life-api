@@ -5,7 +5,7 @@ const { getUser } = require('../user/model')
 const { getCitizen } = require ('../citizen/model')
 
 async function canEdit(usr, group) {
-    console.log('checking if we can edit this object...')
+    console.log('checking if we can edit this object...', group)
     const user = await getUser(usr)
     const id = await getID(user.app_metadata.handle)
     let cmdrs = []
