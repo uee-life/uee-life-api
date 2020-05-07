@@ -5,7 +5,6 @@ const { getUser } = require('../user/model')
 const { getCitizen } = require ('../citizen/model')
 
 async function canEdit(usr, group) {
-    console.log('checking if we can edit this object...', group)
     const user = await getUser(usr)
     const id = await getID(user.app_metadata.handle)
     let cmdrs = []
@@ -21,7 +20,7 @@ async function canEdit(usr, group) {
             console.log('org rank:', rank)
             console.log('Commanders:', cmdrs)
             console.log('Requested by:', user.app_metadata.handle)
-            if (rank === 5 || cmdrs.includes(user.app_metadata.handle)) {
+            if (parseInt(rank) === 5 || cmdrs.includes(user.app_metadata.handle)) {
                 console.log('matched...')
                 edit = true
             } else {
