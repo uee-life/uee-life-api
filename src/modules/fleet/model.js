@@ -15,16 +15,12 @@ async function canEdit(usr, group) {
     let edit = false
     switch (group.type) {
         case 1: // org fleet
-            console.log('adding to org fleet:', group)
             const rank = await getOrgRank(group.owner, id)
-            console.log('org rank:', rank)
-            console.log('Commanders:', cmdrs)
-            console.log('Requested by:', user.app_metadata.handle)
             if (parseInt(rank) === 5 || cmdrs.includes(user.app_metadata.handle)) {
-                console.log('matched...')
+                console.log('Can Edit')
                 edit = true
             } else {
-                console.log('no match')
+                console.log('Cannot Edit')
             }
             break;
         case 2: // personal fleet
@@ -149,7 +145,7 @@ async function getShips (fleetID) {
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
             const owner = await getCitizen(await getHandle(ship.citizen))
-            const crew = await getShipCrew(fleetID, ship.ship)
+            const crew = await getShipCrew(ship.parent, ship.ship)
             ship.owner = owner.info
             ship.crew = crew.length
             ships.push(ship)
@@ -198,7 +194,7 @@ async function removeShip (usr, groupID, shipID) {
 
 async function getShipCrew(fleetID, shipID) {
     // retrieve the crew compliment for the provided fleet ship
-    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=? AND ship=?', [fleetID, shipID])
+    const crew = await executeSQL('SELECT * FROM v_fleet_crew WHERE `group`=? AND `ship`=?', [fleetID, shipID])
     return crew
 }
 
