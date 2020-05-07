@@ -106,6 +106,7 @@ async function getStats() {
     stats.users.verified = await verifiedCount()
     stats.ships = await shipCount()
     stats.fleets = await fleetCount()
+    console.log(stats)
     return stats
 }
 
