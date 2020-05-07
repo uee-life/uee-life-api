@@ -92,6 +92,11 @@ async function shipCount() {
     return res[0].count
 }
 
+async function fleetCount() {
+    const res = await executeSQL('SELECT count(*) from fleet_groups WHERE parent=0')
+    return res[0].count
+}
+
 async function getStats() {
     stats = {}
     stats.latestCitizen = await latestCitizen()
@@ -100,6 +105,7 @@ async function getStats() {
     stats.users.active = await activeCount()
     stats.users.verified = await verifiedCount()
     stats.ships = await shipCount()
+    stats.fleets = await fleetCount()
     return stats
 }
 
