@@ -46,7 +46,7 @@ router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
         type: 1,
         owner: req.params.orgID
     }
-    res.send(await addFleet(req.user, req.params.orgID, data))
+    res.send(await addFleet(req.user, data))
 })
 
 router.get('/orgs/:id/ships', async (req, res) => {
