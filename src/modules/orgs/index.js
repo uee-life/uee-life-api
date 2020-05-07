@@ -9,7 +9,7 @@ const {
 } = require('./model');
 
 const {
-    getOrgFleets,
+    getFleetList,
     addFleet
 } = require('../fleet/model')
 
@@ -36,7 +36,7 @@ router.get('/orgs/:id/affiliates', async (req, res) => {
 })
 
 router.get('/orgs/:orgID/fleets', async (req, res) => {
-    res.send(await getOrgFleets(req.params.orgID))
+    res.send(await getFleetList(req.params.orgID))
 })
 
 router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {

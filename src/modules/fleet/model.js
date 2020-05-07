@@ -37,7 +37,7 @@ async function canEdit(usr, group) {
 
 // fleet functions
 
-async function getOrgFleets(orgTag) {
+async function getFleetList(orgTag) {
     return await executeSQL('SELECT a.*, b.tag as org_tag FROM v_fleets a left join org b on a.owner = b.id WHERE a.type=1 and b.tag=?', [orgTag])
 }
 
@@ -54,12 +54,52 @@ async function addFleet(usr, data) {
     }
 }
 
-async function removeFleet(usr, groupID) {
+// fleet group functions
+
+async function getGroup(groupID) {
+    // use a recursive query to retrieve all squadrons (groups) for given fleet
+    const sql = "SELECT * FROM fleet_groups WHERE id=?"
+    const rows = await executeSQL(sql, [groupID])
+
+    if (rows.length > 0) {
+        const group = rows[0]
+        if (group.type === 1) {
+            group.org_tag = await getOrgTag(group.owner)
+        } else if (fleet.type === 2) {
+            group.handle = await getHandle(group.owner)
+        }
+        return group
+    } else {
+        return {}
+    }
+}
+
+async function addGroup (usr, groupID, data) {
+    const edit = await canEdit(usr, await getGroup(groupID))
+
+    if (edit) {
+        console.log(data)
+        // get parent groups type
+        const rows = await executeSQL("SELECT type FROM fleet_groups WHERE id=?", [groupID])
+        if (rows.length > 0) {
+            const type = rows[0].type
+            const sql = "INSERT INTO fleet_groups (type, parent, owner, name, purpose) values (?, ?, ?, ?, ?)"
+            await executeSQL(sql, [type, groupID, data.owner, data.name, data.purpose])
+            return {success: 1, msg: 'Group added!'}
+        } else {
+            return {success: 0, msg: 'Failed adding group. Invalid parent group specified'}
+        }
+    } else {
+        return {success: 0, msg: 'No permissions to add group to this fleet'}
+    }
+}
+
+async function removeGroup(usr, groupID) {
     // check usr owns org that owns the fleet
-    if (await canEdit(usr, await getFleet(groupID))) {
+    if (await canEdit(usr, await getGroup(groupID))) {
         // remove all crew in the fleet group
         await executeSQL('DELETE FROM fleet_personnel WHERE id in (select id from v_fleet_crew where `group`=?)', [groupID])
-        
+
         // remove all ships in the fleet group
         await executeSQL('DELETE FROM fleet_ships WHERE parent=?', [groupID])
 
@@ -72,35 +112,18 @@ async function removeFleet(usr, groupID) {
     }
 }
 
-async function getFleet(fleetID) {
-    // use a recursive query to retrieve all squadrons (groups) for given fleet
-    const sql = "SELECT * FROM fleet_groups WHERE id=?"
-    const rows = await executeSQL(sql, [fleetID])
-    if (rows.length > 0) {
-        const fleet = rows[0]
-        if (fleet.type === 1) {
-            fleet.org_tag = await getOrgTag(fleet.owner)
-        } else if (fleet.type === 2) {
-            fleet.handle = await getHandle(fleet.owner)
-        }
-        return fleet
-    } else {
-        return {}
-    }
-}
-
-async function updateFleet(usr, fleetID, data) {
-    if (await canEdit(usr, await getFleet(fleetID))) {
+async function updateGroup(usr, groupID, data) {
+    if (await canEdit(usr, await getGroup(groupID))) {
         // TODO: Check permission
         const sql = "UPDATE fleet_groups SET cmdr=?, name=?, purpose=? WHERE id=?"
-        await executeSQL(sql, [data.cmdr, data.name, data.purpose, fleetID])
+        await executeSQL(sql, [data.cmdr, data.name, data.purpose, groupID])
         return {success: 1, msg: 'Fleet Updated!'}
     } else {
         return {success: 0, msg: 'No permission to update fleet group'}
     }
 }
 
-async function getGroups(parent) {
+async function getSubgroups(parent) {
     const rows = await executeSQL("SELECT * FROM fleet_groups WHERE parent=?", [parent])
     if (rows.length > 0) {
         return rows
@@ -109,25 +132,7 @@ async function getGroups(parent) {
     }
 }
 
-async function addGroup (usr, fleetID, data) {
-    const edit = await canEdit(usr, await getFleet(fleetID))
-    console.log("addGroup", edit)
-    if (edit) {
-        console.log(data)
-        // get parent groups type
-        const rows = await executeSQL("SELECT type FROM fleet_groups WHERE id=?", [fleetID])
-        if (rows.length > 0) {
-            const type = rows[0].type
-            const sql = "INSERT INTO fleet_groups (type, parent, owner, name, purpose) values (?, ?, ?, ?, ?)"
-            await executeSQL(sql, [type, fleetID, data.owner, data.name, data.purpose])
-            return {success: 1, msg: 'Group added!'}
-        } else {
-            return {success: 0, msg: 'Failed adding group. Invalid parent group specified'}
-        }
-    } else {
-        return {success: 0, msg: 'No permissions to add group to this fleet'}
-    }
-}
+// ship functions
 
 async function getShipGroupID(fleetID, shipID) {
     const rows = await executeSQL('SELECT parent FROM fleet_ships WHERE fleet=? AND ship=?', [fleetID, shipID])
@@ -140,11 +145,11 @@ async function getShipGroupID(fleetID, shipID) {
 
 async function getShipGroup(fleetID, shipID) {
     const groupID = await getShipGroupID(fleetID, shipID)
-    return await getFleet(groupID)
+    return await getGroup(groupID)
 }
 
-async function getShips (fleetID) {
-    const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [fleetID])
+async function getShips (groupID) {
+    const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE parent=?', [groupID])
 
     let ships = []
 
@@ -163,7 +168,7 @@ async function getShips (fleetID) {
     }
 }
 
-async function getFleetShip (fleetID, shipID) {
+async function getShip (fleetID, shipID) {
     const rows = await executeSQL('SELECT * FROM fleet_ships LEFT JOIN v_ship_map ON fleet_ships.ship = v_ship_map.id WHERE fleet=? and ship=?', [fleetID, shipID])
 
     if (rows.length > 0) {
@@ -177,7 +182,7 @@ async function getFleetShip (fleetID, shipID) {
 }
 
 async function addShip (usr, fleetID, data) {
-    if (await canEdit(usr, await getFleet(data.group))) {
+    if (await canEdit(usr, await getGroup(data.group))) {
         console.log('adding ship', data)
         const sql = "INSERT INTO fleet_ships (fleet, parent, ship) values (?, ?, ?)"
         await executeSQL(sql, [fleetID, data.group, data.ship])
@@ -188,7 +193,7 @@ async function addShip (usr, fleetID, data) {
 }
 
 async function removeShip (usr, groupID, shipID) {
-    if (await canEdit(usr, await getFleet(groupID))) {
+    if (await canEdit(usr, await getGroup(groupID))) {
         const sql = "DELETE FROM fleet_ships WHERE parent=? AND ship=?"
         await executeSQL(sql, [groupID, shipID])
         return {success: 1, msg: 'Ship removed!'}
@@ -206,7 +211,7 @@ async function getShipCrew(fleetID, shipID) {
     return crew
 }
 
-async function getFleetCrew(fleetID) {
+async function getAllCrew(fleetID) {
     // get all crewmembers for the whole fleet
     const rows = await executeSQL('SELECT * FROM v_fleet_crew WHERE fleet=?', [fleetID])
     let crew = []
@@ -214,7 +219,7 @@ async function getFleetCrew(fleetID) {
     if (rows.length > 0) {
         for (i in [...Array(rows.length).keys()]) {
             c = rows[i]
-            const group = await getFleet(c.group)
+            const group = await getGroup(c.group)
             c.group = group
             crew.push(c)
         }
@@ -225,7 +230,7 @@ async function getFleetCrew(fleetID) {
 }
 
 async function addCrew(usr, fleetID, shipID, data) {
-    console.log('in add crew')
+
     if (await canEdit(usr, await getShipGroup(fleetID, shipID))) {
         // add a crewmen to the specified fleet ship
         // check if crewmember is already in the fleet
@@ -286,18 +291,22 @@ async function getCommanders(fleetID) {
 }
 
 module.exports = {
-    getOrgFleets,
+    // fleet functions
+    getFleetList,
     addFleet,
-    removeFleet,
-    getFleet,
-    updateFleet,
-    getGroups,
+    // group functions
+    getGroup,
     addGroup,
+    removeGroup,
+    updateGroup,
+    getSubgroups,
+    // ship functions
     getShips,
-    getFleetShip,
+    getShip,
     addShip,
     removeShip,
-    getFleetCrew,
+    // crew functions
+    getAllCrew,
     getShipCrew,
     addCrew,
     updateCrew,

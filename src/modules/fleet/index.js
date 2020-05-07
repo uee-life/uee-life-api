@@ -2,18 +2,16 @@ const { cache, checkJwt } = require('../helper')
 const router = require('express').Router()
 
 const { 
-    addFleet,
-    getFleet,
-    getFleetCrew,
-    updateFleet,
-    getGroups,
+    getGroup,
     addGroup,
+    removeGroup,
     updateGroup,
-    removeFleet,
+    getSubgroups,
     getShips,
-    getFleetShip,
+    getShip,
     addShip,
     removeShip,
+    getAllCrew,
     getShipCrew,
     addCrew,
     updateCrew,
@@ -21,21 +19,16 @@ const {
     getCommanders
 } = require('./model')
 
-// protected
-router.post('/fleets', checkJwt, async (req, res) => {
-    res.send(await addFleet(req.user, req.params.orgID, req.body))
+router.get('/fleets/:groupID', async (req, res) => {
+    res.send(await getGroup(req.params.groupID))
 })
 
-router.get('/fleets/:fleetID', async (req, res) => {
-    res.send(await getFleet(req.params.fleetID))
+router.put('/fleets/:groupID', checkJwt, async (req, res) => {
+    res.send(await updateGroup(req.user, req.params.groupID, req.body))
 })
 
-router.put('/fleets/:fleetID', checkJwt, async (req, res) => {
-    res.send(await updateFleet(req.user, req.params.fleetID, req.body))
-})
-
-router.delete('/fleets/:fleetID', checkJwt, async (req, res) => {
-    res.send(await removeFleet(req.user, req.params.fleetID))
+router.delete('/fleets/:groupID', checkJwt, async (req, res) => {
+    res.send(await removeGroup(req.user, req.params.groupID))
 })
 
 router.get('/fleets/:fleetID/commanders', async (req, res) => {
@@ -43,19 +36,15 @@ router.get('/fleets/:fleetID/commanders', async (req, res) => {
 })
 
 router.get('/fleets/:fleetID/crew', async (req, res) => {
-    res.send(await getFleetCrew(req.params.fleetID))
+    res.send(await getAllCrew(req.params.fleetID))
 })
 
 router.get('/fleets/:fleetID/groups', async (req, res) => {
-    res.send(await getGroups(req.params.fleetID))
+    res.send(await getSubgroups(req.params.fleetID))
 })
 
 router.post('/fleets/:fleetID/groups', checkJwt, async (req, res) => {
     res.send(await addGroup(req.user, req.params.fleetID, req.body))
-})
-
-router.put('/fleets/:fleetID/groups', checkJwt, async (req, res) => {
-    res.send(await updateGroup(req.user, req.params.fleetID, req.body))
 })
 
 router.get('/fleets/:fleetID/ships', async (req, res) => {
@@ -67,7 +56,7 @@ router.post('/fleets/:fleetID/ships', checkJwt, async (req, res) => {
 })
 
 router.get('/fleets/:fleetID/ships/:shipID', async (req, res) => {
-    res.send(await getFleetShip(req.params.fleetID, req.params.shipID))
+    res.send(await getShip(req.params.fleetID, req.params.shipID))
 })
 
 // Get crew
