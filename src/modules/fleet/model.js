@@ -83,8 +83,8 @@ async function addGroup (usr, groupID, data) {
         const rows = await executeSQL("SELECT type FROM fleet_groups WHERE id=?", [groupID])
         if (rows.length > 0) {
             const type = rows[0].type
-            const sql = "INSERT INTO fleet_groups (type, parent, owner, name, purpose) values (?, ?, ?, ?, ?)"
-            await executeSQL(sql, [type, groupID, data.owner, data.name, data.purpose])
+            const sql = "INSERT INTO fleet_groups (type, parent, owner, name, purpose, cmdr) values (?, ?, ?, ?, ?, ?)"
+            await executeSQL(sql, [type, groupID, data.owner, data.name, data.purpose, data.cmdr])
             return {success: 1, msg: 'Group added!'}
         } else {
             return {success: 0, msg: 'Failed adding group. Invalid parent group specified'}
