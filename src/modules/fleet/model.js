@@ -157,7 +157,7 @@ async function getShips (groupID) {
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
             const owner = await getCitizen(await getHandle(ship.citizen))
-            const crew = await getShipCrew(ship.parent, ship.ship)
+            const crew = await getShipCrew(ship.fleet, ship.ship)
             ship.owner = owner.info
             ship.crew = crew.length
             ships.push(ship)
