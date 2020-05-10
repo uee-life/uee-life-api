@@ -44,8 +44,8 @@ async function getFleetList(orgTag) {
 async function addFleet(usr, data) {
     // TODO: check user CAN add to this owner
     if (await canEdit(usr, data)) {
-        const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose) VALUES (?,?,?,?,?)"
-        const params = [data.type, data.owner, 0, data.name, data.purpose]
+        const sql = "INSERT INTO fleet_groups (type, owner, parent, name, purpose, cmdr) VALUES (?,?,?,?,?,?)"
+        const params = [data.type, data.owner, 0, data.name, data.purpose, data.cmdr]
         const res = await executeSQL(sql, params)
         // TODO: check the sql result
         return {success: 1, msg: 'Fleet Added!'}

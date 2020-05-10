@@ -41,6 +41,7 @@ router.get('/orgs/:orgID/fleets', async (req, res) => {
 
 router.post('/orgs/:orgID/fleets', checkJwt, async (req, res) => {
     const data = {
+        cmdr: req.body.cmdr,
         name: req.body.name,
         purpose: req.body.purpose,
         type: 1,
