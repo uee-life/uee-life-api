@@ -160,7 +160,7 @@ async function setOrg(citizen) {
                 // clear up old org mapping
                 await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizenID])
                 // map to new org
-                await executeSQL('INSERT INTO org_map (citizen, org, founder, rank, type) values (?, ?, ?, ?)', [citizenID, orgID, founder, rank, 1])
+                await executeSQL('INSERT INTO org_map (citizen, org, founder, rank, type) values (?, ?, ?, ?, ?)', [citizenID, orgID, founder, rank, 1])
             } else {
                 // already exists
                 console.log('citizen already registered to org. Checking if update required.')
