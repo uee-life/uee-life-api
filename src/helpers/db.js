@@ -74,7 +74,7 @@ async function getOrgID(tag) {
 
 async function getOrgRank(org, citizen) {
     const sql = "SELECT rank FROM org_map WHERE org=? AND citizen=?"
-    console.log(sql)
+    console.log(sql, org, citizen)
     let rows = await executeSQL(sql, [org, citizen])
     if(rows.length === 0) {
         console.log("Didn't find that citizen in that org...")
