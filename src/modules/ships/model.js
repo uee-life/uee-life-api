@@ -91,8 +91,9 @@ async function getToken() {
             authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU1MTE0NjF9.AY0nDZUrI0oH4-E61f1R4W-4--d5Dy4OuqqDKgBFMpA'
         }
     }).then((res) => {
-        console.log("Token: ", res)
-        return res[1].sessionToken
+        console.log("Token: ", res.data)
+        data = res.data
+        return data[1].sessionToken
     }).catch((err) => {
         console.error(err)
         return ""
