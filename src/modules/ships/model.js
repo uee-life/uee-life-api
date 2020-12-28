@@ -83,11 +83,31 @@ async function saveShip(ship) {
     res = await executeSQL(sql, args)
 }
 
+async function getToken() {
+    token = await axios({
+        url: 'https://api.erkul.games/informations',
+        method: 'GET',
+        headers: {
+            authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU1MTE0NjF9.AY0nDZUrI0oH4-E61f1R4W-4--d5Dy4OuqqDKgBFMpA'
+        }
+    }).then((res) => {
+        console.log("Token: ", res)
+        return res[1].sessionToken
+    }).catch((err) => {
+        console.error(err)
+        return ""
+    })
+    return token
+}
+
 async function testShips() {
     current_ships = getShips().ships
     new_ships = await axios({
         url: 'https://api.erkul.games/ships/live',
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            authorization: 'Bearer ' + await getToken()
+        }
     }).then((res) => {
         ships = []
         for (i in res.data) {
@@ -108,6 +128,8 @@ async function testShips() {
         console.error(err)
         return {success: false}
     })
+    console.log(current_ships)
+    console.log(new_ships)
     return {success: true, old: current_ships.length, new: new_ships.length}
 }
 
