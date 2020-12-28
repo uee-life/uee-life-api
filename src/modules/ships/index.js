@@ -3,6 +3,7 @@ const router = require('express').Router()
 
 const { 
     syncShips,
+    testShips,
     getShips,
     getShip,
     updateShip,
@@ -15,6 +16,10 @@ const {
 
 router.get('/ships/sync', async (req, res) => {
     res.send(await syncShips())
+})
+
+router.get('/ships/test', async (req, res) => {
+    res.send(await testShips())
 })
 
 router.get('/ships', async (req, res) => {

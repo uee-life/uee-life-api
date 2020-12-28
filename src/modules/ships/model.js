@@ -83,9 +83,34 @@ async function saveShip(ship) {
     res = await executeSQL(sql, args)
 }
 
+async function testShips() {
+    current_ships = getShips().ships
+    new_ships = await axios({
+        url: 'https://api.erkul.games/ships/live',
+        method: 'GET'
+    }).then((res) => {
+        ships = []
+        for (i in res.data) {
+            const item = res.data[i]
+            ship = {}
+            ship.short_name = item.ship.localName
+            ship.manufacturer = manufacturers[item.ship.manufacturer]
+            ship.model = item.ship.name
+            ship.size = sizes[item.ship.size]
+            ship.max_crew = item.ship.maxCrew
+            ship.cargo = item.ship.cargoCapacity
+            ship.type = types[item.ship.type]
+            ship.focus = focus[item.ship.focus]
+            ships += ship
+        }
+        return ships
+    })
+    return {success: true, old: current_ships.length, new: new_ships.length}
+}
+
 async function syncShips() {
     let result = await axios({
-        url: 'https://calculator-api-259617.appspot.com/mongoDocuments/ships',
+        url: 'https://api.erkul.games/ships/live',
         method: 'GET'
     }).then((res) => {
         for (i in res.data) {
@@ -210,6 +235,7 @@ async function isOwner(user, ship) {
 
 module.exports = {
     syncShips,
+    testShips,
     getShips,
     updateShip,
     getShip,
