@@ -91,9 +91,9 @@ async function getToken() {
             authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU1MTE0NjF9.AY0nDZUrI0oH4-E61f1R4W-4--d5Dy4OuqqDKgBFMpA'
         }
     }).then((res) => {
-        console.log("Token: ", res.data)
-        data = res.data
-        return data[1].sessionToken
+        console.log("Token: ", res.data[1])
+        data = res.data[1]
+        return data.sessionToken
     }).catch((err) => {
         console.error(err)
         return ""
@@ -103,11 +103,13 @@ async function getToken() {
 
 async function testShips() {
     current_ships = getShips().ships
+    token = await getToken()
+    console.log("Token", token)
     new_ships = await axios({
         url: 'https://api.erkul.games/ships/live',
         method: 'GET',
         headers: {
-            authorization: 'Bearer ' + await getToken()
+            authorization: 'Bearer ' + token
         }
     }).then((res) => {
         ships = []
