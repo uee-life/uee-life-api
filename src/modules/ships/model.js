@@ -104,6 +104,9 @@ async function testShips() {
             ships += ship
         }
         return ships
+    }).catch((err) => {
+        console.error(err)
+        return {success: false}
     })
     return {success: true, old: current_ships.length, new: new_ships.length}
 }
