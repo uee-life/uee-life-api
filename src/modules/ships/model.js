@@ -6,20 +6,26 @@ const { validCitizen } = require('../../helpers/rsi')
 const { getUser } = require('../user/model')
 
 const manufacturers = {
-    'Origin Jumpworks GmbH': 1,
+    'Origin Jumpworks': 1,
+    'Origin': 1,
     'Anvil Aerospace': 2,
     'Roberts Space Industries': 3,
+    'RSI': 3,
     'Aegis Dynamics': 4,
     'Esperia': 5,
     'Drake Interplanetary': 6,
+    'Tumbril Land Systems': 7,
     'Tumbril': 7,
     'Banu': 8,
     'Musashi Industrial & Starflight Concern': 9,
+    'MISC': 9,
     'Aopoa': 10,
     'Argo Astronautics': 11,
     'Consolidated Outland': 12,
     'Kruger Intergalactic': 13,
-    'Vanduul': 14
+    'Vanduul': 14,
+    'Greycat Industrial': 15,
+    'Crusader Industries': 16
 }
 
 const sizes = {
@@ -103,6 +109,9 @@ async function getToken() {
 
 async function testShips() {
     current_ships = getShips().ships
+    if (current_ships == undefined) {
+        current_ships = []
+    }
     token = await getToken()
     console.log("Token", token)
     new_ships = await axios({
@@ -116,15 +125,16 @@ async function testShips() {
         for (i in res.data) {
             const item = res.data[i]
             ship = {}
-            ship.short_name = item.ship.localName
-            ship.manufacturer = manufacturers[item.ship.manufacturer]
-            ship.model = item.ship.name
-            ship.size = sizes[item.ship.size]
-            ship.max_crew = item.ship.maxCrew
-            ship.cargo = item.ship.cargoCapacity
-            ship.type = types[item.ship.type]
-            ship.focus = focus[item.ship.focus]
+            ship.short_name = item.localName
+            ship.manufacturer = manufacturers[item.data.manufacturer]
+            ship.model = item.data.name
+            ship.size = item.data.size
+            ship.max_crew = item.crewSize // will have to compute this ourselves based on turret slots.
+            ship.cargo = item.cargoCapacity // get from /cargos/live
+            ship.type = types[item.type]
+            ship.focus = focus[item.focus]
             ships += ship
+            console.log(ship.short_name, ship.manufacturer)
         }
         return ships
     }).catch((err) => {
@@ -144,14 +154,14 @@ async function syncShips() {
         for (i in res.data) {
             const item = res.data[i]
             ship = {}
-            ship.short_name = item.ship.localName
-            ship.manufacturer = manufacturers[item.ship.manufacturer]
-            ship.model = item.ship.name
-            ship.size = sizes[item.ship.size]
-            ship.max_crew = item.ship.maxCrew
-            ship.cargo = item.ship.cargoCapacity
-            ship.type = types[item.ship.type]
-            ship.focus = focus[item.ship.focus]
+            ship.short_name = item.data.localName
+            ship.manufacturer = manufacturers[item.data.manufacturer]
+            ship.model = item.data.name
+            ship.size = sizes[item.data.size]
+            ship.max_crew = item.data.maxCrew
+            ship.cargo = item.data.cargoCapacity
+            ship.type = types[item.data.type]
+            ship.focus = focus[item.data.focus]
             saveShip(ship)
         }
         return {success: true, count: res.data.length}
@@ -164,6 +174,22 @@ async function syncShips() {
 
 async function getShips() {
     sql = 'select * from ship_view order by make, model'
+    const ships = await executeSQL(sql)
+    const makes = await executeSQL('select * from ship_make')
+    const types = await executeSQL('select * from ship_type')
+    const focus = await executeSQL('select * from ship_focus')
+    const sizes = await executeSQL('select * from ship_size')
+    return {
+        ships: ships,
+        types: types,
+        focus: focus,
+        makes: makes,
+        sizes: sizes
+    }
+}
+
+async function getShips() {
+    sql = 'select * from ships order by make, model'
     const ships = await executeSQL(sql)
     const makes = await executeSQL('select * from ship_make')
     const types = await executeSQL('select * from ship_type')
@@ -265,6 +291,7 @@ module.exports = {
     syncShips,
     testShips,
     getShips,
+    getShipsRaw,
     updateShip,
     getShip,
     getCrew,

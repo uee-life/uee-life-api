@@ -5,6 +5,7 @@ const {
     syncShips,
     testShips,
     getShips,
+    getShipsRaw,
     getShip,
     updateShip,
     getCrew,
@@ -24,6 +25,10 @@ router.get('/ships/test', async (req, res) => {
 
 router.get('/ships', async (req, res) => {
     res.send(await getShips())
+})
+
+router.get('/ships/raw', async (req, res) => {
+    res.send(await getShipsRaw())
 })
 
 router.get('/ships/:id', async (req, res) => {
