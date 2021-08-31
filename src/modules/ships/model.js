@@ -188,7 +188,7 @@ async function getShips() {
     }
 }
 
-async function getShips() {
+async function getShipsRaw() {
     sql = 'select * from ships order by make, model'
     const ships = await executeSQL(sql)
     const makes = await executeSQL('select * from ship_make')
