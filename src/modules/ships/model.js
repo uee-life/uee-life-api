@@ -175,6 +175,10 @@ async function syncShips() {
 async function getShips() {
     sql = 'select * from ship_view order by make, model'
     const ships = await executeSQL(sql)
+    for(var s in ships) {
+        ships[s].performance = JSON.parse(ships[s].performance)
+        .ships[s].equipment = JSON.parse(ships[s].equipment)
+    }
     const makes = await executeSQL('select * from ship_make')
     const types = await executeSQL('select * from ship_type')
     const focus = await executeSQL('select * from ship_focus')
