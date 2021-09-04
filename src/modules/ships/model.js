@@ -83,9 +83,58 @@ const focus = {
     'Passenger': 32
 }
 
-async function saveShip(ship) {
-    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus) values (?, ?, ?, ?, ?, ?, ?, ?)'
-    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus]
+async function addShip(data) {
+    ship_template = {
+        name: '',
+        make: 0,
+        model: 0,
+        size: 0,
+        crew: 0,
+        cargo: 0,
+        type: 0,
+        focus: 0,
+        equipment: {
+            weapons: {},
+            turrets: {},
+            missiles: {},
+            shields: {}
+        },
+        performance: {}
+    }
+    ship = {
+        ...ship_template,
+        ...data
+    }
+    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
+    res = await executeSQL(sql, args)
+}
+
+async function updateShip(shipID, data) {
+    ship_template = {
+        name: '',
+        make: 0,
+        model: 0,
+        size: 0,
+        crew: 0,
+        cargo: 0,
+        type: 0,
+        focus: 0,
+        equipment: {
+            weapons: {},
+            turrets: {},
+            missiles: {},
+            shields: {}
+        },
+        performance: {}
+    }
+    ship = {
+        ...ship_template,
+        ...data
+    }
+    // make this an update statement
+    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
     res = await executeSQL(sql, args)
 }
 
@@ -172,12 +221,20 @@ async function syncShips() {
     return result
 }
 
-async function getShips() {
-    sql = 'select * from ship_view order by make, model'
+async function getShips(extraData=false) {
+    if (extraData) {
+        sql = 'select * from ship_view_extra order by make, model'
+    } else {
+        sql = 'select * from ship_view order by make, model'
+    }
+    
     const ships = await executeSQL(sql)
-    for(var s in ships) {
-        ships[s].performance = JSON.parse(ships[s].performance)
-        .ships[s].equipment = JSON.parse(ships[s].equipment)
+
+    if (extraData) {
+        for(var s in ships) {
+            ships[s].performance = JSON.parse(ships[s].performance)
+            ships[s].equipment = JSON.parse(ships[s].equipment)
+        }
     }
     const makes = await executeSQL('select * from ship_make')
     const types = await executeSQL('select * from ship_type')
@@ -219,7 +276,7 @@ async function getShip(id) {
     return ship
 }
 
-async function updateShip(usr, ship_id, data) {
+async function updateShipName(usr, ship_id, data) {
     const user = await getUser(usr)
     if (isOwner(user, ship_id) && data.name != null) {
         const res = await executeSQL('UPDATE ship_map SET name=? WHERE id=?', [data.name, ship_id])
@@ -297,10 +354,11 @@ module.exports = {
     getShips,
     getShipsRaw,
     updateShip,
+    updateShipName,
     getShip,
     getCrew,
     addCrew,
     removeCrew,
     updateCrew,
-    saveShip
+    addShip
 }
