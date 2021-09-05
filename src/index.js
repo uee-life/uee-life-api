@@ -15,6 +15,7 @@ app.use(cors());
 app.use(morgan('combined'));
 
 
+app.use(require('./modules/admin'))
 app.use(require('./modules/citizen'))
 //app.use(require('./modules/location'))
 app.use(require('./modules/locations'))
