@@ -21,7 +21,7 @@ async function getCitizen(handle) {
         const info = await fetchCitizen(handle)
         if (info) {
             citizen.info = info
-            citizen.info.id = 0
+            citizen.info.id = 0  // What am I doing here? o.O
             citizen.ships = []
             citizen.home = {
                 system: null,

@@ -232,7 +232,9 @@ async function getShips(extraData=false) {
 
     if (extraData) {
         for(var s in ships) {
+            console.log(ships[s].performance)
             ships[s].performance = JSON.parse(ships[s].performance)
+            console.log(ships[s].equipment)
             ships[s].equipment = JSON.parse(ships[s].equipment)
         }
     }
