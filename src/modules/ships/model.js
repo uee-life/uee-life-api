@@ -232,11 +232,13 @@ async function getShips(extraData=false) {
 
     if (extraData) {
         for(var s in ships) {
-            console.log(ships[s].short_name)
-            console.log(ships[s].performance)
-            ships[s].performance = JSON.parse(ships[s].performance)
-            console.log(ships[s].equipment)
-            ships[s].equipment = JSON.parse(ships[s].equipment)
+            if (ships[s]) {
+                console.log(ships[s].short_name)
+                console.log(ships[s].performance)
+                ships[s].performance = JSON.parse(ships[s].performance)
+                console.log(ships[s].equipment)
+                ships[s].equipment = JSON.parse(ships[s].equipment)
+            }
         }
     }
     const makes = await executeSQL('select * from ship_make')
