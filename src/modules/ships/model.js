@@ -232,8 +232,8 @@ async function getShips(extraData=false) {
 
     if (extraData) {
         for(var s in ships) {
-            if (ships[s]) {
-                console.log(ships[s].short_name)
+            console.log(ships[s])
+            if (typeof ships[s].short_name !== 'undefined') {
                 console.log(ships[s].performance)
                 ships[s].performance = JSON.parse(ships[s].performance)
                 console.log(ships[s].equipment)
