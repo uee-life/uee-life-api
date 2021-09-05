@@ -103,9 +103,9 @@ async function getToken() {
 
 async function getShips(extraData=false) {
     if (extraData) {
-        sql = 'select * from ship_view_extra order by make, model'
+        sql = 'select * from ship_view_extra order by make_text, model'
     } else {
-        sql = 'select * from ship_view order by make, model'
+        sql = 'select * from ship_view order by make_text, model'
     }
     
     const ships = await executeSQL(sql)
