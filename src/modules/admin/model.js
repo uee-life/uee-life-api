@@ -76,7 +76,7 @@ async function addShip(data) {
         make: 0,
         model: 0,
         size: 0,
-        crew: 0,
+        max_crew: 0,
         cargo: 0,
         type: 0,
         focus: 0,
@@ -92,8 +92,8 @@ async function addShip(data) {
         ...ship_template,
         ...data
     }
-    sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
+    sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance, modifier) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    args = [ship.name, ship.make, ship.model, ship.size, ship.max_crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
     res = await executeSQL(sql, args)
 }
 
@@ -103,7 +103,7 @@ async function updateShip(shipID, data) {
         make: 0,
         model: 0,
         size: 0,
-        crew: 0,
+        max_crew: 0,
         cargo: 0,
         type: 0,
         focus: 0,
@@ -121,8 +121,8 @@ async function updateShip(shipID, data) {
     }
     // make this an update statement
     //sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    sql = 'UPDATE ships SET short_name=?, make=?, model=?, size=?, max_crew=?, cargo=?, type=?, focus=?, equipment=?, performance=? WHERE id=?'
-    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance), shipID]
+    sql = 'UPDATE ships SET short_name=?, make=?, model=?, size=?, max_crew=?, cargo=?, type=?, focus=?, equipment=?, performance=?, modifier=? WHERE id=?'
+    args = [ship.name, ship.make, ship.model, ship.size, ship.max_crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance), ship.modifier, shipID]
     res = await executeSQL(sql, args)
 }
 
