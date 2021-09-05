@@ -125,9 +125,15 @@ async function updateShip(shipID, data) {
     res = await executeSQL(sql, args)
 }
 
+async function deleteShip(shipID) {
+    sql = 'DELETE FROM ships WHERE id=?'
+    res = await executeSQL(sql, [shipID])
+}
+
 module.exports = { 
     syncShips,
     testShips,
     updateShip,
-    addShip
+    addShip,
+    deleteShip
 }

@@ -5,7 +5,8 @@ const {
     syncShips,
     testShips,
     updateShip,
-    addShip
+    addShip,
+    deleteShip
 } = require('./model')
 
 router.get('/admin/ships/sync', async (req, res) => {
