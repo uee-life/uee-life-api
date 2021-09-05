@@ -105,7 +105,7 @@ async function addShip(data) {
         ...ship_template,
         ...data
     }
-    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
     res = await executeSQL(sql, args)
 }
@@ -133,7 +133,7 @@ async function updateShip(shipID, data) {
         ...data
     }
     // make this an update statement
-    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
     res = await executeSQL(sql, args)
 }
