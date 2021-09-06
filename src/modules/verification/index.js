@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 const { executeSQL } = require('../mariadb')
 
 const{ manager } = require('../manager')
