@@ -15,10 +15,13 @@ async function validCitizen(handle) {
 }
 
 async function fetchCitizen(handle) {
-    console.log('fetching citizen...')
-    try {
-        const baseURI = 'https://robertsspaceindustries.com'
-        const resp = await axios.get(baseURI + '/citizens/' + handle)
+    console.log('fetching citizen...', handle)
+
+    const baseURI = 'https://robertsspaceindustries.com'
+    const res = await axios({
+        url: `${baseURI}/citizens/${handle}`,
+        method: 'GET'
+    }).then(async (resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.handle = handle
@@ -32,20 +35,29 @@ async function fetchCitizen(handle) {
             info.portrait = `${baseURI}${image.attribs.src}`
         }
         info.org = $('span:contains("Spectrum Identification (SID)")', '#public-profile').next().text()
-        info.orgRank = $('span:contains("Organization rank")', '#public-profile').next().text()
+        if(info.org) {
+            info.orgTitle = $('span:contains("Organization rank")', '#public-profile').next().text()
+            info.orgRank = await fetchOrgRank(info.org, info.handle)
+        } else {
+            info.orgTitle = ''
+            info.orgRank = 0
+        }
         info.website = $('span:contains("Website")', '#public-profile').next().attr('href') || ''
         info.verified = 0
         return info
-    } catch (error) {
-        console.error("fetchCitizen - Error retrieving citizen")
+    }).catch((error) => {
+        //console.error("fetchCitizen - Error retrieving citizen: ", error)
         return null
-    }
+    })
+    return res
 }
 
 async function fetchOrg(org) {
-    try {
-        const baseURI = "https://robertsspaceindustries.com"
-        const resp = await axios.get(baseURI + '/orgs/' + org)
+    const baseURI = "https://robertsspaceindustries.com"
+    const resp = await axios({
+        url: baseURI + '/orgs/' + org,
+        method: 'GET'
+    }).then(async (resp) => {
         const $ = cheerio.load(resp.data)
         info = {}
         info.name = $('h1', '#organization').text().split("/")[0].trim()
@@ -65,10 +77,11 @@ async function fetchOrg(org) {
         info.tag = org
 
         return info
-    } catch (error) {
-        console.error(error)
+    }).catch((err) => {
+        console.error(err)
         return {error: "Org Not found!"}
-    }
+    })
+    return resp
 }
 
 async function fetchOrgFounders(org) {
@@ -111,7 +124,23 @@ async function checkCitizens(members) {
     return members
 }
 
-async function fetchMembers(org, page, isMain) {
+function computeRank(stars) {
+    let rank = 0
+
+    if (stars) {
+        starsize = parseInt(stars.match(/width\:\ (.*)\%/)[1])
+        if(starsize) {
+            rank = starsize / 20
+        }
+
+    } else {
+        rank = 0
+    }
+
+    return rank
+}
+
+async function fetchMembers(org, page=1, isMain=true, handle='') {
     let res = {
         count: 0,
         members: []
@@ -124,7 +153,7 @@ async function fetchMembers(org, page, isMain) {
         let i = 0
         data = {
             symbol: org,
-            search: '',
+            search: handle,
             pagesize: 32,
             main_org: isMain == true ? "1" : "0",
             page: page
@@ -148,30 +177,21 @@ async function fetchMembers(org, page, isMain) {
             $('li.member-item').each(function (i, el) {
                 let handle = $(el).find('span.nick').text()
                 let name = $(el).find('span.name').text()
-                let starspan = $(el).find('span.stars').attr('style')
+
                 let thumb = 'https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg'
-                let stars = 0
-                if (starspan) {
-                    stars = parseInt(starspan.match(/width\:\ (.*)\%/)[1])
-
-                    if(stars) {
-                        stars = stars / 20
-                    }
-
-                    thumbimg = $(el).find('span.thumb').find('img')[0]
-                    if(thumbimg && thumbimg.attribs.src) {
-                        thumb = `https://robertsspaceindustries.com${thumbimg.attribs.src}`
-                    }
-
-                } else {
-                    stars = 0
+                thumbimg = $(el).find('span.thumb').find('img')[0]
+                if(thumbimg && thumbimg.attribs.src) {
+                    thumb = `https://robertsspaceindustries.com${thumbimg.attribs.src}`
                 }
+
+                let rank = computeRank($(el).find('span.stars').attr('style'))
+                let stars = 0
 
                 if(handle.trim() != '') {
                     member = {
                         name: name,
                         handle: handle,
-                        stars: stars,
+                        rank: rank,
                         thumb: thumb,
                         verified: false
                     }
@@ -180,7 +200,7 @@ async function fetchMembers(org, page, isMain) {
                     member = {
                         name: 'Redacted',
                         handle: 'Redacted',
-                        stars: stars,
+                        rank: rank,
                         thumb: thumb,
                         verified: false
                     }
@@ -198,7 +218,6 @@ async function fetchMembers(org, page, isMain) {
             console.error(err)
         })
         res.members = await checkCitizens(res.members)
-        console.log(res)
     } catch (error) {
         console.error(error)
         return {error: "Couldn't grab org members!"}
@@ -206,10 +225,18 @@ async function fetchMembers(org, page, isMain) {
     return res
 }
 
+async function fetchOrgRank(org, handle) {
+    const res = await fetchMembers(org, undefined, undefined, handle=handle)
+    const member = res.members[0]
+
+    return parseInt(member.rank)
+}
+
 module.exports = {
     validCitizen,
     fetchCitizen,
     fetchOrg,
     fetchOrgFounders,
-    fetchMembers
+    fetchMembers,
+    fetchOrgRank
 }

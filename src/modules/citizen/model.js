@@ -21,7 +21,7 @@ async function getCitizen(handle) {
         const info = await fetchCitizen(handle)
         if (info) {
             citizen.info = info
-            citizen.info.id = 0
+            citizen.info.id = 0  // What am I doing here? o.O
             citizen.ships = []
             citizen.home = {
                 system: null,
@@ -102,7 +102,7 @@ async function getInfo(handle) {
 }
 
 async function getShips(handle) {
-    sql = "select a.id, a.name, c.short_name, c.make, c.make_abbr, c.model, c.size, c.max_crew, c.cargo, c.type, c.focus from ship_map a left join citizen b on a.citizen = b.id left join ship_view c on a.ship = c.id where b.handle=?"
+    sql = "select a.id, a.name, c.short_name, c.make, c.make_text, c.make_abbr, c.model, c.size, c.size_text, c.max_crew, c.cargo, c.type, c.type_text, c.focus, c.focus_text from ship_map a left join citizen b on a.citizen = b.id left join ship_view c on a.ship = c.id where b.handle=?"
     const ships = await executeSQL(sql, [handle])
     return ships
 }
@@ -228,6 +228,10 @@ async function searchCitizen(search) {
     }
 }
 
+async function getAssignments(handle) {
+    return await executeSQL('select b.id, b.name, a.role, a.joined from ship_crew a left join ship_map b on a.ship = b.id where a.citizen=?', [handle])
+}
+
 module.exports = {
     searchCitizen,
     getCitizen,
@@ -238,5 +242,6 @@ module.exports = {
     removeShip,
     getLocation,
     setLocation,
-    createCitizen
+    createCitizen,
+    getAssignments
 }

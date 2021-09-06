@@ -1,4 +1,4 @@
-const { fetchCitizen, fetchOrgFounders } = require('../../helpers/rsi')
+const { fetchCitizen, fetchOrgFounders, fetchOrgRank } = require('../../helpers/rsi')
 const { createCitizen, getID, getOrgID } = require('../../helpers/db')
 const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
@@ -109,12 +109,12 @@ async function syncCitizen(handle) {
     // get citizen data from RSI
     const citizen = await fetchCitizen(handle)
 
-    // store org affiliation
-    setOrg(citizen)
-
     // update citizen data
     if(citizen) {
-        sql = "REPLACE INTO citizen_sync (handle, record, name, bio, enlisted, portrait, org, orgrank, website) VALUES (?,?,?,?,?,?,?,?,?)"
+        // store org affiliation
+        setOrg(citizen)
+
+        sql = "REPLACE INTO citizen_sync (handle, record, name, bio, enlisted, portrait, org, orgRank, orgTitle, website) VALUES (?,?,?,?,?,?,?,?,?,?)"
         data = [
             citizen.handle,
             citizen.record,
@@ -124,6 +124,7 @@ async function syncCitizen(handle) {
             citizen.portrait,
             citizen.org,
             citizen.orgRank,
+            citizen.orgTitle,
             citizen.website
         ]
         await executeSQL(sql, data)
@@ -138,6 +139,7 @@ async function setOrg(citizen) {
         const citizenID = await getID(citizen.handle)
         const orgID = await getOrgID(citizen.org)
         if(orgID) {
+            // check if they are a founder
             let founder = 0
             const founders = await fetchOrgFounders(citizen.org)
             founders.forEach((item) => {
@@ -145,16 +147,30 @@ async function setOrg(citizen) {
                     founder = 1
                 }
             })
+
+            // get their current rank
+            let rank = await fetchOrgRank(citizen.org, citizen.handle)
+
+            if(!rank) {
+                rank = 0
+            }
+
             let rows = await executeSQL('SELECT * FROM org_map WHERE citizen=? AND org=?', [citizenID, orgID])
             if (rows.length === 0) {
                 // clear up old org mapping
-                await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizen.id])
+                await executeSQL('DELETE FROM org_map WHERE citizen=?', [citizenID])
                 // map to new org
-                await executeSQL('INSERT INTO org_map (citizen, org, founder, type) values (?, ?, ?, ?)', [citizen.id, orgID, founder, 1])
+                await executeSQL('INSERT INTO org_map (citizen, org, founder, rank, type) values (?, ?, ?, ?, ?)', [citizenID, orgID, founder, rank, 1])
             } else {
                 // already exists
-                // need to add logic to update if founder flag changes, or type changes (member/affiliate)
-                console.log('citizen already registered to org...')
+                console.log('citizen already registered to org. Checking if update required.')
+                let member = rows[0]
+                if (member.rank !== rank) {
+                    await executeSQL('UPDATE org_map SET rank=? WHERE citizen=? AND org=?', [rank, citizenID, orgID])
+                }
+                if (member.founder !== founder) {
+                    await executeSQL('UPDATE org_map SET founder=? WHERE citizen=? AND org=?', [founder, citizenID, orgID])
+                }
             }
         } else {
             // failed to get org ID for some reason...

@@ -6,20 +6,26 @@ const { validCitizen } = require('../../helpers/rsi')
 const { getUser } = require('../user/model')
 
 const manufacturers = {
-    'Origin Jumpworks GmbH': 1,
+    'Origin Jumpworks': 1,
+    'Origin': 1,
     'Anvil Aerospace': 2,
     'Roberts Space Industries': 3,
+    'RSI': 3,
     'Aegis Dynamics': 4,
     'Esperia': 5,
     'Drake Interplanetary': 6,
+    'Tumbril Land Systems': 7,
     'Tumbril': 7,
     'Banu': 8,
     'Musashi Industrial & Starflight Concern': 9,
+    'MISC': 9,
     'Aopoa': 10,
     'Argo Astronautics': 11,
     'Consolidated Outland': 12,
     'Kruger Intergalactic': 13,
-    'Vanduul': 14
+    'Vanduul': 14,
+    'Greycat Industrial': 15,
+    'Crusader Industries': 16
 }
 
 const sizes = {
@@ -77,65 +83,57 @@ const focus = {
     'Passenger': 32
 }
 
-async function saveShip(ship) {
-    sql = 'INSERT INTO ships (short_name, manufacturer, model, size, max_crew, cargo, type, focus) values (?, ?, ?, ?, ?, ?, ?, ?)'
-    args = [ship.name, ship.make, ship.model, ship.size, ship.crew, ship.cargo, ship.type, ship.focus]
-    res = await executeSQL(sql, args)
-}
-
-async function testShips() {
-    current_ships = getShips().ships
-    new_ships = await axios({
-        url: 'https://api.erkul.games/ships/live',
-        method: 'GET'
-    }).then((res) => {
-        ships = []
-        for (i in res.data) {
-            const item = res.data[i]
-            ship = {}
-            ship.short_name = item.ship.localName
-            ship.manufacturer = manufacturers[item.ship.manufacturer]
-            ship.model = item.ship.name
-            ship.size = sizes[item.ship.size]
-            ship.max_crew = item.ship.maxCrew
-            ship.cargo = item.ship.cargoCapacity
-            ship.type = types[item.ship.type]
-            ship.focus = focus[item.ship.focus]
-            ships += ship
+async function getToken() {
+    token = await axios({
+        url: 'https://api.erkul.games/informations',
+        method: 'GET',
+        headers: {
+            authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU1MTE0NjF9.AY0nDZUrI0oH4-E61f1R4W-4--d5Dy4OuqqDKgBFMpA'
         }
-        return ships
-    })
-    return {success: true, old: current_ships.length, new: new_ships.length}
-}
-
-async function syncShips() {
-    let result = await axios({
-        url: 'https://api.erkul.games/ships/live',
-        method: 'GET'
     }).then((res) => {
-        for (i in res.data) {
-            const item = res.data[i]
-            ship = {}
-            ship.short_name = item.ship.localName
-            ship.manufacturer = manufacturers[item.ship.manufacturer]
-            ship.model = item.ship.name
-            ship.size = sizes[item.ship.size]
-            ship.max_crew = item.ship.maxCrew
-            ship.cargo = item.ship.cargoCapacity
-            ship.type = types[item.ship.type]
-            ship.focus = focus[item.ship.focus]
-            saveShip(ship)
-        }
-        return {success: true, count: res.data.length}
+        console.log("Token: ", res.data[1])
+        data = res.data[1]
+        return data.sessionToken
     }).catch((err) => {
         console.error(err)
-        return {success: false}
+        return ""
     })
-    return result
+    return token
 }
 
-async function getShips() {
-    sql = 'select * from ship_view order by make, model'
+async function getShips(extraData=false) {
+    if (extraData) {
+        sql = 'select * from ship_view_extra order by make_text, model'
+    } else {
+        sql = 'select * from ship_view order by make_text, model'
+    }
+    
+    const ships = await executeSQL(sql)
+
+    if (extraData) {
+        for(var s in ships) {
+            // Check needed due to weird crap being returned as additional rows from executeSQL. Doesn't show up in result data.
+            if (typeof ships[s].short_name !== 'undefined') {
+                ships[s].performance = JSON.parse(ships[s].performance)
+                ships[s].equipment = JSON.parse(ships[s].equipment)
+            }
+        }
+    }
+    const makes = await executeSQL('select * from ship_make')
+    const types = await executeSQL('select * from ship_type')
+    const focus = await executeSQL('select * from ship_focus')
+    const sizes = await executeSQL('select * from ship_size')
+    return {
+        ships: ships,
+        types: types,
+        focus: focus,
+        makes: makes,
+        sizes: sizes
+    }
+}
+
+async function getShipsRaw() {
+    sql = 'select * from ships order by make, model'
     const ships = await executeSQL(sql)
     const makes = await executeSQL('select * from ship_make')
     const types = await executeSQL('select * from ship_type')
@@ -161,7 +159,7 @@ async function getShip(id) {
     return ship
 }
 
-async function updateShip(usr, ship_id, data) {
+async function updateShipName(usr, ship_id, data) {
     const user = await getUser(usr)
     if (isOwner(user, ship_id) && data.name != null) {
         const res = await executeSQL('UPDATE ship_map SET name=? WHERE id=?', [data.name, ship_id])
@@ -234,14 +232,12 @@ async function isOwner(user, ship) {
 }
 
 module.exports = {
-    syncShips,
-    testShips,
     getShips,
-    updateShip,
+    getShipsRaw,
+    updateShipName,
     getShip,
     getCrew,
     addCrew,
     removeCrew,
-    updateCrew,
-    saveShip
+    updateCrew
 }

@@ -1,27 +1,27 @@
-const axios = require('axios')
-const cheerio = require('cheerio')
-const { convertToMarkdown } = require('../helper')
 const { executeSQL } = require('../mariadb')
-const { getCitizen, getOrgID } = require('../../helpers/db')
+const { getOrgID, getHandle } = require('../../helpers/db')
+const { getCitizen } = require ('../citizen/model')
 const { fetchOrgFounders, fetchOrg, fetchMembers } = require("../../helpers/rsi")
 
-
-async function test() {
-    return convertToMarkdown()
+//TODO: Do something with this...
+async function checkOrgID(param) {
+    if (parseInt(param)) {
+        return parseInt(param)
+    } else {
+        return await getOrgID(param)
+    }
 }
-
 
 async function getOrgFounders(org) {
     return await fetchOrgFounders(org)
 }
 
-async function getOrganization(org) {
-    const org = await fetchOrg(org)
-    const orgID = await getOrgID(org)
+async function getOrganization(tag) {
+    const org = await fetchOrg(tag)
+    const orgID = await getOrgID(tag)
     org.id = orgID
     return org
 }
-
 
 async function getOrgMembers(org, page=1, isMain=true) {
     if(!parseInt(page)) {
@@ -32,14 +32,22 @@ async function getOrgMembers(org, page=1, isMain=true) {
     return members
 }
 
-async function getOrgShips(org) {
-    const sql = 'select m.id, m.name, s.short_name, s.make, s.make_abbr, s.model, s.size, s.max_crew, s.cargo, s.type, s.focus, c.* from ship_map m left join ship_view s on m.ship = s.id left join (select citizen, org, tag from org_map a left join org b on a.org = b.id) c on m.citizen = c.citizen where tag=?'
-    const rows = await executeSQL(sql, [org])
+async function getOrgShips(org, fleet) {
+    let rows = []
+    if (fleet) {
+        const sql = "select * from v_ship_map where tag=? and not exists (select * from fleet_ships where fleet_ships.fleet=? and  fleet_ships.ship = v_ship_map.id)"
+        rows = await executeSQL(sql, [org, fleet])
+    } else {
+        const sql = 'select * from v_ship_map where tag=?'
+        rows = await executeSQL(sql, [org])
+    }
+    
     let ships = []
     if (rows.length > 0) {
         for (i in [...Array(rows.length).keys()]) {
             ship = rows[i]
-            ship.owner = await getCitizen(ship.citizen)
+            const owner = await getCitizen(await getHandle(ship.citizen))
+            ship.owner = owner.info
             ships.push(ship)
         }
         return ships
@@ -48,11 +56,9 @@ async function getOrgShips(org) {
     }
 }
 
-
 module.exports = {
     getOrganization,
     getOrgFounders,
     getOrgMembers,
-    getOrgShips,
-    test
+    getOrgShips
 };

@@ -15,6 +15,7 @@ app.use(cors());
 app.use(morgan('combined'));
 
 
+app.use(require('./modules/admin'))
 app.use(require('./modules/citizen'))
 //app.use(require('./modules/location'))
 app.use(require('./modules/locations'))
@@ -24,6 +25,7 @@ app.use(require('./modules/news'))
 app.use(require('./modules/orgs'))
 app.use(require('./modules/search'))
 app.use(require('./modules/ships'))
+app.use(require('./modules/fleet'))
 app.use(require('./modules/stats'))
 app.use(require('./modules/user'))
 app.use(require('./modules/content'))

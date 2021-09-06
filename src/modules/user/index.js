@@ -41,7 +41,7 @@ router.get("/user/sync", checkJwt, async (req, res) => {
 })
 
 // Protected
-router.get("/user/sync", checkJwt, async (req, res) => {
+router.post("/user/sync", checkJwt, async (req, res) => {
     res.send(await sync(req.user))
 })
 

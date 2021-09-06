@@ -33,24 +33,30 @@ async function getID(handle) {
 }
 
 async function getHandle(id) {
-    sql = "SELECT handle FROM citizen WHERE id=?"
-    rows = await executeSQL(sql, [id])
-    if(rows.length === 0) {
-        // not found
-        return ''
+    const citizen = await getCitizen(id)
+    if (citizen) {
+        return citizen.handle
     } else {
-        return rows[0].handle
+        return null
     }
 }
 
-async function getOrg(id) {
-
+async function getOrgTag(id) {
+    const rows = await executeSQL("SELECT tag FROM org WHERE id=?", [id])
+    if (rows.length === 0) {
+        console.log('Org not found...')
+        return 0
+    } else {
+        console.log('org found: ', rows[0].tag)
+        return rows[0].tag
+    }
 }
 
 async function getOrgID(tag) {
     const sql = "SELECT id FROM org WHERE tag=?"
     let rows = await executeSQL(sql, [tag])
     if(rows.length === 0) {
+        //TODO: check org tag is actually a valid org
         console.log(`Adding: ${tag}`)
         // not found, add to org table
         await executeSQL("INSERT INTO org (tag) values (?)", [tag])
@@ -66,6 +72,18 @@ async function getOrgID(tag) {
     }
 }
 
+async function getOrgRank(org, citizen) {
+    const sql = "SELECT rank FROM org_map WHERE org=? AND citizen=?"
+    console.log(sql, org, citizen)
+    let rows = await executeSQL(sql, [org, citizen])
+    if(rows.length === 0) {
+        console.log("Didn't find that citizen in that org...")
+        return 0
+    } else {
+        return rows[0].rank
+    }
+}
+
 async function getFeeds() {
     const rows = await executeSQL('SELECT * FROM news_feeds')
     return rows
@@ -75,7 +93,9 @@ module.exports = {
     createCitizen,
     getCitizen,
     getID,
-    getOrg,
+    getHandle,
     getOrgID,
+    getOrgTag,
+    getOrgRank,
     getFeeds
 }
