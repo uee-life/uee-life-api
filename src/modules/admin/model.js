@@ -93,7 +93,7 @@ async function addShip(data) {
         ...data
     }
     sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance, modifier) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    args = [ship.name, ship.make, ship.model, ship.size, ship.max_crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance)]
+    args = [ship.name, ship.make, ship.model, ship.size, ship.max_crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance), ship.modifier]
     res = await executeSQL(sql, args)
 }
 
