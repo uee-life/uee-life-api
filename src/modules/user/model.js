@@ -2,7 +2,7 @@ const { fetchCitizen, fetchOrgFounders, fetchOrgRank } = require('../../helpers/
 const { createCitizen, getID, getOrgID } = require('../../helpers/db')
 const { getVerificationCode, setVerificationCode, setVerified } = require('../verification')
 const { executeSQL } = require('../mariadb')
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 
 const{ manager } = require('../manager')
 
