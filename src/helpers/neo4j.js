@@ -1,5 +1,5 @@
 const neo4j = require('neo4j');
-const {uri, user, password} = require('../../config/db_config')
+const {uri, user, password} = require('../config/db_config')
 
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 
@@ -21,10 +21,10 @@ async function writeQuery(query, params) {
     } finally {
         await session.close();
     }
-  }
+}
 
-  // return the full record set?
-  async function readQuery(query, params) {
+// return the full record set?
+async function readQuery(query, params) {
     const session = driver.session({ database: 'neo4j' });
     records = [];
     try {
@@ -43,8 +43,9 @@ async function writeQuery(query, params) {
         await session.close()
     }
     return records
-  }
-  
-  module.exports = {
-    executeSQL
-  }
+}
+
+module.exports = {
+    writeQuery,
+    readQuery
+}
