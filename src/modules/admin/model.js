@@ -92,9 +92,13 @@ async function addShip(data) {
         ...ship_template,
         ...data
     }
-    sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance, modifier) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    /*sql = 'INSERT INTO ships (short_name, make, model, size, max_crew, cargo, type, focus, equipment, performance, modifier) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     args = [ship.name, ship.make, ship.model, ship.size, ship.max_crew, ship.cargo, ship.type, ship.focus, JSON.stringify(ship.equipment), JSON.stringify(ship.performance), ship.modifier]
-    res = await executeSQL(sql, args)
+    res = await executeSQL(sql, args)*/
+    
+    query = "MERGE {ship:Ship " +
+        "{ name: $name, make: $make, model: $model, size: $size, max_crew: $max_crew, cargo: $cargo, type: $type, focus: $focus}} " +
+        "RETURN ship"
 }
 
 async function updateShip(shipID, data) {
